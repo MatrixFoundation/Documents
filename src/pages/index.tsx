@@ -10,7 +10,7 @@ export default function Home(): JSX.Element {
       title={`Welcome 👋`}
       description="Description will go into a meta tag in <head />">
       <main>
-          <Redirect to="/docs/introduction" />
+          <Redirect to="/docs/home/introduction" />
       </main>
     </Layout>
   );

@@ -64,6 +64,12 @@ const config: Config = {
       items: [
         {
           type: 'docSidebar',
+          sidebarId: 'homeSidebar',
+          position: 'left',
+          label: 'Home',
+        },
+        {
+          type: 'docSidebar',
           sidebarId: 'tutorialSidebar',
           position: 'left',
           label: 'Tutorial',
