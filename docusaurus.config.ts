@@ -65,18 +65,21 @@ const config: Config = {
         {
           type: 'docSidebar',
           sidebarId: 'homeSidebar',
+          className: 'nav-home',
           position: 'left',
           label: 'Home',
         },
         {
           type: 'docSidebar',
           sidebarId: 'tutorialSidebar',
+          className: 'nav-tutorials',
           position: 'left',
           label: 'Tutorials',
         },
         {
           type: 'docSidebar',
           sidebarId: 'projectSidebar',
+          className: 'nav-projects',
           position: 'left',
           label: 'Projects',
         },
