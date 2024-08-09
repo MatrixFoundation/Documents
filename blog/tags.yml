@@ -2,3 +2,8 @@ announcements:
   label: Announcements
   permalink: /announcements
   description: MatrixFoundation Important Announcement
+
+summary:
+  label: Summary
+  permalink: /summary
+  description: MatrixFoundation working summary

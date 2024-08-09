@@ -1,7 +1,7 @@
 ---
 slug: welcome
 title: Welcome
-authors: [theRunCom]
+authors: [Nexseer]
 tags: [announcements]
 ---
 
