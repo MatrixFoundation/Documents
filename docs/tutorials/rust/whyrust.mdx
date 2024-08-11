@@ -1,0 +1,249 @@
+---
+sidebar_label: I. Why Rust?
+title: I. Why Rust?
+sidebar_position: 1
+---
+
+## 1. Overview 初印象
+
+A language empowering everyone to build reliable and efficient software.
+
+一门赋予每个人构建可靠且高效软件能力的语言。
+
+Rust is one of the most widely used languages in blockchain systems and many popular blockchains including Solana, Polkadot, Aptos, and Sui are built with Rust. Rust frameworks such as Foundry are also highly preferred by developers of established chains including Ethereum.
+
+Rust 是区块链系统中最广泛使用的语言之一，许多流行的区块链包括 Solana、Polkadot、Aptos 和 Sui 都是用 Rust 构建的。Foundry 等 Rust 框架也受到包括以太坊在内的区块链开发人员的高度青睐。
+
+The use of Rust is growing rapidly among blockchain projects at large and in the coming years, we will see an exponential increase here.
+
+Rust 的使用在区块链项目正在迅速增长，在未来几年我们将看到这里的指数级增长。
+
+Rust is a modern programming language that has been gaining a reputation for its focus on safety and performance, making it worth learning for all developers!
+
+Rust 是一种现代编程语言，以其对安全性和性能的关注而声名远扬，值得我们所有开发者学习！
+
+## 2. Features 特点
+
+### Safety 安全
+
+Rust offers memory safety without the need for a garbage collector through its innovative ownership model.
+
+Rust通过其创新的所有权模型确保内存安全，而无需垃圾收集器。
+
+Memory safety means that the language prevents bugs that lead to crashes or security vulnerabilities due to mishandled memory, such as buffer overflows, null pointer dereferencing, and data races in concurrent operations.
+
+内存安全意味着该语言可以防止由于内存处理不当而导致崩溃或安全漏洞的错误，例如缓冲区溢出、空指针解引用和并发操作中的数据竞争。
+
+### High Performance 高性能
+
+Rust offers the speed of a compiled language and the efficiency of manual memory management without a garbage collector, making it an ideal candidate for performance-critical domains. Rust’s unique “zero-cost abstractions” allow us to write code that is both high-performance and safe without experiencing additional runtime overhead.
+
+Rust 提供了编译型语言的速度和无需垃圾收集器的手动内存管理效率，使其成为性能关键领域的理想选择。Rust 独特的“零成本抽象”使我们能够编写高性能且安全的代码，而无需经历额外的运行时开销。
+
+### Fearless Concurrency 并发
+
+Rust aims to make concurrent programming accessible and safe. It offers abstractions like threads and asynchronous programming while enforcing thread safety through the type system.
+
+Rust 旨在使并发编程变得可访问和安全。它提供了诸如线程和异步编程之类的抽象，同时通过类型系统强制执行线程安全。
+
+### Ecosystem
+
+Rust's ecosystem offers a treasure trove of libraries, tools, and frameworks. The Cargo package manager simplifies dependency management, compilation, and building of Rust projects, fostering a vibrant ecosystem that continuously expands the language's applicability. Furthermore, the integration with other data science tools and languages, through FFI (Foreign Function Interface), bridges the gap between Rust's system-level efficiency and the high-level ease of use found in scripting languages.
+
+Rust 的生态系统提供了丰富的库、工具和框架。Cargo 包管理器简化了依赖项管理、编译和构建 Rust 项目的过程，培育了一个充满活力的生态系统,不断扩展语言的适用性。此外，通过 FFI (外部函数接口)与其他数据科学工具和语言集成，弥合了 Rust 系统级效率与脚本语言高级易用性之间的鸿沟。
+
+You can find all sorts of libraries on [crates.io](http://crates.io).
+
+你可以在 Crates. io 上找到各种各样的库。
+
+### Open Source Community
+
+Rust has a very friendly and vibrant open-source developer community. This community is known for its enthusiasm, inclusivity, and willingness to help.
+
+Rust 拥有一个非常友好和充满活力的开源开发者社区。这个社区以其热情、包容和乐于助人而闻名。
+
+## 3. Hello World
+
+`cargo new hello-rust`
+
+```
+hello-rust/
+├── Cargo.toml
+├── .gitignore
+└── src/
+    └── main.rs
+```
+
+`Cargo. toml` is the manifest file for Rust. It’s where you keep metadata for your project, as well as dependencies.
+
+`Cargo. toml` 是 Rust 的清单文件。它是保存你的项目元数据以及依赖关系的地方。
+
+`src/main.rs` is where we’ll write our application code.
+
+`src/main.rs` 是我们要写应用程序代码的地方。
+
+```rust
+fn main() {
+	println!("Hello World");
+}
+```
+
+`cargo run`
+
+## 4. Number Guessing Game 猜数游戏
+
+### Input/Output
+
+Enter a number and it will be displayed.
+输入一个数并输出。
+
+```rust
+use std::io;
+
+fn main() {
+    println!("Please input your guess：");
+    let mut guess = String::new();
+    io::stdin()
+        .read_line(&mut guess)
+        .expect("Failed to read line");
+    println!("You guessed: {}", guess);
+}
+```
+
+`use std::io;`
+This line imports the input/output module from Rust's standard library, allowing us to use input/output related functionalities.
+这行代码导入了 Rust 标准库中的 input/output 模块，使我们能够使用输入输出相关的功能。
+
+`fn main()`
+Defines the main function of the program, where the execution begins.
+定义了程序的主函数，程序的执行从这里开始。
+
+`println!("Please input your guess：");`
+Uses the `println!` macro to print a prompt message to the console, asking the user to input their guess.
+使用 `println!` 宏在控制台打印一条提示信息，要求用户输入猜测。
+
+`let mut guess = String::new();`
+Creates a mutable `String` type variable `guess` to store user input. The `mut` keyword indicates that this variable is mutable.
+创建一个可变的 `String` 类型变量 `guess`，用于存储用户输入。`mut` 关键字表示这个变量是可变的。
+
+`io::stdin()`
+Calls the `stdin` function from the `io` module, returning a handle to the standard input.
+调用 `io` 模块的 `stdin` 函数，返回一个标准输入的句柄。
+
+`.read_line(&mut guess)`
+Calls the `read_line` method on the standard input handle to read a line of text from user input. `&mut guess` is a mutable reference, indicating that the user input will be stored in the `guess` variable.
+在标准输入句柄上调用 `read_line` 方法，读取用户输入的一行文本。`&mut guess` 是一个可变引用，表示将用户输入存储到 `guess` 变量中。
+
+`.expect("Failed to read line");`
+The `read_line` method returns a `Result` type, and `expect` is used to handle potential errors. If reading fails, the program will terminate and display the specified error message.
+`read_line` 方法返回一个 `Result` 类型，`expect` 用于处理可能的错误。如果读取失败，程序会终止并显示指定的错误信息。
+
+`println!("You guessed: {}", guess);`
+Uses the `println!` macro again to print the user's input. `{}` is a placeholder that will be replaced by the value of `guess`.
+再次使用 `println!` 宏，打印用户输入的内容。`{}` 是一个占位符，会被 `guess` 的值替换。
+
+### Randomly Generated 随机生成
+
+Generate a random number between 1 and 100.
+生成一个 1~100 之间的随机数。
+
+```toml
+[dependencies]
+rand = "0.8.4"
+```
+
+`use rand:: Rng;`
+The package is a `trait`. You can think of it as an interface, and introducing a package in your code is equivalent to a class implementing an interface, so if you introduce it and don't use it you'll report an error.
+这个包是一个 `trait`。你可以把它想成接口，而在代码中引入包相当于一个类实现一个接口，所以如果你引入，而不用就会报错。
+
+```rust
+use rand::Rng;
+use std::io;
+
+fn main() {
+    let secret_number = rand::thread_rng().gen_range(1..101);
+    println!("The secret number is: {}", secret_number);
+    println!("Please input your guess：");
+    let mut guess = String::new();
+    io::stdin()
+        .read_line(&mut guess)
+        .expect("Failed to read line");
+    println!("You guessed: {}", guess);
+}
+```
+
+### Compare 比较
+
+Compare the generated random number with the input number.
+比较生成的随机数和输入数字。
+
+Ordering has three variants `Less`, `Greater`, `Equal`.
+Ordering 有三个变体 `Less`、`Greater`、`Equal`。
+
+`guess.cmp(&secret_number)` is to compare guess with secret_number, this method returns an Ordering.
+`guess.cmp(&secret_number)` 是用 guess 和 secret_number 进行比较，这个方法会返回一个 Ordering。
+
+`guess.trim()` removes spaces, tabs, and carriage returns (pressing `enter` while typing results in `\n` input)
+`guess.trim()` 会删除空格、tab、以及回车（输入时候按`回车`就会有 `\n` 输入）
+
+`parse()` will parse the input string, there are `i32` `u32` `i64`, we choose to parse it as `u32`.
+`parse()` 会把输入的字符串解析，有 `i32` `u32` `i64`，我们这里选择解析成 `u32`。
+
+```rust
+use rand::Rng;
+use std::cmp::Ordering;
+use std::io;
+
+fn main() {
+    let secret_number = rand::thread_rng().gen_range(1..101);
+    println!("The secret number is: {}", secret_number);
+    println!("Please input your guess：");
+    let mut guess = String::new();
+    io::stdin()
+        .read_line(&mut guess)
+        .expect("Failed to read line");
+    println!("You guessed: {}", guess);
+
+    let guess: u32 = guess.trim().parse().expect("Please type a number!");
+    match guess.cmp(&secret_number) {
+        Ordering::Less => println!("Too small"),
+        Ordering::Greater => println!("Too big"),
+        Ordering::Equal => println!("You win!"),
+    }
+}
+```
+
+### Final 终版
+
+Add loops until the rule is reached and then ends.
+添加循环直至达到规则后结束。
+
+```rust
+fn main() {
+    let secret_number = rand::thread_rng().gen_range(1..101);
+    println!("The secret number is: {}", secret_number);
+    loop {
+        println!("Please input your guess：");
+        let mut guess = String::new();
+        io::stdin()
+            .read_line(&mut guess)
+            .expect("Failed to read line");
+        println!("You guessed: {}", guess);
+
+        let guess: u32 = match guess.trim().parse() {
+            Ok(num) => num,
+            Err(_) => continue,
+        };
+
+        match guess.cmp(&secret_number) {
+            Ordering::Less => println!("Too small"),
+            Ordering::Greater => println!("Too big"),
+            Ordering::Equal => {
+                println!("You win!");
+                break;
+            }
+        }
+    }
+}
+```
+
