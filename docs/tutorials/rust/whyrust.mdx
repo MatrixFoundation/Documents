@@ -32,9 +32,17 @@ Rust offers memory safety without the need for a garbage collector through its i
 
 Rust 通过其创新的所有权模型确保内存安全，而无需垃圾收集器。
 
-Memory safety means that the language prevents bugs that lead to crashes or security vulnerabilities due to mishandled memory, such as buffer overflows, null pointer dereferencing, and data races in concurrent operations.
+Memory safety means that the language prevents bugs that lead to crashes or security vulnerabilities due to mishandled memory.
 
-内存安全意味着该语言可以防止由于内存处理不当而导致崩溃或安全漏洞的错误，例如缓冲区溢出、空指针解引用和并发操作中的数据竞争。
+内存安全意味着该语言可以防止由于内存处理不当而导致崩溃或安全漏洞的错误。
+
+Rust's ownership model ensures that variables are deallocated when they go out of scope, preventing memory leaks and dangling references.
+
+Rust 的所有权模型确保变量在超出作用域时自动释放，防止内存泄漏和悬挂引用。
+
+Additionally, Rust's borrow checker enforces strict rules around mutable and immutable references, preventing data races and other common concurrency bugs.
+
+此外，Rust 的借用检查器强制执行对可变和不可变引用的严格规则，防止数据竞争和其他常见的并发错误。
 
 ### High Performance 高性能
 
