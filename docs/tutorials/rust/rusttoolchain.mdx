@@ -1,0 +1,584 @@
+---
+sidebar_label: II. Rust Toolchain
+title: II. Rust Toolchain
+sidebar_position: 2
+---
+
+| Toolchain/version manager | Rust compiler | Code formatter | Linter   | Package manager | Package registry |
+| ------------------------- | ------------- | -------------- | -------- | --------------- | ---------------- |
+| `rustup`                  | `rustc`       | `rustfmt`      | `clippy` | `cargo`         | `crates.io`      |
+
+| 工具链/版本管理器 | Rust 编译器 | 代码格式化工具 | 代码检查工具 | 包管理器 | 包注册中心  |
+| ----------------- | ----------- | -------------- | ------------ | -------- | ----------- |
+| `rustup`          | `rustc`     | `rustfmt`      | `clippy`     | `cargo`  | `crates.io` |
+
+## 1. Introduction 简单介绍
+
+- `rustup`: the Rust toolchain installer and updater. This tool is used to install and update `rustc` and `cargo` when new versions of Rust are released. In addition, `rustup` can also download documentation for the standard library. You can have multiple versions of Rust installed at once and `rustup` will let you switch between them as needed.
+- `rustup`：Rust 工具链的安装和更新工具。这个工具用于在发布新版本的 Rust 时安装和更新 `rustc` 和 `cargo`。此外，`rustup` 还可以下载标准库的文档。你可以同时安装多个版本的 Rust，并使用 `rustup` 在它们之间切换。
+
+- `rustc`: the Rust compiler which turns `.rs` files into binaries and other intermediate formats.
+- `rustc`：Rust 编译器，用于将 `.rs` 文件转换为二进制文件或其他中间格式。
+
+- `rustfmt`: a tool for formatting Rust code according to style guidelines. It ensures that Rust code is consistent and adheres to community standards.
+- `rustfmt`：用于根据样式指南格式化 Rust 代码的工具。它确保 Rust 代码的一致性并符合社区标准。
+
+- `clippy`: a collection of lints to catch common mistakes and improve your Rust code. It provides suggestions for idiomatic Rust usage and helps maintain code quality.
+- `clippy`：一组用于捕捉常见错误并改进 Rust 代码的 lint 集合。它提供惯用的 Rust 使用建议，并帮助维护代码质量。
+
+- `cargo`: the Rust dependency manager and build tool. Cargo knows how to download dependencies, usually hosted on [https://crates.io](https://crates.io/), and it will pass them to `rustc` when building your project. Cargo also comes with a built-in test runner which is used to execute unit tests.
+- `cargo`：Rust 的依赖管理器和构建工具。Cargo 可以下载依赖项（通常托管在 [https://crates.io](https://crates.io/) 上），并在构建项目时将这些依赖项传递给 `rustc`。Cargo 还内置了测试运行器，用于执行单元测试。
+
+- `crates.io`: the official package registry for Rust, where developers can publish, discover, and manage Rust libraries (crates). It serves as the primary source for Rust packages and dependencies.
+
+- `crates.io`：Rust 的官方包注册表，开发者可以在这里发布、发现和管理 Rust 库（crates）。它是 Rust 包和依赖项的主要来源。
+
+## 2. `Editions`
+
+Editions in Rust are a structured way to introduce new features and improvements while maintaining backward compatibility. This ensures that code written in older editions will still compile with newer compilers.
+Rust 版本是一种结构化的方法，用于引入新功能和改进，同时保持向后兼容性。这确保了用旧版本编写的代码仍可以使用较新的编译器进行编译。
+
+Rust editions are released every three years, allowing significant changes to be introduced without breaking existing code.
+Rust 版本每三年发布一次，使得在不破坏现有代码的情况下可以引入重大更改。
+
+So far, Rust has had three editions: 2015, 2018, and 2021. Each edition introduces new syntax, features, and improvements.
+到目前为止，Rust 已经发布了三个版本：2015 年、2018 年和 2021 年。每个版本都引入了新的语法、功能和改进。
+
+The edition is specified in the Cargo.toml file under the `[package]` section, guiding the Rust compiler on which edition's rules to apply.
+版本在 Cargo.toml 文件的 `[package]` 部分指定，指导 Rust 编译器应用哪个版本的规则。
+
+Code from different editions can coexist within the same project, allowing for gradual migration to newer editions.
+不同版本的代码可以在同一项目中共存，从而实现向较新版本的逐步迁移。
+
+Tools like `cargo fix` assist in migrating code to a newer edition by automatically applying necessary changes.
+`cargo fix` 等工具通过自动应用必要的更改，帮助将代码迁移到较新的版本。
+
+Editions enable Rust to evolve and improve without disrupting existing projects, making it easier for developers to adopt new features at their own pace.
+版本使 Rust 能够在不干扰现有项目的情况下发展和改进，使开发人员能够更轻松地按照自己的节奏采用新功能。
+
+## 3. `Crate`
+
+Rust implements code modularity and organization through its `crate` system.
+Rust 通过 `crate` 系统实现代码模块化和组织。
+
+`crates`, the fundamental compilation units in Rust, can be compiled into executable binaries or libraries. This structure promotes code modularity, reusability and separation of concerns.
+`crate` 是 Rust 的基本编译单元，可被编译为可执行二进制文件或库文件。这种结构促进了代码的模块化、可重用性和关注点分离。
+
+The `crate` system also facilitates code sharing, enabling developers to reuse functional modules across different projects, thereby enhancing development efficiency and reducing duplication of effort. Through `crate`, Rust provides robust support for structuring large projects and collaborative development.
+`crate` 系统还支持代码共享，允许开发者在不同项目间复用功能模块，提高开发效率并减少重复工作。通过 `crate`，Rust 为大型项目的结构化和协作开发提供了强大的支持。
+
+### Binary Crate 二进制 crate
+
+Usually `main.rs` is used as the entry point, which is compiled to produce an executable.
+通常以`main.rs`作为入口点，编译后生成可执行文件。
+
+```rust
+// src/main.rs
+fn main() {
+    println!("Hello, world!");
+}
+```
+
+### Library Crate
+
+Usually `lib.rs` is the main file, which is compiled to generate libraries for use by other programs.
+通常以`lib.rs`为主文件，编译后生成供其他程序使用的库。
+
+```rust
+// src/lib.rs
+pub fn greet(name: &str) -> String {
+    println!("Hello, {}!", name);
+}
+```
+
+This crate can be referenced by other `crate`.
+这个库可以被其他 `crate` 引用。
+
+```rust
+// src/main.rs
+use my_library::greet;
+
+fn main() {
+    let message = greet("Alice");
+    println!("{}", message);
+}
+```
+
+## 4. `Modules`
+
+Modules in Rust are similar to namespaces in C++ and packages in Java.
+Rust 中的模块，类似 C++ 中的命名空间，Java 语言中的包。
+
+In Rust, a single `crate` can contain multiple modules.
+Rust 语言中一个 `crate` 可以存放多个模块。
+
+When we talk about functional modules, we're referring to grouping functions or structures based on their functionality. It's common to organize similar functions, or functions and structures that implement the same functionality or work together to implement a functionality, into a single module.
+
+我们常说功能模块，就是用于将函数或结构体按照功能分组。也常常把相似的函数或者实现相同功能的或者共同实现一个功能的函数和结构体划分到一个模块中。
+
+### Define modules 定义模块
+
+```rust
+mod module_name {
+   fn function_name() {
+      // ……
+   }
+}
+```
+
+In Rust, modules are private by default. If a module or a function within a module needs to be exported for external use, the `pub` keyword must be added. Private modules cannot be called by other external modules or programs. All functions in a private module must be private, while a public module can have both public and private functions.
+
+Rust 语言中的模块默认是私有的。如果一个模块或者模块内的函数需要导出为外部使用，则需要添加  `pub`  关键字。私有的模块不能为外部其它模块或程序所调用。私有模块的所有函数都必须是私有的，而公开的模块，则即可以有公开的函数也可以有私有的函数。
+
+```rust
+pub mod public_module {
+   pub fn public_function() {
+      // ……
+   }
+   fn private_function() {
+      // ……
+   }
+}
+mod private_module {
+   fn private_function() {
+	   // ……
+   }
+}
+```
+
+### Call module 调用模块
+
+```rust
+use pub_module::function_name;
+use 公开的模块名::函数名;
+```
+
+Create library 创建类库：
+`cargo new –lib mylib`
+
+```rust
+// src/lib.rs
+
+/// Adds two numbers and returns the result.
+pub fn add(a: i32, b: i32) -> i32 {
+    a + b
+}
+
+/// Multiplies two numbers and returns the result.
+pub fn multiply(a: i32, b: i32) -> i32 {
+    a * b
+}
+```
+
+Go to the mylib directory and execute `cargo build`.
+进入 mylib 目录执行` cargo build`
+
+Open the root directory Cargo.toml
+打开根目录 Cargo.toml
+
+```toml
+[dependencies]
+mylib = { path = "..//mylib" }
+```
+
+```rust
+// src/main.rs
+use mylib::{add, multiply};
+
+fn main() {
+    let sum = add(5, 10);
+    let product = multiply(5, 10);
+
+    println!("Sum: {}", sum);
+    println!("Product: {}", product);
+}
+```
+
+Rust allows nesting of one module within another, or, in other words, multiple levels of modules. To call or use a nested module use two colons (`::`) to splice modules from left to right, from outside to inside.
+
+Rust 允许一个模块中嵌套另一个模块，换种说法，就是允许多层级模块。调用或使用嵌套模块的方法使用两个冒号 (`::`) 从左到右拼接从外到内的模块即可。
+
+```rust
+use mod1::mod2::mod3::method_name;
+
+fn main() {
+    method_name();
+}
+```
+
+```rust
+use mod1::mod2::mod3::方法名;
+
+fn main() {
+    方法名();
+}
+```
+
+### Path 路径
+
+Absolute path: start at crate root, use crate name or the literal value crate;
+绝对路径：从 crate root 开始，使用 crate 名或字面值 crate；
+
+Relative path: start from the current module, use self, super or the identifier of the current module;
+相对路径：从当前模块开始，使用 self 、super 或当前模块的标识符；
+
+If the defined part and the used part always move together, use a relative path; if they can be detached independently, use an absolute path.
+如果定义的部分和使用的部分总是一起移动，用相对路径，可以独立拆解出来，用绝对路径。
+
+```
+my_crate
+├── src
+│   ├── lib.rs
+│   └── utils.rs
+```
+
+```rust
+// src/utils.rs
+pub fn greet() {
+    println!("Hello!");
+}
+```
+
+```rust
+// src/lib.rs
+pub mod utils;
+
+fn main() {
+    my_crate::utils::greet();
+    crate::utils::greet();
+}
+```
+
+```
+my_crate
+├── src
+│   ├── lib.rs
+│   └── module_a.rs
+│   └── module_b.rs
+```
+
+```rust
+// src/module_a.rs
+pub fn function_a() {
+    println!("Function A");
+    self::function_b();
+}
+
+pub fn function_b() {
+    println!("Function B");
+}
+```
+
+```rust
+// src/module_b.rs
+pub fn call_function_a() {
+    super::module_a::function_a();
+}
+```
+
+```rust
+// src/lib.rs
+pub mod module_a;
+pub mod module_b;
+
+fn main() {
+    module_b::call_function_a();
+}
+```
+
+## 5. `Cargo`
+
+`Cargo`, Rust’s package manager and build system, simplifies many tasks associated with managing dependencies, compiling packages, and distributing software. This ecosystem makes it easy for developers to share libraries, streamline their build processes, and manage multiple projects with ease. 
+`Cargo` 是 Rust 的包管理器和构建系统，它简化了管理依赖项、编译包和分发软件等许多任务。这个生态系统使开发人员能够轻松共享库、简化构建过程并轻松管理多个项目。
+
+```
+Moreover, Rust’s compiler is renowned for its helpful error messages that not only tell you what went wrong but also suggest how to fix it.
+此外，Rust 的编译器因其有用的错误消息而闻名，不仅告诉你出了什么问题，还建议如何修复。
+```
+
+`Cargo` simplifies the Rust development workflow by managing project creation, building, and dependency management.
+`Cargo` 通过管理项目创建、构建和依赖项管理来简化 Rust 开发工作流程。
+
+### Command
+
+```
+The `cargo new` command initializes a new Rust project with a default directory structure.
+`cargo new` 命令使用默认目录结构初始化一个新的 Rust 项目。
+
+Adding dependencies is straightforward; you modify the `Cargo.toml` file, and `Cargo` handles fetching and compiling the necessary `crates`.
+添加依赖项很简单；您修改 `Cargo.toml` 文件，`Cargo` 会处理获取和编译必要的 `crate`。
+
+The `cargo build` command compiles the project, and `cargo run` compiles and runs the project. This seamless integration makes Rust development more efficient and organized.
+`cargo build` 命令编译项目，`cargo run` 编译并运行项目。这种无缝集成使 Rust 开发更加高效和有组织。
+
+`Cargo` also supports running tests with `cargo test`, generating documentation with `cargo doc`, and publishing libraries to `crates.io` with `cargo publish`. Its comprehensive feature set and ease of use make it a crucial tool in the Rust ecosystem.
+`Cargo` 还支持使用 `cargo test` 运行测试，使用 `cargo doc` 生成文档，以及使用`cargo publish` 将库发布到 `crates.io`。其全面的功能集和易用性使其成为 Rust 生态系统中的重要工具。
+
+The `cargo --list` command lists all available `cargo` subcommands along with brief descriptions, helping developers quickly understand the features and options provided by `cargo` for more efficient management of Rust projects.
+
+`cargo --list` 此命令列出所有可用的 `cargo` 子命令及其简要说明，帮助开发者快速了解 `cargo` 提供的功能和选项，以便更高效地管理 Rust 项目。
+
+Use `cargo check` to quickly check your project for errors, use `cargo build` to compile it without running it. You will find the output in `target/debug/` for a normal debug build. Use `cargo build --release` to produce an optimized release build in `target/release/`.
+使用 `cargo check` 快速检查项目是否有错误，使用 `cargo build` 无需运行即可编译。你可以在 `target/debug/` 中找到正常调试编译的输出结果。使用 `cargo build --release` 可以在 `target/release/` 中生成经过优化的发布版本。
+
+`--verbose` is a common command-line parameter used to make a program output more runtime information, allowing for a better understanding of the program's operational state and more detailed debugging. The specific meaning and behavior may vary depending on the particular program.
+
+`--verbose` 是一个常见的命令行参数，用于让程序输出更多的运行时信息，以便于更好地了解程序的运行状态和更详尽地进行调试。更具体的含义和行为可能会依据具体的程序而有所差异。
+```
+
+| Command         | Description                                                                                                                           |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| `cargo new`     | Creates a new project in the current directory with a default structure.                                                              |
+| `cargo check`   | Analyzes the current project and reports errors without compiling any files.                                                          |
+| `cargo build`   | Compiles the current project, generating an executable or library in the `target` directory.                                          |
+| `cargo run`     | Compiles and runs the file `src/main.rs`.                                                                                             |
+| `cargo clean`   | Removes the `target` directory and all its subdirectories and files from the current project.                                         |
+| `cargo update`  | Updates all dependencies listed in the `Cargo.lock` file of the current project.                                                      |
+| `cargo test`    | Runs all tests in the project to ensure code correctness and stability.                                                               |
+| `cargo doc`     | Generates documentation for the project based on code comments and information in the `Cargo.toml` file.                              |
+| `cargo publish` | Publishes the current project to `crates.io`, making it available for other developers.                                               |
+| `cargo install` | Installs specified Rust tools or libraries, making them globally available.                                                           |
+| `cargo --list`  | Lists all available `cargo` subcommands along with brief descriptions, helping developers quickly understand the features of `cargo`. |
+| `--verbose`     | Makes the program output more runtime information, aiding in debugging and understanding the program's operational state.             |
+
+| 命令            | 说明                                                                         |
+| --------------- | ---------------------------------------------------------------------------- |
+| `cargo new`     | 在当前目录下新建一个项目                                                     |
+| `cargo check`   | 分析当前项目并报告项目中的错误，但不会编译任何项目文件                       |
+| `cargo build`   | 编译当前项目，生成可执行文件或库，输出到 `target` 目录                       |
+| `cargo run`     | 编译并运行文件  `src/main. rs`                                               |
+| `cargo clean`   | 移除当前项目下的  `target`  目录及目录中的所有子目录和文件                   |
+| `cargo update`  | 更新当前项目中的  `Cargo. lock`  文件列出的所有依赖                          |
+| `cargo test`    | 运行项目中的所有测试                                                         |
+| `cargo doc`     | 生成项目的文档，基于代码注释和 `Cargo.toml` 文件中的信息                     |
+| `cargo publish` | 将当前项目发布到 `crates.io`，使其可供其他开发者使用                         |
+| `cargo install` | 安装指定的 Rust 工具或库，使其在全局可用                                     |
+| `cargo --list`  | 列出所有可用的 `cargo` 子命令及其简要说明，帮助开发者快速了解 `cargo` 的功能 |
+| `--verbose`     | `使程序输出更多的运行时信息，便于调试和了解程序的运行状态`                   |
+
+### `Cargo.toml`
+
+`Cargo.toml` is a configuration file for managing your project’s metadata and dependencies.
+
+`Cargo.toml` 是用于管理项目元数据和依赖关系的配置文件。
+
+The `TOML` file format is, like JavaScript Object Notation (`JSON`) or YAML Ain’t Markup Language (`YAML`).
+`TOML` 文件格式与 JavaScript 对象表示法 (`JSON`) 或 YAML 非标记语言 (`YAML`) 一样。
+
+By specifying different version constraints in this file, developers can control the versions of the libraries their project depends on. This is crucial for ensuring the stability and compatibility of the project.
+在该文件中指定不同的版本约束，开发者可以控制项目所依赖的库的版本。这对于确保项目的稳定性和兼容性至关重要。
+
+| Cargo.toml Line           | Meaning                                                   |
+| ------------------------- | --------------------------------------------------------- |
+| `image = "=0.10.0"`       | Use only the exact version 0.10.0                         |
+| `image = ">=1.0.5"`       | Use version 1.0.5 or higher (including 2.9, if available) |
+| `image = ">1.0.5 <1.1.9"` | Use a version greater than 1.0.5 but less than 1.1.9      |
+| `image = "<=2.7.10"`      | Use version 2.7.10 or any earlier version                 |
+
+| Cargo. toml 行            | 含义                                              |
+| ------------------------- | ------------------------------------------------- |
+| `image = "=0.10.0"`       | 仅使用确切的版本 0.10.0                           |
+| `image = ">=1.0.5"`       | 使用 1.0.5 或更高版本（甚至 2.9，如果其可用的话） |
+| `image = ">1.0.5 <1.1.9"` | 使用高于 1.0.5 但低于 1.1.9 的版本                |
+| `image = "<=2.7.10"`      | 使用 2.7.10 或更早的任何版本                      |
+
+### `Cargo.lock`
+
+When building a project for the first time, Cargo outputs a `Cargo.lock` file to record the exact version of each crate it uses. Subsequent builds will refer to this file and continue using the same versions. Cargo will only upgrade to newer versions when you explicitly request it, either by manually increasing the version number in the `Cargo.toml` file or by running `cargo update`.
+
+当第一次构建项目时，Cargo 会输出一个 `Cargo.lock` 文件，以记录它使用的每个 crate 的确切版本。以后的构建都将参考此文件并继续使用相同的版本。仅当你要求 Cargo 升级时它才会升级到更新版本，方法是手动增加 `Cargo.toml` 文件中的版本号或运行  `cargo update`。
+
+The `Cargo.lock` file is automatically generated and typically doesn't need manual editing. However, if your project is an executable, you should commit the `Cargo.lock` file to version control. This ensures that everyone building the project always gets the same versions. The version history of the `Cargo.lock` file will record these dependency updates.
+
+`Cargo.lock` 是自动生成的，通常不用手动编辑。不过，如果此项目是可执行文件，那你就应该将 `Cargo.lock` 提交到版本控制。这样，构建项目的每个人总是会获得相同的版本。`Cargo.lock`文件的版本历史中会记录这些依赖项更新。
+
+## 6. Optimization 优化
+
+In Rust, optimization can significantly improve a program's performance. Below are some common optimization techniques, including compilation configuration, link-time optimization, panic handling, and compile-time optimization.
+
+在 Rust 中，优化可以显著提高程序的性能。以下将介绍几种常用的优化技巧，包括编译配置、链接时优化、panic 处理以及编译时间优化。
+
+### Compilation Configuration 编译配置
+
+Debug Mode (`cargo build`):
+
+- Configuration Section: `[profile.dev]`
+- Advantages: Fast compilation, suitable for debugging
+- Disadvantages: Slower runtime, no optimization
+
+Debug 模式 (`cargo build`)：
+
+- 配置区段: `[profile.dev]`
+- 优点: 编译速度快，适合调试
+- 缺点: 运行速度较慢，不进行优化
+
+Release Mode (`cargo build --release`):
+
+- Configuration Section: `[profile.release]`
+- Advantages: Faster runtime, various optimizations
+- Disadvantages: Longer compilation time, larger binary size
+
+Release 模式 (`cargo build --release`)：
+
+- 配置区段: `[profile.release]`
+- 优点: 运行速度快，进行多种优化
+- 缺点: 编译时间长，生成的二进制文件可能较大
+
+It is common practice to use debug mode during development and release mode when deploying.
+在开发过程中使用 debug 模式，而在发布时使用 release 模式是常见做法。
+
+By default, Rust builds in debug mode. If you run `cargo build`, `cargo run`, or `rustc` without any additional options, it will generate a debug build. Debug builds are useful for debugging but are not optimized.
+默认的是 debug 构建—— 如果你运行  `cargo build`，`cargo run`，`rustc`，并且不带其他选项，就会生成 debug 构建。 debug 构建对调试很有用，但是并不优化。
+
+When you compile your Rust program in release mode, the compiler performs a series of optimizations such as inlining, loop unrolling, dead code elimination, and constant folding. These optimizations make your program run faster, but they also increase compilation time and may result in larger binary files.
+在 Release 模式下编译你的 Rust 程序时，编译器会进行一系列的优化，例如内联，循环展开，死代码删除，常量折叠等。这些优化会使你的程序运行得更快。然而，这些优化也会使你的程序的编译时间更长，并可能使生成的二进制文件更大。
+
+```rust
+// src/main.rs
+fn fibonacci(n: u64) -> u64 {
+    if n <= 1 {
+        return n;
+    }
+    fibonacci(n - 1) + fibonacci(n - 2)
+}
+
+fn main() {
+    let n = 40;
+    println!("Fibonacci({}) = {}", n, fibonacci(n));
+}
+```
+
+```shell
+# Debug模式
+$ cargo run
+   Compiling fib v0.1.0 (/path/to/fib)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.50s
+     Running `target/debug/fib`
+Fibonacci(40) = 102334155
+# 运行时间：约5秒
+
+# Release模式
+$ cargo run --release
+   Compiling fib v0.1.0 (/path/to/fib)
+    Finished release [optimized] target(s) in 0.72s
+     Running `target/release/fib`
+Fibonacci(40) = 102334155
+# 运行时间：约0.05秒
+```
+
+- `[unoptimized + debuginfo]` indicates that a debug build was generated. The compiled code will be placed in the `target/debug/` directory. `cargo run` will run the program built in debug mode.
+- `[optimized]` indicates that a release build was generated. The compiled code will be placed in the `target/release/` directory. `cargo run --release` will run the program built in release mode.
+
+- `[unoptimized + debuginfo]`  表示生成的是 debug 构建。编译后的代码会放在  `target/debug/`  目录中。 `cargo run`  会运行 debug 构建的程序。
+- `[optimized]`  表示生成的是 release 构建。编译好的代码会放在  `target/release/`  目录中。 `cargo run --release`  会运行 release 构建。
+
+### Link-Time Optimization 链接时优化
+
+Link-Time Optimization (LTO) is a whole-program optimization technique that can improve runtime performance by 10%-20% or more at the cost of increased build time. For a single Rust program, it's usually worthwhile to trade off compilation time for runtime performance. Enabling LTO slightly increases compilation time but further reduces runtime.
+链接时优化 (Link-time optimization, LTO) 是一种适用于整个程序的优化技术，以增加构建时间为代价，可以提高 10%-20% 或更多的运行时性能，对于单个 Rust 程序，通常用编译时间换取运行性能是值得的（启用 LTO 后，编译时间略有增加，但运行时间进一步减少）。
+
+The simplest way to enable LTO is to add the following lines to `Cargo.toml` and then perform a release build.
+启用 LTO 最简单的方法是，向  `Cargo.toml`  中添加下列行，然后进行 release 构建。
+
+```toml
+[profile.release]
+lto = true
+```
+
+Alternatively, using `lto = "thin"` in `Cargo.toml` enables Thin LTO, a less aggressive form of LTO that is usually as effective as full LTO but doesn’t significantly increase build time.
+另外，在  `Cargo.toml`  中使用  `lto = "thin"`  则会启用 “轻量级”(thin) LTO——一种不那么激进的 LTO 形式，通常与重量级 LTO 一样有效，但不会过多增加构建时间。
+
+```toml
+[profile.release]
+lto = "thin"
+```
+
+```
+cargo run --release
+```
+
+### Panic! with Abort panic! 时 abort
+
+If you don't need to catch or unwind from a panic, you can configure the program to abort on panic. This can reduce the binary size and slightly improve performance:
+如果不需要捕获或展开 panic，可以配置在 panic 时直接中止程序，这样可以减小二进制文件大小并略微提升性能：
+
+```toml
+[profile.release]
+panic = "abort"
+```
+
+```
+# 优化前
+$ ls -lh target/release/fib
+-rwxr-xr-x 2 user user 3.8M Aug 13 10:00 target/release/fib
+
+# 优化后
+$ cargo build --release
+$ ls -lh target/release/fib
+-rwxr-xr-x 2 user user 3.6M Aug 13 10:05 target/release/fib
+```
+
+### Faster Linker 更快的链接器
+
+It is recommended to use [lld](https://lld.llvm.org/), which supports ELF, PE/COFF, Mach-O, wasm, and more.
+这里推荐 [lld](https://lld.llvm.org/)，它支持 ELF，PE/COFF，Mach-O，wasm 等等。
+
+To specify using `lld` via the command line, you can prepend your build command with `RUSTFLAGS="-C link-arg=-fuse-ld=lld"`.
+通过命令行指定使用 lld，你可以在你的构建命令前加上 `RUSTFLAGS="-C link-arg=-fuse-ld=lld"`
+
+Alternatively, you can configure it in `config.toml`:
+或在`config.toml`中配置:
+
+```toml
+[build]
+rustflags = ["-C", "link-arg=-fuse-ld=lld"]
+```
+
+```
+# 使用默认链接器
+$ time cargo build --release
+    Finished release [optimized] target(s) in 25.32s
+
+real    0m25.320s
+user    0m24.156s
+sys     0m1.164s
+
+# 使用lld
+$ RUSTFLAGS="-C link-arg=-fuse-ld=lld" time cargo build --release
+    Finished release [optimized] target(s) in 20.15s
+
+real    0m20.150s
+user    0m19.228s
+sys     0m0.922s
+```
+
+### Incremental Compilation 增量编译
+
+The Rust compiler supports incremental compilation, which avoids redundant work during recompilation. It can significantly speed up compilation, but sometimes it may result in slower-running executables. Therefore, it is enabled by default only for debug builds. If you want to enable it for release builds as well, add the following to `Cargo.toml`:
+Rust 编译器支持增量编译，避免在重编译的时候做重复的工作。它可以大大提升编译速度，但有时会让生成的可执行程序运行的慢一些。因此，它只默认为调试构建启用。如果你也想为发布构建启用，把这些加到 `Cargo.toml`：
+
+```toml
+[profile.release]
+incremental = true
+```
+
+```
+$ touch src/main.rs
+$ time cargo build --release
+   Compiling project v0.1.0 (/path/to/project)
+    Finished release [optimized] target(s) in 1m 45s
+
+real    1m45.150s
+user    1m43.228s
+sys     0m1.922s
+
+
+$ touch src/main.rs
+$ time cargo build --release
+   Compiling project v0.1.0 (/path/to/project)
+    Finished release [optimized] target(s) in 0m 25s
+
+real    0m25.120s
+user    0m24.156s
+sys     0m0.964s
+```
