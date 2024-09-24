@@ -1,0 +1,8 @@
+{
+  "label": "Bolt",
+  "position": 5,
+  "link": {
+    "type": "generated-index",
+    "description": "A high-performance and composable SVM-based framework for Fully On-chain games and Autonomous Worlds. 一个高性能、可组合的基于SVM的框架，用于实现全链上游戏和自治世界。"
+  }
+}
