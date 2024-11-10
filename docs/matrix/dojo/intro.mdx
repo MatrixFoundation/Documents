@@ -1,0 +1,71 @@
+---
+sidebar_label: I. Dojo Introduction
+title: I. Dojo Introduction ⤵️
+sidebar_position: 1
+---
+
+> 🚀 **This document is continuously being updated...**
+
+> 🚀 **本文档持续更新中...**
+
+## Get Started 快速开始
+
+Dojo is built around a set of development tools - Katana, Torii and Sozo.
+
+Dojo 会使用一系列的开发工具 —— Katana, Torii and Sozo.
+
+:::info
+
+You can choose one of the following methods!
+
+以下方式选择一种即可！
+
+:::
+
+### Install Dojoup 安装 Dojoup
+
+`dojoup` is dojo development toolchain installer.
+
+`dojoup`是 dojo 开发工具链安装器。
+
+```bash
+curl -L https://install.dojoengine.org | bash
+```
+
+Then run the following command to complete the installation of the tools.
+
+然后运行以下的命令完成工具的安装。
+
+```bash
+dojoup
+```
+
+### Building from source 从源码构建
+
+**Prerequisites**: You will need the Rust compiler and Cargo, the Rust package manager. The easiest way to install both is with `rustup`.
+
+**前期准备**：您需要 Rust 编译器和 Cargo，这是 Rust 的包管理器。安装这两者的最简单方式是使用 rustup。
+
+By using a single Cargo command:
+
+通过使用单一的 Cargo 命令：
+
+```bash
+cargo install --git https://github.com/dojoengine/dojo --force sozo katana torii
+```
+
+Or, by manually building from a local copy of the Dojo repository:
+
+或者，从 Dojo 仓库的本地副本手动构建：
+
+```bash
+# clone the repository 克隆仓库
+git clone https://github.com/dojoengine/dojo.git
+cd dojo
+# install Sozo 安装 Sozo
+cargo install --path ./bin/sozo --force
+# install Katana 安装 Katana
+cargo install --path ./bin/katana --force
+# install Torii
+cargo install --path ./bin/torii --force
+```
