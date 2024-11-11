@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Freeman&family=Ma+Shan+Zheng&family=Poetsen+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Poetsen+One&family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap');
 
 @font-face {
     font-family: "LXGWZhenKaiGB";
@@ -15,7 +15,7 @@
     --ifm-color-primary-lightest: #d5f1fd;
     --ifm-code-font-size: 95%;
     --ifm-font-size-base: 18px;
-    --ifm-heading-font-family: Freeman, Ma Shan Zheng, ui-sans-serif, system-ui, -apple-system;
+    --ifm-heading-font-family: Poetsen One, Ma Shan Zheng, ui-sans-serif, system-ui, -apple-system;
     --ifm-navbar-shadow: 0 4px 28px rgb(0 0 0 / 10%);
     --ifm-menu-color: #0d203a;
     --ifm-code-background: #12affa1a;
@@ -62,7 +62,8 @@
 }
 
 body {
-    font-family: "Poetsen One", "LXGWZhenKaiGB", system-ui, -apple-system;
+    font-family: "Source Sans 3", " LXGWZhenKaiGB", system-ui, -apple-system;
+    font-weight: 500;
 }
 
 html,
@@ -90,6 +91,10 @@ article {
             &:focus {
                 border-bottom: 1px solid var(--ifm-color-primary-light);
             }
+        }
+
+        p {
+            font-size: 1.2rem;
         }
 
         code {
@@ -178,6 +183,7 @@ article {
     margin-right: 16px;
     font-size: 1rem;
     font-weight: 500;
+    font-family: Poetsen One, Ma Shan Zheng, ui-sans-serif, system-ui, -apple-systems
 }
 
 .nav-home:before,
