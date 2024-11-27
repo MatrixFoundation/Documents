@@ -1,0 +1,904 @@
+---
+sidebar_label: Git 命令行操作
+title: 📤 深入浅出 Git 命令行操作
+sidebar_position: 6
+---
+
+## 一、Git 介绍 📚
+
+GitHub 是全球最大的代码托管平台，它提供基于 Git 的代码托管服务，Git 是版本控制系统。
+
+> 版本控制是一种记录一个或若干文件内容变化，以便将来查阅特定版本修订情况的系统。
+
+### 1、Git 的历史 🕰️
+
+Linux 内核开源项目有着为数众广的参与者，但绝大多数的 Linux 内核维护工作都花在了提交补丁和保存归档的繁琐事务上（1991－2002年）。 到 2002 年，整个项目组开始启用一个专有的分布式版本控制系统 BitKeeper 来管理和维护代码。
+
+BitKeeper 在当时是一个私有的付费工具，但是 Linux 的开发者可以免费使用它，直到 BitKeeper 的创始人 Larry McVoy 与一个 Linux 开发人员就不恰当地使用 BitKeeper 发生了争执。
+
+到了 2005 年，开发 BitKeeper 的商业公司同 Linux 内核开源社区的合作关系结束，他们收回了 Linux 内核社区免费使用 BitKeeper 的权力。
+
+在 2005 年，Linus Torvalds 迫切需要一个新的版本控制系统来维护 Linux 内核的开发。于是他花了一个星期的时间，从头开始编写了一个革命性的新系统，并将其命名为 Git。
+
+自诞生于 2005 年以来，Git 日臻成熟完善，在高度易用的同时，仍然保留着初期设定的目标。它的速度飞快，极其适合管理大项目，有着令人难以置信的非线性分支管理系统。
+
+### 2、Git 的特点 ✨
+
+- **高性能：** 采用高效的压缩算法，节省存储空间，分支操作速度快，切换分支几乎瞬间完成，优秀的存储机制，避免存储重复内容，网络传输效率高，只传输差异内容。
+
+- **分布式版本控制：** Git是一个分布式版本控制系统，这意味着每个开发者都拥有完整的代码仓库副本，不需要依赖中央服务器就能工作，支持离线开发，提高了系统的可靠性，避免了单点故障。
+- **数据完整性保证：** 使用SHA-1哈希算法来保证数据完整性，每次提交都会生成唯一的哈希值，确保代码历史不可篡改，提供可靠的代码追溯能力，任何文件的变化都会被准确记录。实际上，Git 数据库中保存的信息都是以文件内容的哈希值来索引，而不是文件名。
+
+- **适合团队协作开发：** 完善的远程仓库支持，便捷的代码推送（push）和拉取（pull）机制，而且内置冲突解决工具。
+
+## 二、安装与配置 💾
+
+### 1、各平台安装方法 🖥️
+
+👉 [Git 下载](https://git-scm.com/downloads)
+
+### 2、初始配置 🛠️
+
+Git 自带一个 `git config`​ 的工具来帮助设置 Git 配置。
+
+```bash
+# 查看所有配置
+git config --list
+```
+
+#### 用户信息配置 ⚙️
+
+主要为了标识身份，每次提交都需要标识作者，追踪代码贡献者，区分不同开发者的提交。
+
+```bash
+# 配置用户名（进行替换 Github Username）
+git config --global user.name "Github Username"
+
+# 配置邮箱（进行替换 Github Email）
+git config --global user.email "Github Email"
+```
+
+#### SSH 配置
+
+1. 加密远程仓库通信，身份验证安全。
+2. 避免重复输入密码，免密码推送和拉取仓库。
+
+```bash
+# 生成 SSH 密钥（进行替换 Github Email）
+ssh-keygen -t rsa -b 4096 -C "Github Email"
+
+# 查看公钥，复制该内容
+cat ~/.ssh/id_rsa.pub
+
+# 在 GitHub 等平台添加 SSH 公钥（⬇️ 详情查看下图）
+
+# 测试 SSH 连接
+ssh -T git@github.com
+```
+
+<img src="/tools/git_ssh.png" alt="Git SSH" />
+
+#### 配置级别
+
+Git 有三个配置级别，优先级由高到低：
+
+1. **本地级别（Local）**
+
+   - 只对当前仓库有效
+   - 配置文件位置：`.git/config`​
+   - 使用命令：`git config --local`​
+
+2. **全局级别（Global）**
+
+   - 对当前用户的所有仓库有效
+   - 配置文件位置：`~/.gitconfig`​
+   - 使用命令：`git config --global`​
+
+3. **系统级别（System）**
+
+   - 对系统所有用户有效
+   - 配置文件位置：`/etc/gitconfig`​
+   - 使用命令：`git config --system`​
+
+### 3、常用配置命令 ⚙️
+
+```bash
+# 查看 Git 的某项配置（进行替换 <key>）
+git config <key>
+# git config user.name
+
+# 删除某项配置（进行替换 <key>）
+git config --global --unset <key>
+# git config --global --unset user.name
+
+# 文本编辑器：当 Git 需要你输入信息时会调用它，如果未配置，Git 会使用操作系统默认的文本编辑器。（如，使用 nvim 编辑器）
+git config --global core.editor nvim
+
+# 直接编辑全局配置文件
+git config --global --edit
+
+# 获取 Git 命令的具体操作或子命令的帮助（进行替换 <verb>）
+git help <verb>
+git <verb> --help
+man git-<verb>
+# git help config
+```
+
+代理设置（如果需要，`proxy.example.com`​和 `port`​ 进行替换）
+
+```bash
+# 设置 HTTP 代理
+git config --global http.proxy http://proxy.example.com:port
+
+# 设置 HTTPS 代理
+git config --global https.proxy https://proxy.example.com:port
+```
+
+## 三、Git 基础 🧩
+
+### 1、Git 状态 🚦
+
+Git 有三种状态，你的文件处于其中之一：已提交（committed）、已修改（modified）和已暂存（staged）。
+
+- 已提交表示数据已经安全的保存在本地数据库中。
+- 已修改表示修改了文件，但还没保存到数据库中。
+- 已暂存表示对一个已修改文件的当前版本做了标记，使之包含在下次提交的快照中。
+
+### 2、Git 工作区域 🗂️
+
+#### 工作区（Working Directory）
+
+项目的实际文件存储位置，开发者直接进行代码编辑的区域，包含项目的所有源文件和目录。
+
+**特点**：
+
+- 未被Git追踪的文件默认存在这里
+- 可以看到实际的项目文件
+- 直接反映当前代码的最新状态
+
+```bash
+# 查看工作区状态
+git status
+```
+
+#### 暂存区（Staging Area）
+
+临时存储即将提交的修改，位于.git目录下的索引文件（index），作为工作区和本地仓库之间的中间状态。
+
+**特点**：
+
+- 可以精细控制提交的内容
+- 允许部分文件提交
+- 提供代码审查的机会
+
+```bash
+# 添加文件到暂存区（进行替换 <file>）
+git add <file>
+```
+
+#### 本地仓库（Local Repository）
+
+存储项目的完整历史记录，位于项目根目录的.git目录，包含所有提交信息和分支。
+
+**特点**：
+
+- 完整保存项目的所有版本历史
+- 支持版本回退和分支管理
+- 可以完全脱机工作
+
+```bash
+# 提交到本地仓库（进行替换 commit message）
+git commit -m "commit message"
+
+# 查看提交历史
+git log
+```
+
+#### 远程仓库（Remote Repository）
+
+托管在网络服务器上的代码仓库，如GitHub、GitLab、Gitee等平台，用于代码共享和多人协作。
+
+**特点**：
+
+- 提供代码备份
+- 支持多人协作开发
+- 可以托管开源或私有项目
+
+```bash
+# 克隆远程仓库（进行替换 <repository-url>）
+git clone <repository-url>
+
+# 推送代码到远程仓库（进行替换 <branch>）
+git push origin <branch>
+
+# 从远程仓库拉取代码（进行替换 <branch>）
+git pull origin <branch>
+```
+
+### 3、工作流程示例 🔄
+
+**工作区 → 暂存区 → 本地仓库 → 远程仓库**
+
+```bash
+# 1. 在工作区修改文件
+vim README.md
+
+# 2. 将修改添加到暂存区
+git add README.md
+
+# 3. 提交到本地仓库
+git commit -m "Update README"
+
+# 4. 推送到远程仓库
+git push origin main
+```
+
+这四个区域构成了Git版本控制的核心机制，提供了灵活、高效的代码管理方式。理解这些区域及其交互对于熟练使用Git至关重要。
+
+## 四、Git 基本操作 🖱️
+
+### 1、获取 Git 仓库 📦
+
+有两种获取 Git 项目仓库的方法，第一种是在本地初始化仓库（git init）； 第二种是从一个服务器克隆一个现有的 Git 仓库（git clone）。
+
+| 特性     | 初始化（git init） | 克隆（git clone） |
+| -------- | ------------------ | ----------------- |
+| 适用场景 | 新项目             | 现有项目          |
+| 项目历史 | 从零开始           | 获取完整历史      |
+| 远程仓库 | 需手动添加         | 自动关联          |
+
+#### 初始化仓库
+
+```bash
+git init
+```
+
+可以在空目录中，也可以是已经存在文件的文件夹，该命令将创建一个名为 `.git`​ 的子目录来跟踪版本，这是 Git 仓库的核心，记录了仓库的所有历史和状态信息。
+
+#### 克隆仓库
+
+```bash
+# 基本克隆命令（进行替换 <repository-url>）
+git clone <repository-url>
+
+# 克隆并指定本地目录名（进行替换 <repository-url> <local directory name>）
+git clone <repository-url> <local directory name>
+
+# 只克隆最近 1 次提交（浅克隆）（进行替换 <repository-url>）
+git clone --depth 1 <repository-url>
+# 克隆最近 n 次提交
+git clone --depth n <repository-url>
+
+# 克隆特定分支（进行替换 <branch> <repository-url>）
+git clone -b <branch> <repository-url>
+```
+
+主要使用两种协议：公开项目优先使用 HTTPS，开发项目推荐 SSH。
+
+| 默认端口     | 443                | 22                 |
+| ------------ | ------------------ | ------------------ |
+| 安全性       | 中等               | 高                 |
+| 防火墙通过性 | 非常好             | 可能受限           |
+| 认证方式     | 用户名/密码        | 密钥对             |
+| 初始配置     | 简单               | 需要生成和配置密钥 |
+| 每次操作     | 需要输入凭据       | 免密码             |
+| 适用场景     | 公共网络、临时使用 | 私密环境、频繁操作 |
+
+```bash
+git clone https://github.com/username/repository.git
+git clone git@github.com:username/repository.git
+```
+
+### 2、添加文件（git add） ➕
+
+```bash
+# 添加单个文件到暂存区（进行替换 <file>）
+git add <file>
+
+# 添加多个指定文件（进行替换 <filen>）
+git add <file1> <file2> <file3>
+
+# 添加当前目录下所有新文件和修改
+git add .
+
+# 添加所有变更，包括新增、修改、删除
+git add -A
+# 等同于
+git add --all
+
+# 仅添加已经被 git 跟踪的文件的修改
+git add -u
+
+# 交互式选择
+git add -p
+```
+
+#### `.gitignore`​
+
+​`.gitignore`​ 是一个文本文件，用于告诉 Git 哪些文件或目录不需要被版本控制，合理配置可以大大简化 Git 使用，保持仓库整洁，`.gitignore`​ 只对未跟踪文件生效。
+
+**忽略文件/目录**
+
+```bash
+# 忽略特定文件
+secret.txt
+passwords.json
+
+# 忽略特定目录
+logs/
+temp/
+
+# 忽略所有 .log 文件
+*.log
+
+# 忽略特定目录下的所有文件
+build/*
+```
+
+**通配符使用**
+
+```bash
+# * 匹配多个字符
+*.txt       # 所有 .txt 文件
+*.log       # 所有日志文件
+
+# ? 匹配单个字符
+test?.txt   # test1.txt, testa.txt 匹配，但 test10.txt 不匹配
+
+# ** 匹配多级目录
+**/logs     # 任何层级的 logs 目录
+```
+
+**取反规则**
+
+```bash
+# 忽略所有 .log 文件，但 important.log 除外
+*.log
+!important.log
+```
+
+### 3、提交更改（git commit） ✅
+
+每次准备提交前，先用 `git status`​ 看下，确保修改的需提交的文件都已暂存起来了， 然后再运行提交命令 `git commit`​。
+
+```bash
+# 基本提交（进行替换 commit message）
+git commit -m "commit message"
+
+# 多行提交信息（进行替换 “……”）
+git commit -m "feat: 新增用户认证模块
+- 实现用户注册功能
+- 添加登录验证逻辑
+- 集成第三方认证"
+
+# 直接提交所有已跟踪的修改文件（进行替换 commit message）
+git commit -a -m "commit message"
+
+# 修改最近一次提交的信息（进行替换 commit message）
+git commit --amend -m "commit message"
+
+# 将新更改合并到上一次提交，而不需要修改提交信息
+git commit --amend --no-edit
+
+# 打开编辑器编写更详细的提交信息
+git commit
+```
+
+### 4、查看状态（git status） 👀
+
+```bash
+# 简洁输出
+git status -s
+git status --short
+
+# 显示分支信息
+git status -b
+git status --branch
+```
+
+#### 输出信息类型
+
+```bash
+# 未修改状态
+nothing to commit, working tree clean
+
+# 有未跟踪的文件
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+    new_file.txt
+
+# 有已暂存的文件
+Changes to be committed:
+  (use "git reset HEAD <file>..." to unstage)
+    new file:   staged_new_file.txt
+    modified:   staged_modified_file.txt
+```
+
+### 5、查看差异（git diff） 🔍
+
+```bash
+# 比较工作目录和暂存区，显示未暂存的文件修改内容
+git diff
+
+# 比较暂存区和最近一次提交
+git diff --staged
+git diff --cached
+
+# 比较两次提交（进行替换 <commit1> <commit2>）
+git diff <commit1> <commit2>
+
+# 查看某个文件的差异（进行替换 <file>）
+git diff <file>
+
+# 显示简要统计信息
+git diff --stat
+```
+
+### 6、查看日志（git log） 📝
+
+帮助您追踪项目的变更记录和开发轨迹。
+
+标准日志视图 `git log`​
+
+- 按时间倒序显示所有提交
+- 包含完整的提交哈希、作者、日期和提交信息
+
+简洁日志 `git log --oneline`​
+
+- 每个提交显示为一行
+- 显示简短哈希和提交信息
+
+```bash
+# 显示最近 5 次提交
+git log -n 5
+
+# 按作者过滤（进行替换 username）
+git log --author="username"
+
+# 按日期范围（进行替换 "日期"）
+git log --since="2023-01-01" --until="2023-12-31"
+
+# 查看提交历史
+git log --graph --oneline --all
+git log --graph --oneline develop
+
+# 查看某文件各行最后修改对应的 commit 以及作者（进行替换 <file>）
+git blame <file>
+```
+
+### 7、撤销修改 🔙
+
+#### git checkout
+
+> 使用 `--`​ 分隔文件名，避免与分支名冲突
+
+```bash
+# 撤销工作目录中的文件修改（进行替换 <file>）
+git checkout -- <file>
+
+# 撤销所有未暂存的修改，谨慎使用
+git checkout -- .
+
+# 切换分支（同时也可以丢弃更改）（进行替换 <branch>）
+git checkout <branch>
+```
+
+#### git reset
+
+> HEAD 是当前分支引用的指针，它总是指向该分支上的最后一次提交。 这表示 HEAD 将是下一次提交的父结点。 通常，理解 HEAD 的最简单方式就是将它看做 **你的上一次提交** 的快照。`HEAD~1`​ 是一种引用方式，用于表示当前 `HEAD`​ 的前一个提交（即上一个提交）。
+
+重置当前分支的 HEAD 指针，可以改变提交历史。
+
+```bash
+# 取消暂存的文件，将文件从暂存区移除，但保留工作目录的修改（进行替换 <file>）
+git reset <file>
+
+# 软重置：保留工作目录和暂存区的更改
+git reset --soft HEAD~1
+
+# 混合重置（默认）：保留工作目录，清空暂存区
+git reset HEAD~1
+
+# 硬重置：完全丢弃所有更改
+git reset --hard HEAD~1
+```
+
+**重置模式比较：**
+
+| 模式          | 工作目录 | 暂存区 | 提交历史 |
+| ------------- | -------- | ------ | -------- |
+| --soft        | 不变     | 不变   | 回退     |
+| --mixed(默认) | 不变     | 清空   | 回退     |
+| --hard        | 清空     | 清空   | 回退     |
+
+#### git revert
+
+创建一个新的提交，撤销指定提交的更改，不会改变提交历史。
+
+```bash
+# 撤销最近一次提交
+git revert HEAD
+
+# 撤销指定哈希的提交（进行替换 <commit-hash>）
+git revert <commit-hash>
+
+# 撤销最近的3个提交
+git revert HEAD~2..HEAD
+```
+
+#### 总结
+
+- 本地修改：使用 `git checkout`​
+
+- 已暂存但未提交：使用 `git reset`​
+
+- 已推送提交：使用 `git revert`​
+
+| 场景               | git checkout | git reset | git revert |
+| ------------------ | ------------ | --------- | ---------- |
+| 撤销本地未暂存修改 | ✅           | ❌        | ❌         |
+| 取消暂存文件       | ❌           | ✅        | ❌         |
+| 回退本地未推送提交 | ❌           | ✅        | ✅         |
+| 撤销已推送提交     | ❌           | ❌        | ✅         |
+
+## 五、分支管理 🌿
+
+### 1、分支概念 🌳
+
+分支是指向提交的可移动指针。它允许你在不影响主分支（通常是 `main`​）的情况下进行修改和实验。每个分支都是代码库的一条独立的开发线，可以进行提交、合并等操作。
+
+### 2、分支操作 ✂️
+
+```bash
+# 查看本地分支
+git branch
+
+# 查看所有分支（包括远程）
+git branch -a
+
+# 查看每个分支最后一次提交
+git branch -v
+
+# 创建新分支（进行替换 <branch>）
+git branch <branch>
+
+# 创建并切换到新分支（进行替换 <branch>）
+git checkout -b <branch>
+
+# 基于特定提交创建分支（进行替换 <commit-hash>）
+git branch <branch> <commit-hash>
+
+# 切换分支（进行替换 <branch>）
+git checkout <branch>
+
+# 快速切换到上一个分支
+git checkout -
+
+# 强制切换（丢弃未提交的更改）（进行替换 <branch>）
+git checkout -f <branch>
+
+# 将其他分支合并到当前分支（进行替换 <branch>）
+git merge <branch>
+
+# 使用变基方式合并（进行替换 <branch>）
+git merge --rebase <branch>
+
+# 压缩合并（合并为单个提交）（进行替换 <branch>）
+git merge --squash <branch>
+
+# 删除已合并的本地分支（进行替换 <branch>）
+git branch -d <branch>
+
+# 强制删除分支（未合并）（进行替换 <branch>）
+git branch -D <branch>
+
+# 删除远程分支（进行替换 <branch>）
+git push origin --delete <branch>
+```
+
+### 3、分支策略 🗺️
+
+版本管理分支帮助管理项目的不同版本：
+
+- 主分支（main）通常保存稳定版本
+- 开发分支（develop）用于集成新特性
+- 功能分支（feature）用于开发新特性
+- 发布分支（release）可以准备新版本
+- 修复分支（hotfix）用于紧急bug修复
+
+## 六、远程仓库操作 🌐
+
+### 1、查看远程仓库 🔭
+
+> `origin`​ 是 Git 给你克隆的仓库服务器的默认名字。
+
+```bash
+# 查看远程仓库服务器
+git remote
+
+# 查看远程仓库使用的 Git 保存的简写与其对应的 URL
+git remote -v
+
+# 查看指定远程仓库详情
+git remote show origin
+
+# 重命名远程仓库（进行替换 <old-name> <new-name>）
+git remote rename <old-name> <new-name>
+
+# 删除远程仓库关联（进行替换 <remote-name>）
+git remote remove <remote-name>
+```
+
+### 2、添加远程仓库 ➕
+
+```bash
+# 添加远程仓库（进行替换 <remote-name> <repository-url>）
+git remote add <remote-name> <repository-url>
+```
+
+### 3、推送到远程（git push） ⬆️
+
+```bash
+# 标准推送（进行替换 <remote-name> <branch>）
+git push <remote-name> <branch>
+# git push origin main
+
+# 首次推送并建立上游分支关联（进行替换 <remote-name> <branch>）
+git push -u <remote-name> <branch>
+# git push -u origin main
+
+# 强制推送（谨慎使用）（进行替换 <remote-name> <branch>）
+git push -f <remote-name> <branch>
+# git push -f origin main
+
+# 推送所有分支（进行替换 <remote-name>）
+git push --all <remote-name>
+# git push --all origin
+
+# 推送所有标签（进行替换 <remote-name>）
+git push --tags <remote-name>
+
+# 删除远程分支（进行替换 <remote-name> <branch>）
+git push <remote-name> --delete <branch>
+# git push origin --delete <branch>
+```
+
+### 4、从远程获取（git fetch） ⬇️
+
+```bash
+# 获取远程仓库更新（进行替换 <remote-name>）
+git fetch <remote-name>
+# git fetch origin
+
+# 获取特定分支（进行替换 <remote-name> <branch>）
+git fetch <remote-name> <branch>
+
+# 获取所有远程仓库和分支
+git fetch --all
+```
+
+### 5、拉取更新（git pull） 🔄
+
+```bash
+# 基本拉取（进行替换 <remote-name> <branch>）
+git pull <remote-name> <branch>
+# git pull origin main
+
+# 拉取并变基（进行替换 <remote-name> <branch>）
+git pull --rebase <remote-name> <branch>
+# git pull --rebase origin main
+
+# 使用变基方式拉取（推荐）
+git pull --rebase
+
+# 只拉取但不合并
+git pull --no-commit
+
+# 强制覆盖本地更改
+git pull -f
+```
+
+### 6、远程分支管理 🌍
+
+```bash
+# 列出所有远程分支
+git branch -r
+
+# 查看本地和远程分支
+git branch -a
+
+# 基于远程分支创建本地分支（进行替换 <local-branch> <remote-name> <branch>）
+git checkout -b <local-branch> <remote-name>/<remote-branch>
+
+# 设置本地分支跟踪远程分支（进行替换 <remote-name> <branch>）
+git branch -u <remote-name>/<remote-branch>
+```
+
+### 7、总结 📋
+
+| 命令      | 作用           | 是否修改本地代码 | 是否下载远程更新 |
+| --------- | -------------- | ---------------- | ---------------- |
+| git fetch | 仅下载远程更新 | 否               | 是               |
+| git pull  | 下载并合并更新 | 是               | 是               |
+| git push  | 推送本地更新   | 否               | 否               |
+
+## 七、高级 Git 技巧 🚀
+
+### 1、Git 别名 🏷️
+
+如果不想每次都输入完整的 Git 命令，可以通过 `git config`​ 来为需要的命令设置一个别名。
+
+```bash
+# 进行替换 <alias-name> <git-command>
+git config --global alias.<alias-name> <git-command>
+# git config --global alias.co checkout
+# git config --global alias.br branch
+# git config --global alias.ci commit
+# git config --global alias.st status
+# git config --global alias.unstage 'reset HEAD --'
+```
+
+例如，当要输入 `git commit`​ 时，只需要输入 `git ci`​。
+
+上述操作会使下面的两个命令等价：
+
+```bash
+git unstage fileA
+git reset HEAD -- fileA
+```
+
+### 2、标签管理（git tag） 🏁
+
+Git 标签是给特定提交打上永久性书签的方式，通常用于标记版本发布点。
+
+通过掌握 Git 标签的使用，您可以更好地管理项目版本，追踪重要的发布里程碑，并为团队协作提供清晰的版本参考。
+
+​`主版本.次版本.修订版`​
+
+示例：`v1.2.3`​
+
+- 1: 主版本（重大变更）
+- 2: 次版本（新功能）
+- 3: 修订版（bug修复）
+
+```bash
+# 创建轻量标签（进行替换 <tag-name>）
+git tag <tag-name>
+# git tag v1.0.0
+
+# 创建附注标签（进行替换 <tag-name> <message>）
+git tag -a <tag-name> -m "<message>"
+# git tag -a v1.0.0 -m "版本说明"
+
+# 给指定的 commit 打标签（进行替换 <tag-name> <commit>）
+git tag <tag-name> <commit>
+
+# 列出标签
+git tag
+
+# 使用特定的模式查找标签（进行替换 <pattern>）
+git tag -l '<pattern>'
+# git tag -l 'v1.8.5*'
+
+# 推送标签（进行替换 <remote-name> <tag-name>）
+git push <remote-name> <tag-name>
+# git push origin v1.0.0
+
+# 删除标签（进行替换 <tag-name>）
+git tag -d <tag-name>
+# git tag -d v1.0.0
+```
+
+### 3、储藏（git stash） 📦
+
+用于临时保存当前工作目录的未完成修改（将当前未提交的修改（已暂存和未暂存的）保存起来），同时让工作目录恢复到上一次提交的干净状态。这在你需要快速切换分支或处理其他紧急任务时非常有用。
+
+- stash只会储存已跟踪的文件
+- 未跟踪的新文件需要先使用`git add`​
+- 冲突的stash可能需要手动解决
+
+```bash
+# 基本储藏
+git stash
+
+# 带描述的储藏（进行替换 <message>）
+git stash save "<message>"
+
+# 查看stash列表
+# 每个stash都有唯一的标识符
+git stash list
+
+# 应用并删除最近的stash
+git stash pop
+
+# 应用但保留stash
+git stash apply
+
+# 清空所有stash
+git stash clear
+
+# 从stash创建分支，将最近的 stash 应用到这个新分支上，成功后会自动删除这个 stash（进行替换 <branch>）
+git stash branch <branch>
+```
+
+正在开发功能，突然需要切换分支：
+
+```bash
+# 保存当前未完成的工作
+git stash
+
+# 切换到其他分支（进行替换 <another-branch>）
+git checkout <another-branch>
+
+# 完成其他工作后，返回并恢复之前的工作（进行替换 <original-branch>）
+git checkout <original-branch>
+git stash pop
+```
+
+保存多个stash并管理：
+
+```bash
+# 创建多个stash
+git stash save "功能A未完成"
+git stash save "功能B调试中"
+
+# 查看所有stash
+git stash list
+
+# 应用特定的stash
+# stash@{1} 是指你在 git stash list 中看到的第二个 stash（因为索引是从 0 开始的）。
+git stash apply stash@{1}
+```
+
+### 4、子模块（git submodule） 🧩
+
+子模块本质是指向特定提交的指针，在一个 Git 仓库中管理另一个 Git 仓库的机制。它允许你将一个 Git 仓库作为另一个 Git 仓库的子目录，同时保持两个仓库的独立性。这对于管理复杂项目的依赖和代码复用非常有用，但是子模块的更新需要谨慎，以避免意外引入不兼容的代码。
+
+- 子模块始终指向一个特定的提交，而不是分支的最新状态
+- 子模块的更新需要显式操作
+- 多人协作时需要注意子模块的同步
+
+```bash
+# 添加子模块（进行替换 <repository-url> <path>）
+git submodule add <repository-url> <path>
+# git submodule add https://github.com/nlohmann/json.git libs/json
+
+# 初始化本地配置文件
+git submodule init
+
+# 初始化特定子模块（进行替换 <path/to/submodule>）
+git submodule init <path/to/submodule>
+# git submodule init libs/json
+
+# 更新所有子模块到主项目中记录的特定提交
+git submodule update
+
+# 更新并初始化
+git submodule update --init
+
+# 递归更新嵌套的子模块
+git submodule update --init --recursive
+
+# 克隆主仓库并初始化所有子模块（进行替换 <repository-url>）
+git clone --recurse-submodules <repository-url>
+
+# 更新所有子模块到其远程仓库的最新提交
+git submodule update --remote
+
+# 同步所有子模块的远程URL
+git submodule sync
+
+# 同步特定子模块（进行替换 <path/to/submodule>）
+git submodule sync <path/to/submodule>
+# git submodule sync libs/json
+
+# 删除子模块（进行替换 <path/to/submodule>）
+git submodule deinit <path/to/submodule>
+# git submodule deinit libs/json
+
+# 从版本控制中删除子模块（进行替换 <path/to/submodule>）
+git submodule rm <path/to/submodule>
+# git rm libs/json
+```
+
+> 初始化子模块的作用是将子模块的目录设置为 Git 仓库，并准备好进行后续的操作（如拉取、更新等）。如果没有初始化，子模块的目录将是空的，无法进行版本控制操作。
