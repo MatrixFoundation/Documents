@@ -1,6 +1,6 @@
-import { themes as prismThemes } from 'prism-react-renderer';
-import type { Config } from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
+import type { Config } from '@docusaurus/types';
+import { themes as prismThemes } from 'prism-react-renderer';
 
 const config: Config = {
   title: 'MatrixFoundation',
@@ -156,7 +156,7 @@ const config: Config = {
       copyright: `Made with ❤️ by <a target="_blank" rel="noopener noreferrer" href="https://github.com/MatrixFoundation">MatrixFoundation.</a>`,
     },
     prism: {
-      theme: prismThemes.github,
+      theme: prismThemes.oneLight,
       darkTheme: prismThemes.dracula,
     },
   } satisfies Preset.ThemeConfig,
