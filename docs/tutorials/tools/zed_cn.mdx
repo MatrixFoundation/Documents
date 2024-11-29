@@ -4,7 +4,13 @@ title: ✍️ 探索 Zed 编辑器：代码编辑器的未来
 sidebar_position: 6
 ---
 
-代码编辑器（Code Editor）通常是轻量级的，主要聚焦于编辑源代码，提供基础的代码编辑功能，如语法高亮、文本编辑、文件管理等。代码编辑器通常具有高度的可定制性和扩展性，允许用户通过安装插件来增加额外的功能，如语法检查、版本控制等。代码编辑器通常不绑定特定的开发框架或语言，其相较于 IDE（Integrated Development Environment，集成开发环境）由于功能较少，通常更快，启动迅速，占用系统资源较少。
+:::note
+
+代码编辑器（Code Editor）通常是轻量级的，主要聚焦于编辑源代码，提供基础的代码编辑功能，如语法高亮、文本编辑、文件管理等。代码编辑器通常具有高度的可定制性和扩展性，允许用户通过安装插件来增加额外的功能，如语法检查、版本控制等。
+
+代码编辑器通常不绑定特定的开发框架或语言，其相较于 IDE（Integrated Development Environment，集成开发环境）由于功能较少，通常更快，启动迅速，占用系统资源较少。
+
+:::
 
 <img src="/tools/zed_logo.png" alt="Zed Editor" />
 
@@ -12,7 +18,11 @@ sidebar_position: 6
 
 <img src="/tools/zed.png" alt="Zed Editor" />
 
-> Zed is a next-generation code editor designed for high-performance collaboration with humans and AI.
+:::info
+
+Zed is a next-generation code editor designed for high-performance collaboration with humans and AI.
+
+:::
 
 Zed Editor 是一款支持多人协作的代码编辑器，由 Atom 编辑器的原作者主导开发，底层采用 Rust，主打 “高性能” 😮，无论是插入延迟、启动时间还是内存占用都十分优秀。
 
@@ -65,11 +75,15 @@ Zed Editor 官方尚未发布适用于 Windows 的版本。
 
 👉 官方默认设置：[zed/assets/settings/default.json](https://github.com/pjlast/zed/blob/3273f5e4041f67b6703c07a14a1a106c03e36962/assets/settings/default.json)
 
+:::tip
+
 打开设置 `settings.json`，有以下两种办法：
 
 1. 快捷键 `Ctrl ,`
 
 2. 打开命令面板 `Crtl Shift P`，输入 `zed: open settings` 来打开 `settings.json` 文件。
+
+:::
 
 #### Vim 模式
 
@@ -77,7 +91,13 @@ Zed Editor 原生支持 Vim 模式，在 `settings.json` 文件添加：`"vim_mo
 
 #### 代理
 
-在 `settings.json` 文件添加：`"proxy": "http://127.0.0.1:7890",`，方便后续 Zed AI 的使用，关闭并重新启动 Zed 编辑器，使新的代理设置生效。
+:::tip
+
+根据你的代理服务器的地址和端口，替换 `proxy.example.com` 和 `port`。
+
+:::
+
+在 `settings.json` 文件添加：`"proxy": "http://proxy.example.com:port",`，方便后续 Zed AI 的使用，关闭并重新启动 Zed 编辑器，使新的代理设置生效。
 
 #### 主题配置
 
@@ -87,7 +107,7 @@ Zed Editor 原生支持 Vim 模式，在 `settings.json` 文件添加：`"vim_mo
 2. 通过右上角头像下拉框中的 `Extension`，安装主题插件，我使用的就是 `base16` 插件，选择其中的 `snazzy` 主题
 3. 自定义主题：将主题 json 文件（如[GitHub - Brunowilliang/zedspace](https://github.com/Brunowilliang/zedspace)中的`zedspace.json`）放置 `.config/zed/themes/` 下，在 `settings.json` 文件添加：
 
-```json
+```json title="settings.json"
 // 更换主题名
 "theme": {
     "mode": "dark",
@@ -136,7 +156,7 @@ Zed Editor 原生支持 Vim 模式，在 `settings.json` 文件添加：`"vim_mo
 
 Zed Editor 内置格式化功能，通过语言服务器协议（LSP）来实现代码格式化。
 
-```json
+```json title="settings.json"
 "tab_size": 2,
 // 启用文件保存时自动格式化功能
 "format_on_save": "on",
@@ -226,7 +246,11 @@ Zed Editor 内置格式化功能，通过语言服务器协议（LSP）来实现
 },
 ```
 
-> 需要手动执行 git pull 命令来合并更改 ⛔
+:::warning
+
+需要手动执行 `git pull` 命令来合并更改 ⛔
+
+:::
 
 #### 开发配置
 
@@ -239,9 +263,7 @@ Zed Editor 在语言配置方面做得非常好，提供了开箱即用的多语
 - **`source.organizeImports: true`**：在格式化代码时自动整理导入语句。
 - **`source.fixAll.eslint: true`**：在格式化代码时自动修复所有 ESLint 报告的问题。
 
-Rust 中日常编码中频繁使用 `check`，定期或在代码审查前使用 `clippy`。`clippy` 是 Rust 的一个 lint 工具，提供了更多的代码风格和错误检查。
-
-```json
+```json title="settings.json"
 "languages": {
   "C++": {
     "formatter": {
@@ -315,11 +337,17 @@ Rust 中日常编码中频繁使用 `check`，定期或在代码审查前使用 
 }
 ```
 
+:::tip
+
+Rust 中日常编码中频繁使用 `check`，定期或在代码审查前使用 `clippy`。`clippy` 是 Rust 的一个 lint 工具，提供了更多的代码风格和错误检查。
+
+:::
+
 #### 数据收集设置
 
 不允许 Zed Industries 收集匿名使用数据~
 
-```json
+```json title="settings.json"
 "telemetry": {
   "diagnostics": false,
   "metrics": false
@@ -372,7 +400,7 @@ Zed Editor 的快捷键配置（[Key bindings - Zed](https://zed.dev/docs/key-bi
 
 输入 `zed: open keymap` 来打开 `keymap.json` 文件，进行<u>自定义修改</u>。
 
-```json
+```json title="keymap.json"
 [
   {
     "bindings": {
@@ -575,11 +603,15 @@ cs<existing><desired>
 | `[ x`         | 选择上一级语法节点，扩大选择范围 |
 | `] x`         | 选择下一级语法节点，缩小选择范围 |
 
-> `git blame` 是 Git 中的一个命令，用于追溯指定文件的历史修改记录。它可以显示文件中每一行代码的最后一次修改信息，包括提交哈希值、作者、日期和时间。
->
-> `hunk` 包含了在某个提交中被添加、删除或修改的行。
->
-> `[ x` 与 `] x` 命令利用 Tree-sitter 生成的语法树，使得代码编辑器能够智能地选择代码块，从而提高代码编辑和导航的效率。
+:::tip
+
+`git blame` 是 Git 中的一个命令，用于追溯指定文件的历史修改记录。它可以显示文件中每一行代码的最后一次修改信息，包括提交哈希值、作者、日期和时间。
+
+`hunk` 包含了在某个提交中被添加、删除或修改的行。
+
+`[ x` 与 `] x` 命令利用 Tree-sitter 生成的语法树，使得代码编辑器能够智能地选择代码块，从而提高代码编辑和导航的效率。
+
+:::
 
 **项目面板（Project Panel）快捷键**
 
@@ -637,7 +669,7 @@ cs<existing><desired>
 
 在 `settings.json` 文件添加：
 
-```json
+```json title="settings.json"
 "features": {
 	"inline_completion_provider": "supermaven"
 }

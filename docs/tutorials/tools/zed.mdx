@@ -4,7 +4,13 @@ title: ✍️ Explore the Zed Editor：The Future of Code Editor
 sidebar_position: 5
 ---
 
-A code editor is typically a lightweight tool focused on editing source code, providing essential features like syntax highlighting, text editing, and file management. Code editors are often highly customizable and extensible, allowing users to add additional functionalities such as syntax checking and version control by installing plugins. Unlike Integrated Development Environments (IDEs), code editors are generally not tied to specific development frameworks or languages. Due to having fewer built-in features, they tend to be faster, with quicker startup times and lower system resource usage.
+:::note
+
+A code editor is typically a lightweight tool focused on editing source code, providing essential features like syntax highlighting, text editing, and file management. Code editors are often highly customizable and extensible, allowing users to add additional functionalities such as syntax checking and version control by installing plugins.
+
+Unlike Integrated Development Environments (IDEs), code editors are generally not tied to specific development frameworks or languages. Due to having fewer built-in features, they tend to be faster, with quicker startup times and lower system resource usage.
+
+:::
 
 <img src="/tools/zed_logo.png" alt="Zed Editor" />
 
@@ -12,7 +18,11 @@ A code editor is typically a lightweight tool focused on editing source code, pr
 
 <img src="/tools/zed.png" alt="Zed Editor" />
 
-> Zed is a next-generation code editor designed for high-performance collaboration with humans and AI.
+:::info
+
+Zed is a next-generation code editor designed for high-performance collaboration with humans and AI.
+
+:::
 
 Zed Editor is a code editor that supports real-time collaboration, developed by Nathan Sobo, who was previously known for creating the Atom text editor while working at GitHub. Built with Rust at its core, Zed is designed for "high performance" 😮, excelling in areas such as input latency, startup time, and memory usage.
 
@@ -63,10 +73,14 @@ However, there are a few ways to use Zed on Windows:
 
 👉 Default Settings: [zed/assets/settings/default.json](https://github.com/pjlast/zed/blob/3273f5e4041f67b6703c07a14a1a106c03e36962/assets/settings/default.json)
 
+:::tip
+
 To open the `settings.json` file, you have two options:
 
 1. Use the shortcut `Ctrl ,`
 2. Open the command palette with `Ctrl Shift P` and type `zed: open settings` to open the `settings.json` file
+
+:::
 
 #### Vim Mode
 
@@ -74,7 +88,13 @@ Zed Editor has built-in support for Vim mode. To enable it, add `"vim_mode": tru
 
 #### Proxy
 
-To set up a proxy, add `"proxy": "http://127.0.0.1:7890",` to the `settings.json` file. This will facilitate the use of Zed AI. After making changes, close and restart Zed Editor to apply the new proxy settings.
+:::tip
+
+Replace `proxy.example.com` and `port` with your proxy server's address and port.
+
+:::
+
+To set up a proxy, add `"proxy": "http://proxy.example.com:port",` to the `settings.json` file. This will facilitate the use of Zed AI. After making changes, close and restart Zed Editor to apply the new proxy settings.
 
 #### Theme Configuration
 
@@ -84,7 +104,7 @@ To set up a proxy, add `"proxy": "http://127.0.0.1:7890",` to the `settings.json
 2. To install theme plugins, go to `Extension` under the same menu. For instance, you can install the `base16` plugin and select the `snazzy` theme.
 3. To customize themes, place a theme JSON file (like `zedspace.json` from [GitHub - Brunowilliang/zedspace](https://github.com/Brunowilliang/zedspace)) under `.config/zed/themes/`. Then, add the following to your `settings.json` file:
 
-```json
+```json title="settings.json"
 // Change the theme name
 "theme": {
     "mode": "dark",
@@ -97,7 +117,7 @@ To set up a proxy, add `"proxy": "http://127.0.0.1:7890",` to the `settings.json
 
 #### Appearance Configuration
 
-```json
+```json title="settings.json"
 "ui_font_size": 22,
 // Font style for the user interface (UI)
 "ui_font_family": "Cascadia Mono PL",
@@ -132,7 +152,7 @@ To set up a proxy, add `"proxy": "http://127.0.0.1:7890",` to the `settings.json
 
 Zed Editor comes with built-in formatting capabilities through the Language Server Protocol (LSP).
 
-```json
+```json title="settings.json"
 "tab_size": 2,
 // Enable auto-formatting on file save
 "format_on_save": "on",
@@ -222,7 +242,11 @@ Zed Editor comes with built-in formatting capabilities through the Language Serv
 },
 ```
 
-> Note: You need to manually run the `git pull` command to merge changes ⛔
+:::warning
+
+You need to manually run the `git pull` command to merge changes ⛔
+
+:::
 
 #### Development Configuration
 
@@ -235,9 +259,7 @@ Zed Editor excels in language configuration, offering out-of-the-box support for
 - **`source.organizeImports: true`**: Automatically organize import statements during code formatting.
 - **`source.fixAll.eslint: true`**: Automatically fix all issues reported by ESLint during code formatting.
 
-In Rust, `check` is frequently used during daily coding, and `clippy` is used periodically or before code reviews. `clippy` is a lint tool for Rust that provides additional code style and error checks.
-
-```json
+```json title="settings.json"
 "languages": {
   "C++": {
     "formatter": {
@@ -311,11 +333,17 @@ In Rust, `check` is frequently used during daily coding, and `clippy` is used pe
 }
 ```
 
+:::tip
+
+In Rust, `check` is frequently used during daily coding, and `clippy` is used periodically or before code reviews. `clippy` is a lint tool for Rust that provides additional code style and error checks.
+
+:::
+
 #### Telemetry Settings
 
 Do not allow Zed Industries to collect anonymous usage data.
 
-```json
+```json title="settings.json"
 "telemetry": {
   "diagnostics": false,
   "metrics": false
@@ -368,7 +396,7 @@ To view the default keymap, open the command palette with `Ctrl Shift P`, then t
 
 To customize your shortcuts, type `zed: open keymap` to open the `keymap.json` file and make your modifications.
 
-```json
+```json title="keymap.json"
 [
   {
     "bindings": {
@@ -570,11 +598,15 @@ cs<existing><desired>
 | `[ x`         | Select previous syntax node         |
 | `] x`         | Select next syntax node             |
 
-> `git blame` is a Git command used to trace the history of modifications in a specified file, showing the last modification information for each line.
->
-> A `hunk` is a set of lines added, removed, or modified in a commit.
->
-> `[ x` and `] x` commands use the syntax tree generated by Tree-sitter, allowing the code editor to intelligently select code blocks, improving editing and navigation efficiency.
+:::tip
+
+`git blame` is a Git command used to trace the history of modifications in a specified file, showing the last modification information for each line.
+
+A `hunk` is a set of lines added, removed, or modified in a commit.
+
+`[ x` and `] x` commands use the syntax tree generated by Tree-sitter, allowing the code editor to intelligently select code blocks, improving editing and navigation efficiency.
+
+:::
 
 **Project Panel Shortcuts**
 
@@ -632,7 +664,7 @@ To enable multi-cursor mode, hold down the Alt key and click the left mouse butt
 
 Add the following to your `settings.json` file:
 
-```json
+```json title="settings.json"
 "features": {
 	"inline_completion_provider": "supermaven"
 }
