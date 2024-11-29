@@ -101,19 +101,20 @@ ssh -T git@github.com
 
 Git has three configuration levels, with priority from high to low:
 
-1. **Local Level**
+1. <b>Local Level</b>
 
    - Only affects the current repository
    - Configuration file location: `.git/config`
    - Command: `git config --local`
 
-2. **Global Level**
+2. <b>Global Level</b>
 
    - Affects all repositories for the current user
    - Configuration file location: `~/.gitconfig`
    - Command: `git config --global`
 
-3. **System Level**
+3. <b>System Level</b>
+
    - Affects all users on the system
    - Configuration file location: `/etc/gitconfig`
    - Command: `git config --system`
@@ -168,7 +169,7 @@ Files in Git can be in one of three states: committed, modified, and staged.
 
 The actual location where project files are stored, where developers directly edit code, containing all source files and directories of the project.
 
-**Features**:
+**Features** 🎨:
 
 - Untracked files exist here by default
 - Can see actual project files
@@ -183,7 +184,7 @@ git status
 
 Temporarily stores modifications that will be committed, located in the index file under the .git directory, serving as an intermediate state between the working directory and local repository.
 
-**Features**:
+**Features** 🎨:
 
 - Can precisely control what to commit
 - Allows partial file commits
@@ -198,7 +199,7 @@ git add <file>
 
 Stores complete project history, located in the .git directory in project root, contains all commit information and branches.
 
-**Features**:
+**Features** 🎨:
 
 - Completely stores all version history of the project
 - Supports version rollback and branch management
@@ -216,7 +217,7 @@ git log
 
 Code repository hosted on network servers like GitHub, GitLab, Gitee, used for code sharing and multi-person collaboration.
 
-**Features**:
+**Features** 🎨:
 
 - Provides code backup
 - Supports multi-person collaborative development
@@ -251,7 +252,7 @@ git commit -m "Update README"
 git push origin main
 ```
 
-These four areas form the core mechanism of Git version control, providing a flexible and efficient way of code management. Understanding these areas and their interactions is crucial for proficient Git usage.
+These four areas 🔄 form the core mechanism of Git version control, providing a flexible and efficient way of 📂 code management. Understanding these areas and their interactions is crucial for proficient Git usage.
 
 ## IV. Basic Git Operations 🖱️
 
@@ -331,9 +332,13 @@ git add -u
 git add -p
 ```
 
-#### `.gitignore`
+#### `.gitignore` Syntax
 
-`.gitignore` is a text file that tells Git which files or directories should not be version controlled. Proper configuration can greatly simplify Git usage and keep the repository clean. `.gitignore` only affects untracked files.
+:::info
+
+`.gitignore` is a text file that tells Git which files or directories should not be version controlled. Proper configuration can greatly simplify Git usage and keep the repository clean. It only affects untracked files.
+
+:::
 
 **Ignoring Files/Directories**
 
@@ -376,8 +381,6 @@ test?.txt   # matches test1.txt, testa.txt, but not test10.txt
 ```
 
 ### 3. Committing Changes (git commit) ✅
-
-Before each commit, first use `git status` to check and ensure that all files you want to commit have been staged, then run the commit command `git commit`.
 
 ```bash
 # Basic commit (replace commit message)
@@ -454,7 +457,11 @@ git diff --stat
 
 ### 6. Viewing Logs (git log) 📝
 
+:::note
+
 Helps you track project changes and development trajectory.
+
+:::
 
 Standard log view `git log`
 
@@ -503,7 +510,13 @@ git checkout <branch>
 
 #### git reset
 
-> HEAD is a pointer that references the current branch, always pointing to the last commit on that branch. This means HEAD will be the parent of your next commit. Usually, the simplest way to understand HEAD is to think of it as a snapshot of **your last commit**. `HEAD~1` is a reference method used to indicate the commit before the current `HEAD` (i.e., the previous commit).
+:::info
+
+HEAD is a pointer that references the current branch, always pointing to the last commit on that branch. This means HEAD will be the parent of your next commit.
+
+Usually, the simplest way to understand HEAD is to think of it as a snapshot of your last commit. `HEAD~1` is a reference method used to indicate the commit before the current `HEAD` (i.e., the previous commit).
+
+:::
 
 Resets the HEAD pointer of the current branch, can change commit history.
 
@@ -917,8 +930,8 @@ git submodule rm <path/to/submodule>
 # git rm libs/json
 ```
 
-> Initializing submodules serves to set up the submodule directory as a Git repository and prepare it for subsequent operations (such as pulling, updating, etc.). Without initialization, the submodule directory will be empty and cannot perform version control operations.
+:::note
 
-```
+Initializing submodules serves to set up the submodule directory as a Git repository and prepare it for subsequent operations (such as pulling, updating, etc.). Without initialization, the submodule directory will be empty and cannot perform version control operations.
 
-```
+:::
