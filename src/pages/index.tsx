@@ -1,5 +1,5 @@
-import Layout from '@theme/Layout';
 import { Redirect } from '@docusaurus/router';
+import Layout from '@theme/Layout';
 
 export default function Home(): JSX.Element {
   return (
@@ -8,7 +8,7 @@ export default function Home(): JSX.Element {
       description="Description will go into a meta tag in <head />"
     >
       <main>
-        <Redirect to="/docs/home/home/introduction" />
+        <Redirect to="/home/introduction" />
       </main>
     </Layout>
   );
