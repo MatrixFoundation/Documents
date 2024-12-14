@@ -1,0 +1,107 @@
+---
+sidebar_label: C# Basics
+title: Getting Started with C# Basics
+sidebar_position: 1
+---
+
+## I. Language Overview 💻
+
+`C#` (pronounced "C sharp") is a modern, type-safe, object-oriented programming language designed and developed by Microsoft. While maintaining the expressiveness and efficiency of `C++`, it also provides modern features such as automatic memory management and exception handling.
+
+:::info
+The `#` symbol in musical notation represents sharp, indicating that a note should be raised by a half step when marked with `#`. This naming reflects Microsoft's ambition and positioning for the language — to both inherit the excellent traditions of the C language family while achieving enhancement and breakthrough.
+:::
+
+As a versatile and powerful language, `C#` is widely used in various fields. It is particularly very popular in gameplay programming. With its powerful performance and flexibility, it has become the preferred language for game developers.
+
+:::tip
+This tutorial will focus on practical syntax and skills based on actual game development needs.
+:::
+
+`C#` is most prominently known as the language used for scripting in the Unity game engine. The Godot engine also supports writing game logic in `C#`.
+
+Unity implements cross-platform `C#` scripting support through Mono.
+
+Godot 3.x uses Mono as its `C#` runtime environment. Godot 4.x adopts native .NET support, gradually migrating to the modern .NET ecosystem.
+
+:::info
+Mono is an open-source implementation of the .NET framework that provides cross-platform development solutions, offering developers a complete .NET-compatible environment.
+:::
+
+## II. Language Characteristics 👥
+
+- Object-Oriented: `C#` supports the principles of object-oriented programming, making it easier to organize and structure code.
+
+- Type-Safe: `C#` is a statically-typed language, meaning variables must be declared with a specific data type, enhancing code safety.
+
+- Memory Management: `C#` includes automatic memory management through garbage collection, reducing the risk of memory leaks.
+
+- Modern language features: `C#` continues to evolve and introduces many modern programming language features, making development more efficient and flexible.
+
+- Open source ecosystem: `C#` has an active open source community that provides a large number of open source projects, documents and resources to help solve problems encountered in cross-platform development.
+
+## III. Development environment 🖥️
+
+### .NET SDK 🔧
+
+.NET SDK: This software development kit includes compilers, libraries, and other resources for developing applications in `C#`.
+
+👉 [.NET SDK Download](https://dotnet.microsoft.com/en-us/download)
+
+### .NET Framework 🔧
+
+.NET Framework is a traditional framework that has been available for many years, specifically for the Windows platform.
+
+### .NET Core 🔧
+
+.NET Core is a cross-platform, open-source version of .NET, designed to support modern applications.
+
+### .NET 🔧
+
+The .NET platform merge the capabilities of both .NET Framework and .NET Core and offering developers a singular platform to create applications of any kind. These developments were necessitated to adapt to modern technological trends and demands for improved performance and scalability.
+
+### Development tools 📊
+
+The main IDE for `C#` is Visual Studio from Microsoft.
+
+However, there are alternatives, such as Visual Studio Code (a lightweight code editor with support for `C#` extensions) and JetBrains Rider.
+
+Each environment has its own benefits and features, and the choice depends on the specific needs of the developer:
+
+- Visual Studio: Comprehensive IDE with advanced tools for large-scale projects and multi-language support.
+
+- JetBrains Rider: Cross-platform .NET IDE with powerful tools for .NET development and a rich set of plugins.
+
+## IV. Hello World 👋
+
+Open your development tool and create a console project, or use the command line `dotnet new console` to create a new console application. Use `dotnet run` to compile and run a simple `C#` program.
+
+```csharp
+public class Program
+{
+    public static void Main()
+    {
+        Console.WriteLine("Hello World!");
+    }
+}
+```
+
+The entry point in a `C#` program is typically represented by the `Main()` method, which is located in the `Program` class. This method must be static and serves as the starting point for the program's execution.
+
+`void` is the keyword and means this section of our program – called a method – will not "return" any values.
+
+Both `Console.WriteLine()` and `Console.Write()` print information to the console.
+
+Common `C#` program structure:
+
+```csharp
+public class Program
+{
+    public static void Main(string[] args)
+    {
+        // program code
+    }
+}
+```
+
+The `args` argument contains an array of strings that is passed to the program upon its launch.
