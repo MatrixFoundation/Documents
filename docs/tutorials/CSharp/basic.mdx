@@ -105,3 +105,712 @@ public class Program
 ```
 
 The `args` argument contains an array of strings that is passed to the program upon its launch.
+
+## V. Variables and Data Types 👀
+
+Variables are used to store data in a program.
+
+### 1. Variables naming rules 📚
+
+Variable names should be descriptive.
+
+- Variable names must start with a letter or an underscore. This one can be a bit frustrating when you want to start a variable name with a number, like `6thEnemy` or `2DBackground`, but it’s just not allowed in `C#`. Instead, use `enemy6` or `background2D`.
+
+- After the first letter or underscore, I recommend sticking mostly to letters, numbers, or underscores unless you have a really good reason to use something else. Some unusual characters can be used, but others will cause syntax errors.
+
+- You cannot use a space in a variable name. A space actually splits your variable name into two variable names and will confuse the compiler. For example, `playerScore` is one variable, while `player Score` will be treated like two variables.
+
+- Use `camel case` when your variable names have more than one word.
+
+:::tip
+
+Writing multi-word variable names like this`playerfirstName`is ok, but the words tend to blend together. To make the specific words in the name clearer, use `camel case`, which means giving each word after the first word a capital letter like `playerFirstName`. You can capitalize the first letter, but by `C#` convention, variable names start with a lowercase first letter.
+
+:::
+
+### 2. Basic data types 📊
+
+- Integer Types: `int`, `long`, `short`, `byte`
+
+- Floating-Point Types: `float`, `double`, `decimal`
+
+- Character Type: `char`
+
+- Boolean Type: `bool`
+
+- String Type: `string`
+
+One of the reasons we need to specify the type of our variable is so that `C#` knows how much memory to set aside.
+
+`int` is stored in 32 bits, or 4 bytes of memory.
+
+If you need to save on memory and only need to store numbers that fall within a small range, using `byte` or `short` is the right choice.
+
+`float` is our go-to for storing decimal numbers. Like `int`, it is stored in 32 bits or 4 bytes of memory.
+
+`double` uses twice the memory that a `float` needs (hence the name `double`) but is more precise (more decimal places), while `decimal` is four times the memory size of a `float` and provides even more precision (even more decimal places)!
+
+`char` is stored in 16 bits, or 2 bytes of memory.
+
+`bool` is stored in 1 bit of memory, but is typically allocated 1 byte (8 bits) for efficiency in most systems.
+
+`string` is the type we use to store text. Strings are actually made up of characters, so the amount of memory they use depends on the length of the string.
+
+```csharp
+public class Program
+{
+    public static void Main()
+    {
+        Console.WriteLine(10);
+        Console.WriteLine(3.14159);
+        Console.WriteLine(-0.5f);
+        Console.WriteLine('Y');
+        Console.WriteLine(true);
+        Console.WriteLine("games");
+    }
+}
+```
+
+| Data Type | Memory Size                  | Description                                                             |
+| --------- | ---------------------------- | ----------------------------------------------------------------------- |
+| `bool`    | 1 bit (typically 1 byte)     | Stores logical true or false values                                     |
+| `byte`    | 8 bits (1 byte)              | Stores small range integers                                             |
+| `short`   | 16 bits (2 bytes)            | Stores smaller range integers                                           |
+| `int`     | 32 bits (4 bytes)            | Stores standard integers                                                |
+| `long`    | 64 bits (8 bytes)            | Stores very large integers                                              |
+| `char`    | 16 bits (2 bytes)            | Stores a single character                                               |
+| `float`   | 32 bits (4 bytes)            | Stores single-precision floating-point numbers                          |
+| `double`  | 64 bits (8 bytes)            | Stores double-precision floating-point numbers, more precise than float |
+| `decimal` | 128 bits (16 bytes)          | Stores high-precision decimal numbers                                   |
+| `string`  | Variable (depends on length) | Stores text, composed of characters                                     |
+
+### 3. Declaring Variables 💡
+
+In `C#`, you declare a variable by specifying its data type and a name.
+
+A variable must be declared before it can be assigned.
+
+To create a variable, we must declare it – and to do that we need to tell `C#` what type the variable will be (what kind of value it will store) and give it a name (a programmer-defined label that we will use to access the variable).
+
+In general, a declaration statement looks like this: `type variableName;` (type is the data type, variableName is the variable name)
+
+A variable declaration only creates the variable, it doesn’t store a value.
+
+<b>First Format (Declaring Multiple Variables)</b>
+
+More concise when declaring multiple variables of the same type.
+
+```csharp
+int playerScore, playerHealth, gameHighScore;
+float scoreModifier;
+string playerFirstName, playerLastName;
+bool playerHasHighScore, gameOver;
+```
+
+<b>Second Format (Declaring Each Variable Individually)</b>
+
+More prominent in terms of readability.
+
+```csharp
+int playerScore;
+int playerHealth;
+int gameHighScore;
+float scoreModifier;
+string playerFirstName;
+string playerLastName;
+bool playerHasHighScore;
+bool gameOver;
+```
+
+### 4. Variable assignment 📝
+
+Assignment statement looks like this: `variableName = someValue;` (variableName is the variable name, someValue is the value
+
+### 5. Initializing Variables 🔄
+
+Initialization = Declaration + Assignment
+
+```csharp
+public class Program
+{
+    public static void Main()
+    {
+        // Declaration without initialization
+        int playerHealth;
+        // Initialization later in the program
+        playerHealth = 100;
+        Console.WriteLine("Player's Health is " + playerHealth);
+        // Initialization at declaration
+        float distanceToTarget = 10.9f;
+        Console.WriteLine("Distance to target: " + distanceToTarget);
+    }
+}
+```
+
+### 6. Type Inference 🔗
+
+`C#` supports type inference using the `var` keyword, allowing the compiler to automatically determine the data type based on the assigned value.
+
+```csharp
+public class Program
+{
+    public static void Main()
+    {
+        // Compiler infers string
+        var name = "Player";
+        // Compiler infers float
+        var score = 100.5f;
+
+        Console.WriteLine($"Name: {name}");
+        Console.WriteLine($"Score: {score}");
+    }
+}
+```
+
+### 7. Constants 🔒
+
+Constants are variables whose values cannot be changed once assigned. They are declared using the `const` keyword:
+
+```csharp
+const double PI = 3.14159;
+```
+
+`const` variables should be used when you need to define a variable that doesn’t change throughout the program’s life cycle.<br />
+
+Key characteristics of constants:
+
+- Must be initialized when declared
+
+- The value must be determined at compile time
+
+In `C#`, the naming convention for constants generally follows the rules of Pascal case (capitalization of the first letter of each word) and is all uppercase, separated by underscores. This is known as the UPPER_SNAKE_CASE.
+
+```csharp
+public class GameConstants
+{
+    public const int MAX_PLAYER_LEVEL = 100;
+    public const int INITIAL_HEALTH_POINTS = 100;
+    public const string GAME_VERSION = "1.0.0";
+}
+```
+
+### 8. Nullable Types 🤔
+
+Nullable types in `C#` allow representing an absent or uninitialized value for value types.
+
+In `C#`, value types cannot be assigned a value of null. However, by using nullable types, you can explicitly allow a value type to be null.
+
+```csharp
+int? nullableInt = null;
+```
+
+To check for the presence of a value, you can use the `HasValue` property, and to retrieve the value itself, you use `Value`.
+
+The `??` operator is a null-coalescing operator that returns the left operand if it’s not null; otherwise, it returns the right one.
+
+```csharp
+public class Program
+{
+    public static void Main()
+    {
+        int? number = null;
+        number = 6;
+
+        if (number.HasValue)
+        {
+            Console.WriteLine(number.Value);
+        }
+
+        int? a = null;
+        int? b = 10;
+        int c = a ?? b ?? 0;
+        Console.WriteLine(c);
+    }
+}
+```
+
+### 9. Type Conversion 🔀
+
+<b>Implicit Type Conversion</b>
+
+Implicit type conversion happens automatically when converting from a data type that can hold less information to one that can hold more information (for example, from `int` to `double`).
+
+```csharp
+int playerHealth = 100;       // int
+float healthPercentage = playerHealth;  // int → float
+```
+
+<b>Explicit Conversion</b>
+
+Explicit-type conversion (casting) is required when there’s a risk of data loss during the conversion.
+
+```csharp
+float enemyDamage = 50.5f;
+int roundedDamage = (int)enemyDamage;  // float → int
+```
+
+<b>Value Type Conversion Methods</b>
+
+1. Convert Class
+
+```csharp
+string scoreText = "200";
+int playerScore = Convert.ToInt32(scoreText);
+```
+
+2. Parse Method
+
+Focusing on string conversion, the performance is better, but the rules are stricter. Use it with `TryParse` to achieve safe conversion.
+
+```csharp
+string dateStr = "2008-10-31";
+if (DateTime.TryParse(dateStr, out DateTime gameDate))
+{
+    Console.WriteLine(gameDate);
+}
+else
+{
+    Console.WriteLine("Invalid date format.");
+}
+```
+
+<b>Safe Conversion</b>
+
+`as` is used for safe type conversion of reference types, returning null instead of throwing an exception if conversion is not possible. `is` is used to check if an object is of a specific type.
+
+```csharp
+public class GameCharacter
+{
+    public string Name { get; set; }
+}
+
+public class Player : GameCharacter
+{
+    public int Score { get; set; }
+}
+
+public class Enemy : GameCharacter
+{
+    public int Health { get; set; }
+}
+
+public class GameManager
+{
+    public void ProcessCharacter(object character)
+    {
+        if (character is Player player)
+        {
+            Console.WriteLine($"Player {player.Name}, Score: {player.Score}");
+        }
+        else if (character is Enemy enemy)
+        {
+            Console.WriteLine($"Enemy {enemy.Name}, Health: {enemy.Health}");
+        }
+
+        var gameChar = character as GameCharacter;
+        if (gameChar != null)
+        {
+            Console.WriteLine($"Character Name: {gameChar.Name}");
+        }
+    }
+}
+
+public class Program
+{
+    public static void Main()
+    {
+        var gameManager = new GameManager();
+        object[] characters = {
+            new Player { Name = "Hero", Score = 100 },
+            new Enemy { Name = "Joker", Health = 50 },
+        };
+
+        foreach (var character in characters)
+        {
+            gameManager.ProcessCharacter(character);
+        }
+    }
+}
+```
+
+## VI. Strings 🔝
+
+In game development, string processing is very commonly used, for example, text localization, UI text display, configuration parsing, data storage, etc.
+
+A string is a sequence of characters. In `C#`, a string is a sequence of Unicode characters. It is a data type used to store a sequence of data values (usually bytes).
+
+### 1. Declaration and Initialization 📝
+
+The string type in `C#` is immutable, meaning every time the string is modified, a new instance is created.
+
+```csharp
+string greeting = "Hello, C#!";
+string emptyName = string.Empty;
+```
+
+### 2. Common String Operations 🔄
+
+String Concatenation
+
+```csharp
+// Use the + operator to concatenate multiple strings and variables together
+string firstName = "Satoshi";
+string lastName = "Nakamoto";
+string fullName = firstName + " " + lastName;
+```
+
+String Interpolation
+
+```csharp
+string firstName = "Satoshi";
+string lastName = "Nakamoto";
+string message = $"Hello, {firstName} {lastName}!";
+```
+
+Verbatim String Literal
+
+```csharp
+string normalPath = "C:\\Program Files\\dotnet";
+// No need to escape backslashes
+string verbatimPath = @"C:\Program Files\dotnet";
+```
+
+Common String Methods
+
+```csharp
+string text = "   C# Programming   ";
+string trimmedText = text.Trim();
+string leftTrim = text.TrimStart();
+string rightTrim = text.TrimEnd();
+string upperCaseText = text.ToUpper();
+string lowerCaseText = text.ToLower();
+int length = text.Length;
+char firstChar = text[0];
+```
+
+Find and Replace
+
+```csharp
+string text = "Hello World";
+
+bool contains = text.Contains("World");  // Contains check
+int index = text.IndexOf("o");          // Find position
+int lastIndex = text.LastIndexOf("o");   // Last occurrence position
+
+string newText = text.Replace("World", "C#");  // Replace string
+string noSpaces = text.Replace(" ", "");       // Remove spaces
+```
+
+String Comparison
+
+```csharp
+string str1 = "hello";
+string str2 = "HELLO";
+
+// Comparison methods
+bool isEqual1 = str1 == str2;  // Case-sensitive
+bool isEqual2 = str1.Equals(str2, StringComparison.OrdinalIgnoreCase);  // Case-insensitive
+
+// Compare sizes
+int result = string.Compare(str1, str2);  // Returns -1, 0, or 1
+```
+
+Split and Join
+
+```csharp
+// Splitting game skills
+string skillConfig = "Fireball IceSword LightningStrike";
+string[] skills = skillConfig.Split(' ');
+
+// Joining game items
+string[] items = { "Sword", "Shield", "Potion" };
+string playerInventory = string.Join(" + ", items);
+```
+
+Format
+
+```csharp
+// Basic formatting
+string playerName = "Hero";
+int level = 99;
+string status = string.Format("Player {0} reached level {1}", playerName, level);
+
+// Interpolated string
+string gameInfo = $"Player {playerName} current level {level}";
+
+// Number formatting
+double damage = 123.456;
+string damageText = $"Damage: {damage:F2}";  // Keep two decimal places
+
+// Currency formatting
+double gold = 1234.56;
+string goldText = $"Gold: {gold:C}";  // Currency format
+
+// Alignment formatting
+string itemLog = $"{'Item Name',10}{'Quantity',5}";
+
+// Base conversion
+int exp = 100;
+string hexExp = $"Experience: {exp:X}";  // Hexadecimal
+```
+
+### 3. `StringBuilder`
+
+`StringBuilder` is designed for efficiently modifying strings without the need to create numerous new instances.
+
+```csharp
+using System.Text;
+
+class GameLogBuilder
+{
+    public string BuildGameLog()
+    {
+        // Create StringBuilder
+        StringBuilder log = new StringBuilder();
+
+        // Append log information
+        log.Append("Player entered the game ");
+        log.AppendLine("Time: " + DateTime.Now);
+
+        // Add multiple pieces of information
+        log.AppendFormat("Level: {0} ", 99);
+        log.AppendLine("Map: Main City");
+
+        // Insert information
+        log.Insert(0, "[Game Log] ");
+
+        // Replace information
+        log.Replace("Main City", "Novice Village");
+
+        // Get the final log
+        string finalLog = log.ToString();
+        return finalLog;
+    }
+}
+```
+
+### 4. Regular Expressions 🔗
+
+Regular Expression Basics
+
+```csharp
+using System;
+using System.Text.RegularExpressions;
+
+class RegexDemo
+{
+    static void Main()
+    {
+        // Create Regex objects
+        Regex digitRegex = new Regex(@"\d+");  // Matches one or more digits
+        Regex emailRegex = new Regex(@"\b\w+@\w+\.\w+\b");  // Simple email match
+
+        // Directly match digits
+        bool hasDigits = Regex.IsMatch("Player123", @"\d+");
+        Console.WriteLine($"Contains digits: {hasDigits}");
+
+        // Email validation
+        string email = "player@game.com";
+        bool isValidEmail = Regex.IsMatch(email, @"\b\w+@\w+\.\w+\b");
+        Console.WriteLine($"Is email valid: {isValidEmail}");
+
+        // Extract matched content
+        string text = "Player Level: 99, Score: 1000";
+        Match match = Regex.Match(text, @"\d+");
+        if (match.Success)
+        {
+            Console.WriteLine($"Extracted number: {match.Value}");
+        }
+    }
+}
+```
+
+Regular Expression Matching
+
+```csharp
+public class RegexPatterns
+{
+    // Number matching
+    public static readonly string Numbers = @"\d+";
+
+    // Email matching
+    public static readonly string Email = @"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$";
+
+    // Phone number (China)
+    public static readonly string ChinesePhone = @"^1[3-9]\d{9}$";
+
+    // URL matching
+    public static readonly string Url = @"https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)";
+
+    // Date format (yyyy-MM-dd)
+    public static readonly string Date = @"^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$";
+}
+```
+
+Regular Expression Groups
+
+```csharp
+using System;
+using System.Text.RegularExpressions;
+
+class RegexGroupDemo
+{
+    static void Main()
+    {
+        // Match player information: Name (group) and Level (group)
+        string pattern = @"(\w+):(\d+)";
+        string input = "Hero:99 Mage:80 Archer:75";
+
+        // Find all matches
+        MatchCollection matches = Regex.Matches(input, pattern);
+
+        // Iterate through groups
+        foreach (Match match in matches)
+        {
+            // Entire match
+            Console.WriteLine($"Full match: {match.Value}");
+
+            // Group access
+            string playerName = match.Groups[1].Value;
+            string playerLevel = match.Groups[2].Value;
+
+            Console.WriteLine($"Player: {playerName}, Level: {playerLevel}");
+        }
+
+        // Named groups
+        string namedPattern = @"(?<Name>\w+):(?<Level>\d+)";
+        Match namedMatch = Regex.Match(input, namedPattern);
+
+        if (namedMatch.Success)
+        {
+            Console.WriteLine($"Named group - Player: {namedMatch.Groups["Name"].Value}");
+            Console.WriteLine($"Named group - Level: {namedMatch.Groups["Level"].Value}");
+        }
+    }
+}
+```
+
+Working with strings and regular expressions is an integral part of `C#` development. Whether manipulating strings, performing pattern matching, or utilizing regular expressions for complex text processing, mastering these concepts enhances your ability to handle and process textual data effectively in `C#`.
+
+## VII. Operators 🔢
+
+### 1. Arithmetic Operators 🧮
+
+**Arithmetic operators**: `+`, `-`, `*`, `/`, and `%` for performing arithmetic operations.
+
+They include:
+
+- Addition (`+`): Adds two operands.
+- Subtraction (`-`): Subtracts the right operand from the left operand.
+- Multiplication (`*`): Multiplies two operands.
+- Division (`/`): Divides the left operand by the right operand.
+- Modulus (`%`): Returns the remainder of the division.
+
+### 2. Comparison Operators 🔃
+
+**Comparison operators**: `==`, `!=`, `<`, `>`, `<=`, and `>=` for comparing values.
+
+They include:
+
+- Equal to (`==`): Checks if two operands are equal.
+- Not equal to (`!=`): Checks if two operands are not equal.
+- Greater than (`>`): Checks if the left operand is greater than the right operand.
+- Less than (`<`): Checks if the left operand is less than the right operand.
+- Greater than or equal to (`>=`): Checks if the left operand is greater than or equal to the right operand.
+- Less than or equal to (`<=`): Checks if the left operand is less than or equal to the right operand.
+
+:::tip
+
+Comparison (`==`, `!=`) and relational (`<`, `>`, `<=`, `>=`) operators are used to compare two values.
+
+It’s important to remember that when comparing reference types, the `==` operator checks for reference equality, not content.
+
+:::
+
+### 3. Logical Operators 🔄
+
+**Logical operators**: `&&`, `||`, and `!` for creating logical expressions.
+
+They include:
+
+- Logical AND (`&&`): Returns true if both operands are true.
+- Logical OR (`||`): Returns true if at least one operand is true.
+- Logical NOT (`!`): Returns true if the operand is false, and vice versa.
+
+### 4. Assignment Operators 🔧
+
+Assignment operators are used to assign values to variables.
+
+Assignment (`=`): Assigns the value on the right to the variable on the left.
+
+### 5. Bitwise operators 🔃
+
+**Bitwise operators**: `&`, `|`, `^`, `~`, `<<`, and `>>` for manipulating bits.
+
+Bitwise operations allow for manipulations at the level of individual bits of a numerical value.
+
+### 6. Priority 🔢
+
+It’s important to know operator precedence as it affects the order of operations.
+
+:::tip
+
+Priority is sorted from high to low.
+
+:::
+
+| Category        | Operators                                | Associativity |
+| --------------- | ---------------------------------------- | ------------- |
+| Primary         | `x.y`, `f(x)`, `a[x]`, `x++`, `x--`      | Left to right |
+| Unary           | `+`, `-`, `!`, `~`, `++x`, `--x`, `(T)x` | Right to left |
+| Multiplicative  | `*`, `/`, `%`                            | Left to right |
+| Additive        | `+`, `-`                                 | Left to right |
+| Shift           | `<<`, `>>`                               | Left to right |
+| Relational      | `<`, `>`, `<=`, `>=`, `is`, `as`         | Left to right |
+| Equality        | `==`, `!=`                               | Left to right |
+| Logical AND     | `&`                                      | Left to right |
+| Logical XOR     | `^`                                      | Left to right |
+| Logical OR      | `\|`                                     | Left to right |
+| Conditional AND | `&&`                                     | Left to right |
+| Conditional OR  | `\|\|`                                   | Left to right |
+| Conditional     | `?:`                                     | Right to left |
+| Assignment      | `=`, `+=`, `-=`, `*=`, `/=`              | Right to left |
+
+### 7. Operator Overloading 🔢
+
+In `C#`, operator overloading allows you to redefine the way built-in operators work for user-defined types such as classes and structs.
+
+To overload an operator, you define a static method in your class or struct with the operator keyword followed by the operator symbol you want to overload.
+
+The method must return a result and take at least one parameter of the type you’re overloading the operator for.
+
+Here’s a simple example of overloading the `+` operator for a custom Vector class:
+
+```csharp
+public class Program
+{
+    public static void Main()
+    {
+        Vector vector1 = new Vector(1, 2);
+        Vector vector2 = new Vector(2, 3);
+        Vector result = vector1 + vector2; // This will call the overloaded + operator
+        Console.WriteLine(result);
+    }
+    public class Vector(int x, int y)
+    {
+        private int X { get; } = x;
+        private int Y { get; } = y;
+
+        // Overload + operator
+        public static Vector operator +(Vector v1, Vector v2)
+        {
+            return new Vector(v1.X + v2.X, v1.Y + v2.Y);
+        }
+
+       public override string ToString()
+       {
+           return $"Vector({X}, {Y})";
+       }
+    }
+}
+```
