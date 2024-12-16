@@ -1,0 +1,231 @@
+---
+sidebar_label: C# Advancement
+title: C# Advanced Improvement
+sidebar_position: 3
+---
+
+## Methods 📝
+
+In `C#`, methods are code blocks that perform specific tasks and can be called from other parts of the program. Methods facilitate code reuse, readability, and modularity.
+
+### 1. Method Declaration 📝
+
+```csharp
+public class Calculator
+{
+    public int Add(int a, int b)
+    {
+        return a + b;
+    }
+}
+```
+
+Basic components:
+
+- Access modifiers (such as `public`, `private`)
+- Return type (like `void`, `int`, `string`, etc.)
+- Method name (using camelCase)
+- Parameter list (optional)
+
+### 2. Method Invocation 🔗
+
+#### Instance Method Call
+
+```csharp
+Calculator calculator = new Calculator();
+int result = calculator.Add(1, 2);
+Console.WriteLine(result);
+```
+
+#### Static Method Call
+
+```csharp
+public class MathHelper
+{
+    public static int Square(int x)
+    {
+        return x * x;
+    }
+}
+
+// Call directly using the class name
+int result = MathHelper.Square(4);  // result = 16
+```
+
+### 3. Method Overloading 🔄
+
+1. Method names must be identical
+2. Parameter lists must be different: different number of parameters, different parameter types, or different parameter order
+
+```csharp
+public class Calculator
+{
+    // Add two integers
+    public int Add(int a, int b)
+    {
+        return a + b;
+    }
+
+    // Add two double-precision floating-point numbers
+    public double Add(double a, double b)
+    {
+        return a + b;
+    }
+
+    // Add three integers
+    public int Add(int a, int b, int c)
+    {
+        return a + b + c;
+    }
+
+    // Different parameter order
+    public int Add(int a, string b)
+    {
+        return a + int.Parse(b);
+    }
+}
+```
+
+### 4. Method Parameters 📌
+
+#### Required Parameters
+
+```csharp
+public class MathOperations
+{
+    public int Multiply(int x, int y)
+    {
+        return x * y;
+    }
+}
+```
+
+#### Optional Parameters
+
+Optional parameters provide a concise way to handle method calls with default behavior and must come after required parameters.
+
+```csharp
+public class Printer
+{
+    // Optional parameter with a default value
+    public void PrintMessage(string message, bool uppercase = false)
+    {
+        if (uppercase)
+        {
+            Console.WriteLine(message.ToUpper());
+        }
+        else
+        {
+            Console.WriteLine(message);
+        }
+    }
+}
+```
+
+#### Value Parameters (Default)
+
+```csharp
+void ModifyValue(int x)
+{
+    x = 10;  // Will not change the original value
+}
+```
+
+#### Reference Parameters (`ref`)
+
+```csharp
+void ModifyReference(ref int x)
+{
+    x = 10;  // Will change the original value
+}
+
+int number = 5;
+ModifyReference(ref number);  // number is now 10
+```
+
+#### Output Parameters (`out`)
+
+Provides a concise mechanism for multiple return values, especially suitable for scenarios requiring both status and result returns.
+
+```csharp
+public class UserValidator
+{
+    // Validate user information
+    public bool ValidateUser(string input, out int userId, out string errorMessage)
+    {
+        userId = -1;
+        errorMessage = "";
+
+        // Parse user ID
+        if (!int.TryParse(input, out userId))
+        {
+            errorMessage = "Invalid user ID format";
+            return false;
+        }
+
+        // Check ID range
+        if (userId <= 0)
+        {
+            errorMessage = "User ID must be greater than 0";
+            return false;
+        }
+
+        return true;
+    }
+}
+
+public void ProcessUser()
+{
+    UserValidator validator = new UserValidator();
+
+    // Call the method
+    bool isValid = validator.ValidateUser("123", out int userId, out string message);
+
+    if (isValid)
+    {
+        Console.WriteLine($"User ID: {userId}");
+    }
+    else
+    {
+        Console.WriteLine($"Validation failed: {message}");
+    }
+}
+```
+
+#### Parameter Arrays (`params`)
+
+```csharp
+public int Sum(params int[] numbers)
+{
+    int total = 0;
+    foreach(int num in numbers)
+        total += num;
+    return total;
+}
+```
+
+### 5. Return Types 📤
+
+#### Methods with Return Values
+
+```csharp
+public class Circle
+{
+    public double CalculateArea(double radius)
+    {
+        return Math.PI * radius * radius;
+    }
+}
+```
+
+#### Void Methods
+
+```csharp
+public class Logger
+{
+    public void LogError(string errorMessage)
+    {
+        Console.WriteLine($"Error: {errorMessage}");
+    }
+}
+```

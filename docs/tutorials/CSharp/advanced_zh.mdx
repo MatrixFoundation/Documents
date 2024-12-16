@@ -1,0 +1,231 @@
+---
+sidebar_label: C# 进阶提升
+title: C# 进阶提升
+sidebar_position: 4
+---
+
+## 一、方法 📝
+
+在 `C#` 中，方法是执行特定任务的代码块，可以从程序的其他部分调用。方法可促进代码重用、可读性和模块化。
+
+### 1、方法声明 📝
+
+```csharp
+public class Calculator
+{
+    public int Add(int a, int b)
+    {
+        return a + b;
+    }
+}
+```
+
+基本组成部分：
+
+- 访问修饰符（如 `public`, `private`）
+- 返回类型（如 `void`, `int`, `string` 等）
+- 方法名（使用驼峰命名法）
+- 参数列表（可选）
+
+### 2、调用方法 🔗
+
+#### 实例方法调用
+
+```csharp
+Calculator calculator = new Calculator();
+int result = calculator.Add(1, 2);
+Console.WriteLine(result);
+```
+
+#### 静态方法调用
+
+```csharp
+public class MathHelper
+{
+    public static int Square(int x)
+    {
+        return x * x;
+    }
+}
+
+// Call directly using the class name
+int result = MathHelper.Square(4);  // result = 16
+```
+
+### 3、方法重载 🔄
+
+1. 方法名称必须相同
+2. 参数列表必须不同：参数数量不同、参数类型不同、参数顺序不同
+
+```csharp
+public class Calculator
+{
+    // Add two integers
+    public int Add(int a, int b)
+    {
+        return a + b;
+    }
+
+    // Add two double-precision floating-point numbers
+    public double Add(double a, double b)
+    {
+        return a + b;
+    }
+
+    // Add three integers
+    public int Add(int a, int b, int c)
+    {
+        return a + b + c;
+    }
+
+    // Different parameter order
+    public int Add(int a, string b)
+    {
+        return a + int.Parse(b);
+    }
+}
+```
+
+### 4、方法参数 📌
+
+#### 必需参数
+
+```csharp
+public class MathOperations
+{
+    public int Multiply(int x, int y)
+    {
+        return x * y;
+    }
+}
+```
+
+#### 可选参数
+
+可选参数提供了一种简洁的方法来处理具有默认行为的方法调用，其必须在必填参数之后。
+
+```csharp
+public class Printer
+{
+    // Optional parameter with a default value
+    public void PrintMessage(string message, bool uppercase = false)
+    {
+        if (uppercase)
+        {
+            Console.WriteLine(message.ToUpper());
+        }
+        else
+        {
+            Console.WriteLine(message);
+        }
+	}
+}
+```
+
+#### 值参数（默认）
+
+```csharp
+void ModifyValue(int x)
+{
+    x = 10;  // Will not change the original value
+}
+```
+
+#### 引用参数（`ref`）
+
+```csharp
+void ModifyReference(ref int x)
+{
+    x = 10;  // Will change the original value
+}
+
+int number = 5;
+ModifyReference(ref number);  // number is now 10
+```
+
+#### 输出参数（`out`）
+
+提供一种简洁的多返回值机制，特别适合需要同时返回状态和结果的场景。
+
+```csharp
+public class UserValidator
+{
+    // Validate user information
+    public bool ValidateUser(string input, out int userId, out string errorMessage)
+    {
+        userId = -1;
+        errorMessage = "";
+
+        // Parse user ID
+        if (!int.TryParse(input, out userId))
+        {
+            errorMessage = "Invalid user ID format";
+            return false;
+        }
+
+        // Check ID range
+        if (userId <= 0)
+        {
+            errorMessage = "User ID must be greater than 0";
+            return false;
+        }
+
+        return true;
+    }
+}
+
+public void ProcessUser()
+{
+    UserValidator validator = new UserValidator();
+
+    // Call the method
+    bool isValid = validator.ValidateUser("123", out int userId, out string message);
+
+    if (isValid)
+    {
+        Console.WriteLine($"User ID: {userId}");
+    }
+    else
+    {
+        Console.WriteLine($"Validation failed: {message}");
+    }
+}
+```
+
+#### 参数数组（`params`）
+
+```csharp
+public int Sum(params int[] numbers)
+{
+    int total = 0;
+    foreach(int num in numbers)
+        total += num;
+    return total;
+}
+```
+
+### 5、返回类型 📤
+
+#### 有返回值的方法
+
+```csharp
+public class Circle
+{
+    public double CalculateArea(double radius)
+    {
+        return Math.PI * radius * radius;
+    }
+}
+```
+
+#### 空方法
+
+```csharp
+public class Logger
+{
+    public void LogError(string errorMessage)
+    {
+        Console.WriteLine($"Error: {errorMessage}");
+    }
+}
+```
