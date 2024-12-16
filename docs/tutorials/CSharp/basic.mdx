@@ -814,3 +814,211 @@ public class Program
     }
 }
 ```
+
+## VIII. Process Control 🔄
+
+Control structures and loops are fundamental elements of any program, allowing developers to efficiently manage the flow of code execution.
+
+### 1. Conditional Statements 🤔
+
+- `if-else`: Used to perform actions based on the truthfulness of a condition
+- `switch-case`: Used to choose one block of code to execute from multiple possibilities
+
+`if-else` statements are used for conditional execution. They allow your program to take different paths based on whether a certain condition is true or false.
+
+The `switch` operator allows you to check a variable against multiple values.
+
+It is more compact and often more convenient for checking the values of a single variable.
+
+Nested Control Structures: You can nest control structures within each other to create more complex logic.
+
+```csharp
+public class Program
+{
+    public static void Main()
+    {
+        CheckPlayerStatus(99, true);
+    }
+
+    static void CheckPlayerStatus(int level, bool isVip)
+    {
+        // Basic if-else
+        if (level < 10)
+        {
+            Console.WriteLine("Newbie Player");
+        }
+        else if (level < 50)
+        {
+            Console.WriteLine("Regular Player");
+        }
+        else
+        {
+            Console.WriteLine("Advanced Player");
+        }
+
+        // Nested if-else
+        if (level >= 50)
+        {
+            if (isVip)
+            {
+                Console.WriteLine("Prestigious VIP Player");
+            }
+            else
+            {
+                Console.WriteLine("Regular Advanced Player");
+            }
+        }
+
+        // Complex condition check
+        if (level > 90 && isVip)
+        {
+            Console.WriteLine("Top VIP Player");
+        }
+
+        var playerType = level switch
+        {
+            < 10 => "Newbie",
+            >= 10 and < 50 => isVip ? "Regular VIP" : "Regular",
+            >= 50 and < 90 => isVip ? "Expert VIP" : "Expert",
+            >= 90 => isVip ? "Top VIP" : "Master"
+        };
+        Console.WriteLine($"Player Type: {playerType}");
+    }
+}
+```
+
+### 2. Loop Structure 🔁
+
+Loops allow you to execute a block of code repeatedly.
+
+- `for`: Used when the number of iterations is known
+- `foreach`: Used for iterating over over all elements of a collection
+- `while`: Used when the number of iterations is unknown
+- `do-while`: Guarantees the execution of the code block at least once
+
+Choosing the best loop depends on the specific situation.
+
+- `break` exits the loop prematurely
+- `continue` does not terminate the loop, but continues with the next iteration
+
+A nested loop is a loop placed inside another loop. It is often used for processing a two-dimensional array or matrix.
+
+```csharp
+class SimpleRPGGame
+{
+    // Player class
+    class Player(string? name)
+    {
+        private string? Name { get; } = name;
+        public int Health { get; set; } = 100;
+        public int Attack => 10;
+
+        public void DisplayStatus()
+        {
+            Console.WriteLine($"Player {Name} - Health: {Health}, Attack: {Attack}");
+        }
+    }
+
+    // Monster class
+    class Monster
+    {
+        public string Name { get; }
+        public int Health { get; set; }
+        public int Attack { get; }
+
+        public Monster()
+        {
+            string[] monsterNames = ["Goblin", "Skeleton Warrior", "Dragon"];
+            Random random = new Random();
+            Name = monsterNames[random.Next(monsterNames.Length)];
+            Health = random.Next(50, 100);
+            Attack = random.Next(5, 15);
+        }
+
+        public void DisplayStatus()
+        {
+            Console.WriteLine($"Monster {Name} - Health: {Health}, Attack: {Attack}");
+        }
+    }
+
+    // Main game logic
+    static void Main()
+    {
+        Console.WriteLine("Welcome to the Simple RPG Game!");
+
+        // Create player
+        Console.Write("Please enter your character name: ");
+        string? playerName = Console.ReadLine();
+        if (playerName != null)
+        {
+            Player player = new Player(playerName);
+
+            // Battle system
+            while (true)
+            {
+                // Generate random monster
+                Monster monster = new Monster();
+
+                Console.WriteLine("\nEncountered a new monster!");
+                monster.DisplayStatus();
+                player.DisplayStatus();
+
+                // Battle choices
+                Console.WriteLine("\nChoose your action:");
+                Console.WriteLine("1. Attack");
+                Console.WriteLine("2. Run away");
+                string? choice = Console.ReadLine();
+
+                if (choice == "1")
+                {
+                    // Battle logic
+                    while (player.Health > 0 && monster.Health > 0)
+                    {
+                        // Player attacks
+                        monster.Health -= player.Attack;
+                        Console.WriteLine($"You attacked {monster.Name}");
+
+                        // Monster attacks
+                        if (monster.Health > 0)
+                        {
+                            player.Health -= monster.Attack;
+                            Console.WriteLine($"{monster.Name} attacked you");
+                        }
+
+                        // Display status
+                        player.DisplayStatus();
+                        monster.DisplayStatus();
+
+                        // Check battle result
+                        if (monster.Health <= 0)
+                        {
+                            Console.WriteLine("You defeated the monster!");
+                            break;
+                        }
+
+                        if (player.Health <= 0)
+                        {
+                            Console.WriteLine("Game over, you were defeated!");
+                            return;
+                        }
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("You chose to run away...");
+                    continue;
+                }
+
+                // Ask if continue
+                Console.WriteLine("\nDo you want to continue the adventure? (y/n)");
+                if (Console.ReadLine()?.ToLower() != "y")
+                {
+                    break;
+                }
+            }
+        }
+
+        Console.WriteLine("Game over, thank you for playing!");
+    }
+}
+```

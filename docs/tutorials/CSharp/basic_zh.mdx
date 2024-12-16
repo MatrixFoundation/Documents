@@ -818,3 +818,211 @@ public class Program
     }
 }
 ```
+
+## 八、流程控制 🔄
+
+控制结构和循环是任何程序的基本元素，使开发人员能够有效地管理代码执行流程。
+
+### 1、条件语句 🤔
+
+- `if-else`：用于根据条件的真实性执行操作
+- `switch-case`：用于从多种可能性中选择一个代码块来执行
+
+`if-else` 语句用于条件执行。它们允许您的程序根据特定条件是 true 还是 false 来采用不同的路径。
+
+`switch` 运算符允许您根据多个值检查变量。
+
+它更紧凑，通常更方便检查单个变量的值。
+
+嵌套控制结构：您可以将控制结构相互嵌套以创建更复杂的逻辑。
+
+```csharp
+public class Program
+{
+    public static void Main()
+    {
+        CheckPlayerStatus(99, true);
+    }
+
+    static void CheckPlayerStatus(int level, bool isVip)
+    {
+        // Basic if-else
+        if (level < 10)
+        {
+            Console.WriteLine("Newbie Player");
+        }
+        else if (level < 50)
+        {
+            Console.WriteLine("Regular Player");
+        }
+        else
+        {
+            Console.WriteLine("Advanced Player");
+        }
+
+        // Nested if-else
+        if (level >= 50)
+        {
+            if (isVip)
+            {
+                Console.WriteLine("Prestigious VIP Player");
+            }
+            else
+            {
+                Console.WriteLine("Regular Advanced Player");
+            }
+        }
+
+        // Complex condition check
+        if (level > 90 && isVip)
+        {
+            Console.WriteLine("Top VIP Player");
+        }
+
+        var playerType = level switch
+        {
+            < 10 => "Newbie",
+            >= 10 and < 50 => isVip ? "Regular VIP" : "Regular",
+            >= 50 and < 90 => isVip ? "Expert VIP" : "Expert",
+            >= 90 => isVip ? "Top VIP" : "Master"
+        };
+        Console.WriteLine($"Player Type: {playerType}");
+    }
+}
+```
+
+### 2、循环结构 🔁
+
+循环允许您重复执行一段代码。
+
+- `for`：当迭代次数已知时使用
+- `foreach`：用于迭代集合的所有元素
+- `while`：当迭代次数未知时使用
+- `do-while`：保证代码块至少执行一次
+
+选择最佳循环取决于具体情况。
+
+- `break` 提前退出循环
+- `continue` 不会终止循环，而是继续执行下一次迭代
+
+嵌套循环是放置在另一个循环内的循环。它通常用于处理二维数组或矩阵。
+
+```csharp
+class SimpleRPGGame
+{
+    // Player class
+    class Player(string? name)
+    {
+        private string? Name { get; } = name;
+        public int Health { get; set; } = 100;
+        public int Attack => 10;
+
+        public void DisplayStatus()
+        {
+            Console.WriteLine($"Player {Name} - Health: {Health}, Attack: {Attack}");
+        }
+    }
+
+    // Monster class
+    class Monster
+    {
+        public string Name { get; }
+        public int Health { get; set; }
+        public int Attack { get; }
+
+        public Monster()
+        {
+            string[] monsterNames = ["Goblin", "Skeleton Warrior", "Dragon"];
+            Random random = new Random();
+            Name = monsterNames[random.Next(monsterNames.Length)];
+            Health = random.Next(50, 100);
+            Attack = random.Next(5, 15);
+        }
+
+        public void DisplayStatus()
+        {
+            Console.WriteLine($"Monster {Name} - Health: {Health}, Attack: {Attack}");
+        }
+    }
+
+    // Main game logic
+    static void Main()
+    {
+        Console.WriteLine("Welcome to the Simple RPG Game!");
+
+        // Create player
+        Console.Write("Please enter your character name: ");
+        string? playerName = Console.ReadLine();
+        if (playerName != null)
+        {
+            Player player = new Player(playerName);
+
+            // Battle system
+            while (true)
+            {
+                // Generate random monster
+                Monster monster = new Monster();
+
+                Console.WriteLine("\nEncountered a new monster!");
+                monster.DisplayStatus();
+                player.DisplayStatus();
+
+                // Battle choices
+                Console.WriteLine("\nChoose your action:");
+                Console.WriteLine("1. Attack");
+                Console.WriteLine("2. Run away");
+                string? choice = Console.ReadLine();
+
+                if (choice == "1")
+                {
+                    // Battle logic
+                    while (player.Health > 0 && monster.Health > 0)
+                    {
+                        // Player attacks
+                        monster.Health -= player.Attack;
+                        Console.WriteLine($"You attacked {monster.Name}");
+
+                        // Monster attacks
+                        if (monster.Health > 0)
+                        {
+                            player.Health -= monster.Attack;
+                            Console.WriteLine($"{monster.Name} attacked you");
+                        }
+
+                        // Display status
+                        player.DisplayStatus();
+                        monster.DisplayStatus();
+
+                        // Check battle result
+                        if (monster.Health <= 0)
+                        {
+                            Console.WriteLine("You defeated the monster!");
+                            break;
+                        }
+
+                        if (player.Health <= 0)
+                        {
+                            Console.WriteLine("Game over, you were defeated!");
+                            return;
+                        }
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("You chose to run away...");
+                    continue;
+                }
+
+                // Ask if continue
+                Console.WriteLine("\nDo you want to continue the adventure? (y/n)");
+                if (Console.ReadLine()?.ToLower() != "y")
+                {
+                    break;
+                }
+            }
+        }
+
+        Console.WriteLine("Game over, thank you for playing!");
+    }
+}
+```
