@@ -1,0 +1,108 @@
+---
+sidebar_label: C# Advanced Features
+title: C# Advanced Features
+sidebar_position: 5
+---
+
+## I. Memory Management and Garbage Collection 📦
+
+In `C#`, memory management is handled automatically thanks to the garbage collector mechanism.
+
+:::info
+
+Garbage Collection (GC) is a process where the runtime automatically reclaims memory occupied by objects that are no longer in use, preventing memory leaks and promoting efficient memory utilization.
+
+:::
+
+It automatically identifies objects that are no longer used by the program and frees the memory they occupy. While the garbage collector simplifies memory management, developers need to carefully manage unmanaged resources that are not controlled by the .NET garbage collector, such as database connections or file streams.
+
+:::tip
+
+Stack and Heap: In `C#`, memory is divided into two main areas: the stack and the heap. The stack is used for storing value types and method call information, while the heap is used for dynamically allocated memory, primarily for reference types.
+
+:::
+
+If developers do not release these resources, they will persist for the lifetime of the application, potentially causing memory leaks and system strain.
+
+:::tip
+
+Value Types vs Reference Types: Value types (e.g., int, float) are stored on the stack, while reference types (e.g., classes, arrays) are allocated on the heap. Reference types store a reference to the actual data on the heap.
+
+:::
+
+<b>`IDisposable` Interface</b>
+
+The IDisposable interface is used for releasing unmanaged resources such as file handles, database connections, or network sockets.
+
+```csharp
+public class ResourceManager : IDisposable
+{
+    private bool disposed = false;  // Track whether resources have been released
+    private IntPtr handle;           // Example: unmanaged resource
+    private Component component;      // Example: managed resource
+
+    // Public Dispose method - called through the interface
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);  // Prevent finalizer from running
+    }
+
+    // Protected virtual Dispose method - allows derived classes to override
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!disposed)
+        {
+            if (disposing)
+            {
+                // Release managed resources
+                if (component != null)
+                {
+                    component.Dispose();
+                    component = null;
+                }
+            }
+
+            // Release unmanaged resources
+            if (handle != IntPtr.Zero)
+            {
+                Marshal.FreeHGlobal(handle);
+                handle = IntPtr.Zero;
+            }
+
+            disposed = true;
+        }
+    }
+
+    ~ResourceManager()
+    {
+        Dispose(false);
+    }
+
+    // Check if disposed before use
+    protected void ThrowIfDisposed()
+    {
+        if (disposed)
+        {
+            throw new ObjectDisposedException(GetType().Name);
+        }
+    }
+}
+```
+
+<b>`using` Statement</b>
+
+The using statement ensures that the Dispose method is called, even if an exception occurs.
+
+```csharp
+// Traditional syntax
+using (var resource = new ResourceManager())
+{
+    resource.DoWork();
+}  // Automatically calls Dispose()
+
+// C# 8.0+ simplified syntax
+using var resource = new ResourceManager();
+resource.DoWork();
+// Dispose() is automatically called at the end of the scope
+```

@@ -1,0 +1,106 @@
+---
+sidebar_label: C# 高级特性
+title: C# 高级特性
+sidebar_position: 6
+---
+
+## 一、内存管理和垃圾回收 📦
+
+在`C#`中，由于垃圾收集器机制，内存管理是自动处理的。
+
+:::info
+
+垃圾回收 （GC） 是运行时自动回收不再使用的对象所占用的内存的过程，可以防止内存泄漏并促进内存的高效利用。
+
+:::
+
+它自动识别程序不再使用的对象并释放它们占用的内存。虽然垃圾收集器简化了内存管理，但开发人员需要仔细管理不受 .NET 垃圾收集器控制的非托管资源，例如数据库连接或文件流。
+
+:::tip
+
+栈和堆：在 `C#` 中，内存分为两个主要区域：栈和堆。栈用于存储值类型和方法调用信息，而堆用于动态分配内存，主要用于引用类型。
+
+:::
+
+如果开发人员不释放这些资源，它们将在应用程序的整个生命周期中持续存在，可能导致内存泄漏和系统压力。
+
+:::tip
+
+值类型与引用类型：值类型（例如，int，float）存储在栈上，而引用类型（例如，类，数组）分配在堆上。引用类型存储对堆上实际数据的引用。
+
+:::
+
+<b>`IDisposable` 接口</b>
+
+`IDisposable` 接口用于释放非托管资源，例如文件句柄、数据库连接或网络套接字。
+
+```csharp
+public class ResourceManager : IDisposable
+{
+    private bool disposed = false;  // Track whether resources have been released
+    private IntPtr handle;           // Example: unmanaged resource
+    private Component component;      // Example: managed resource
+
+    // Public Dispose method - called through the interface
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);  // Prevent finalizer from running
+    }
+
+    // Protected virtual Dispose method - allows derived classes to override
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!disposed)
+        {
+            if (disposing)
+            {
+                // Release managed resources
+                if (component != null)
+                {
+                    component.Dispose();
+                    component = null;
+                }
+            }
+
+            // Release unmanaged resources
+            if (handle != IntPtr.Zero)
+            {
+                Marshal.FreeHGlobal(handle);
+                handle = IntPtr.Zero;
+            }
+
+            disposed = true;
+        }
+    }
+
+    ~ResourceManager()
+    {
+        Dispose(false);
+    }
+
+    // Check if disposed before use
+    protected void ThrowIfDisposed()
+    {
+        if (disposed)
+        {
+            throw new ObjectDisposedException(GetType().Name);
+        }
+    }
+}
+```
+
+<b>`using` 语句</b>
+
+```csharp
+// Traditional syntax
+using (var resource = new ResourceManager())
+{
+    resource.DoWork();
+}  // Automatically calls Dispose()
+
+// C# 8.0+ simplified syntax
+using var resource = new ResourceManager();
+resource.DoWork();
+// Dispose() is automatically called at the end of the scope
+```
