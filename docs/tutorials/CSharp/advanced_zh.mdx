@@ -229,3 +229,1411 @@ public class Logger
     }
 }
 ```
+
+## 二、面向对象编程 📦
+
+### 1、原则 📝
+
+面向对象编程基于四个主要原则：封装、继承、多态性和抽象。
+
+- 封装允许将数据和方法捆绑到一个单元（类）中并限制访问到某些组件。
+- 继承允许一个类（子类或派生类）继承另一类（父类或基类）的属性和方法。这促进了代码的重用并在类之间建立了层次关系。
+- 多态性是单个函数或方法根据其输入或调用它的对象以各种方式工作的能力。在`C#`中，多态性可以通过方法覆盖（使用`override`关键字）和方法隐藏（利用`new`关键字隐藏基类中的方法）来实现。
+- 抽象允许开发人员隐藏复杂的实现并仅显示对象的基本特征。这意味着用户仅与必要的内容进行交互，并且内部运作保持隐藏。在`C#`中，抽象类和接口是可以帮助实现抽象的工具。
+
+这些原则有助于设计强大且可扩展的应用程序，从而易于维护和进一步开发。
+
+#### 封装和抽象
+
+这些概念有助于管理对对象数据的访问并在编程中实现高级抽象：
+
+- 封装保护对象的内部状态并防止未经授权的外部访问，允许严格控制数据并确保数据完整性。
+- 抽象允许实现与接口分离，并支持创建具有更高灵活性和可扩展性的系统，使开发人员能够降低编程复杂性并提高效率。
+
+在 `C#` 中，通过 `private`、`protected` 和 `public` 等访问修饰符来确保封装。
+
+这些修饰符决定类成员的可见性，允许隐藏实现细节并仅公开必要的 API。
+
+- `public`: 完全访问
+- `private`: 仅在类内部访问
+- `protected`: 类内部和派生类可访问
+- `internal`: 同一程序集内可访问
+
+| 修饰符             | 同一类中 | 同一程序集内<br />派生类中 | 同一程序集内<br />非派生类中 | 不同程序集内<br />派生类中 | 不同程序集内<br />非派生类中 |
+| ------------------ | -------- | -------------------------- | ---------------------------- | -------------------------- | ---------------------------- |
+| public             | ✔️       | ✔️                         | ✔️                           | ✔️                         | ✔️                           |
+| private            | ✔️       | ❌                         | ❌                           | ❌                         | ❌                           |
+| protected          | ✔️       | ✔️                         | ❌                           | ✔️                         | ❌                           |
+| internal           | ✔️       | ✔️                         | ✔️                           | ❌                         | ❌                           |
+| protected internal | ✔️       | ✔️                         | ✔️                           | ✔️                         | ❌                           |
+| private protected  | ✔️       | ✔️                         | ❌                           | ❌                         | ❌                           |
+
+#### 继承和多态性
+
+继承和多态性是面向对象编程的关键原则，可确保代码的可重用性和灵活性：
+
+- 继承允许创建一个新类，该类继承现有类的属性和方法，从而提高代码可重用性并在类之间建立层次关系。
+- 多态性是通过使用 `virtual` 和 `override` 关键字重写子类中的方法的能力以及通过允许不同的类拥有一组一致的方法的接口来实现的。
+
+### 2、类与对象 📝
+
+类和对象是 `C#` 中面向对象编程的基本概念。类是一个用户自定义的数据类型，它封装了数据和操作数据的方法。对象是类的特定实例，代表已定义类的实现。
+
+#### 类的基础
+
+:::tip
+
+默认访问修饰符是 `internal`，成员的默认访问修饰符是 `private`。
+
+:::
+
+```csharp
+public class Character
+{
+    // Properties
+    public string Name { get; set; }
+    public int Level { get; set; }
+    public int Health { get; set; }
+
+    // Constructor
+    public Character(string name)
+    {
+        Name = name;
+        Level = 1;
+        Health = 100;
+    }
+
+    // Method
+    public void LevelUp()
+    {
+        Level++;
+        Health += 10;
+        Console.WriteLine($"{Name} leveled up to level {Level}");
+    }
+
+    // Virtual method, can be overridden by subclasses
+    public virtual void Introduction()
+    {
+        Console.WriteLine($"I am {Name}, currently at level {Level}");
+    }
+}
+```
+
+#### 属性
+
+在 `C#` 中，属性（Property）是一种特殊的成员，用于封装类中的字段并提供对其的访问。属性使得外部代码可以像访问字段一样访问类的内部数据，但通过属性的方式可以增加代码的安全性和可维护性。
+
+属性通常由两个访问器（Accessor）组成：
+
+- `get`：用于获取属性的值。
+
+- `set`：用于设置属性的值。
+
+```csharp
+public class Program
+{
+    public static void Main()
+    {
+        // Create an instance of the Person class
+        Person person = new Person();
+        // Use the set accessor to set the Name property
+        person.Name = "Jack";
+        // Use the get accessor to retrieve the Name property and output it
+        Console.WriteLine("Person's name is: " + person.Name);
+    }
+}
+
+public class Person
+{
+    private string name;
+
+    public string Name
+    {
+        get { return name;  }
+        set { name = value; }
+    }
+}
+```
+
+<b>自动属性</b>：编译器会自动生成一个私有字段来存储值。
+
+```csharp
+public class Person
+{
+    public string Name { get; set; }
+}
+```
+
+<b>只读属性</b>
+：只有`get`访问器，没有`set`访问器，只能在构造函数中设置。适用于需要计算或只提供读取功能的场景。
+
+```csharp
+public class Circle
+{
+    private double radius;
+
+    public Circle(double radius)
+    {
+        this.radius = radius;
+    }
+
+    public double Radius
+    {
+        get { return radius; }
+    }
+
+    public double Area
+    {
+        get { return Math.PI * radius * radius; }
+    }
+}
+```
+
+<b>只写属性</b>
+：只有`set`访问器，没有`get`访问器。适用于只需要设置值而不需要读取值的场景。
+
+```csharp
+public class Account
+{
+    private decimal balance;
+
+    public decimal Balance
+    {
+        set { balance = value; }
+    }
+}
+```
+
+<b>初始化器设置</b>：在 `C#`
+9.0中，引入的新特性，这一特性使得属性可以在对象初始化时被赋值，但一旦对象被创建后，属性就变为只读，无法再被修改。这种设计模式特别适合于不可变对象的创建。
+
+```csharp
+public class Program
+{
+    public static void Main()
+    {
+        var user = new User
+        {
+            Username = "Player",
+            Email = "player@example.com"
+        };
+        // user.Username = "Bob"; // This line will cause a compilation error because the Name property is read-only
+        Console.WriteLine($"User's Name is: {user.Username}");
+        Console.WriteLine($"User's Email is: {user.Email}");
+    }
+}
+
+public class User
+{
+    public string Username { get; init; }
+    public string Email { get; init; }
+}
+```
+
+#### 构造函数
+
+构造函数是创建对象时调用的特殊方法，它们初始化对象的状态。
+
+<b>默认构造函数</b>
+
+```csharp
+public class Person
+{
+    public string Name;
+
+    public Person()
+    {
+        Name = "Player";
+    }
+}
+```
+
+<b>参数化构造函数</b>
+
+```csharp
+public class Book
+{
+    public string Title;
+    public string Author;
+
+    public Book(string title, string author)
+    {
+        Title = title;
+        Author = author;
+    }
+}
+```
+
+#### 析构函数
+
+析构函数用于在对象生命结束时执行清理操作，在游戏开发中，使用析构函数可以帮助管理资源和内存，以确保游戏运行的效率和稳定性。
+
+析构函数是一个特殊的方法，具有以下特点：
+
+- 以波浪符(~)开头，后跟类名
+- 不能有访问修饰符
+- 不能有参数
+- 不能有返回类型
+- 每个类只能有一个析构函数
+
+:::tip
+
+析构函数的调用时间是不确定的，因为它依赖于垃圾回收器的运行时机。
+
+:::
+
+```csharp
+public class Person
+{
+    public Person()
+    {
+        Console.WriteLine("Constructor called");
+    }
+
+    ~Person()
+    {
+        Console.WriteLine("Destructor called");
+    }
+}
+```
+
+#### 对象实例化
+
+创建类的对象或实例。
+
+```csharp
+// Base class
+public class Player
+{
+    // Properties
+    public string Name { get; set; }
+    public int Level { get; set; }
+
+    // Parameterless constructor
+    public Player()
+    {
+        Name = "Unnamed Player";
+        Level = 1;
+    }
+
+    // Constructor with parameters
+    public Player(string name)
+    {
+        Name = name;
+        Level = 1;
+    }
+
+    // Constructor with multiple parameters
+    public Player(string name, int level)
+    {
+        Name = name;
+        Level = level;
+    }
+}
+
+// Complex object example
+public class GameCharacter
+{
+    // Properties
+    public string Name { get; set; }
+    public int Health { get; set; }
+    public List<string> Skills { get; set; }
+
+    // Constructor
+    public GameCharacter()
+    {
+        Skills = new List<string>();
+    }
+}
+
+public class Program
+{
+    public static void Main()
+    {
+        // 1. The most basic instantiation method
+        Player player1 = new Player();
+
+        // 2. Using constructors
+        Player player2 = new Player("Hero");
+        Player player3 = new Player("Mage", 10);
+
+        // 3. Object initializer
+        Player player4 = new Player
+        {
+            Name = "Archer",
+            Level = 5
+        };
+
+        // 4. var keyword
+        var player5 = new Player("Assassin", 8);
+
+        // 5. Explicit type instantiation
+        Player player6 = new("Knight", 12);
+
+        // 6. Collection initialization
+        var characters = new List<Player>
+        {
+            new Player("Warrior"),
+            new Player("Mage", 5),
+            new Player { Name = "Shooter", Level = 3 }
+        };
+
+        // 7. Complex object initialization
+        var advancedCharacter = new GameCharacter
+        {
+            Name = "Ultimate Hero",
+            Health = 100,
+            Skills = new List<string> { "Fireball", "Heal" }
+        };
+
+        // 8. Using factory method
+        Player specialPlayer = CreateSpecialPlayer();
+
+        // 9. Nullable type
+        Player? optionalPlayer = null;
+    }
+
+    // Factory method example
+    static Player CreateSpecialPlayer()
+    {
+        return new Player("Special Character", 20);
+    }
+}
+
+// Static constructor example
+public class GameConfig
+{
+    // Static field
+    public static int MaxLevel { get; private set; }
+
+    // Static constructor: will only be called once
+    static GameConfig()
+    {
+        MaxLevel = 100;
+    }
+}
+
+// Private constructor (Singleton pattern)
+public class GameManager
+{
+    // Private static instance
+    private static GameManager _instance;
+
+    // Private constructor
+    private GameManager() { }
+
+    // Public static method to get the instance
+    public static GameManager GetInstance()
+    {
+        if (_instance == null)
+        {
+            _instance = new GameManager();
+        }
+        return _instance;
+    }
+}
+```
+
+### 3、继承与派生 📝
+
+#### 基类与派生类
+
+基类（父类）定义基本属性和行为，派生类（子类）继承这些特性并可以添加自己的特性，一个类只能继承自一个基类。
+
+在 `C#` 中使用冒号(`:`)来表示继承关系。
+
+```csharp
+// Base class
+public class Animal
+{
+    public string Name { get; set; }
+}
+
+// Derived class
+public class Dog : Animal
+{
+    public string Breed { get; set; }
+}
+```
+
+#### `base` 关键字
+
+`base` 关键字允许您在派生类中调用基类的成员。它最常用于派生类中，以调用基类的构造函数或访问派生类中重写的其他基类成员。
+
+```csharp
+public class Animal
+{
+    public virtual void Eat()
+    {
+        Console.WriteLine("Animal is eating");
+    }
+}
+
+public class Dog : Animal
+{
+    public override void Eat()
+    {
+        // Call base class method
+        base.Eat();
+        Console.WriteLine("Dog is eating bones");
+    }
+}
+```
+
+#### `this` 关键字
+
+`this` 关键字指向该类的当前实例。它通常用于指向当前对象的字段或方法，特别是当方法参数名称与类字段名称重叠时。
+
+1. 引用实例成员
+
+```csharp
+public class Player
+{
+    private string name;
+
+    public Player(string name)
+    {
+        // Use the this keyword to reference the member variable name
+        this.name = name;
+    }
+
+    public void DisplayInfo()
+    {
+        Console.WriteLine($"Player name: {this.name}");
+    }
+}
+```
+
+2. 调用其他构造函数
+
+```csharp
+public class Character
+{
+    private string name;
+    private int level;
+
+    // Constructor 1
+    public Character(string name) : this(name, 1)  // Call Constructor 2
+    {
+
+    }
+
+    // Constructor 2
+    public Character(string name, int level)
+    {
+        this.name = name;
+        this.level = level;
+    }
+
+    public void DisplayInfo()
+    {
+        Console.WriteLine($"Name: {this.name}, Level: {this.level}");
+    }
+}
+```
+
+#### 方法重写
+
+- 基类方法必须使用 `virtual`、`abstract` 或 `override` 关键字标记
+- 派生类方法必须使用 `override` 关键字
+- 重写方法必须与基类方法具有相同的返回类型、名称、参数列表
+
+在基类中，使用 `virtual` 关键字声明可以被重写的方法：
+
+```csharp
+public class Animal
+{
+    public virtual void MakeSound()
+    {
+        Console.WriteLine("Some sound");
+    }
+}
+```
+
+在派生类中，使用 `override` 关键字重写基类的虚方法：
+
+```csharp
+public class Dog : Animal
+{
+    public override void MakeSound()
+    {
+        Console.WriteLine("Woof!");
+    }
+}
+```
+
+抽象方法必须被派生类实现：
+
+```csharp
+public abstract class Shape
+{
+    public abstract double CalculateArea();
+
+    public virtual void Display()
+    {
+        Console.WriteLine("This is a shape");
+    }
+}
+
+public class Circle : Shape
+{
+    private double radius;
+
+    public override double CalculateArea()
+    {
+        return Math.PI * radius * radius;
+    }
+}
+```
+
+使用 `sealed` 关键字防止进一步重写：
+
+```csharp
+public class Dog : Animal
+{
+    public sealed override void MakeSound()
+    {
+        Console.WriteLine("Woof!");
+    }
+}
+```
+
+### 4、接口与抽象类 📝
+
+接口和抽象类是设计灵活且可维护的 `C#` 代码的重要工具。
+
+#### 接口
+
+`C#`不支持类的多重继承。但是，一个类可以实现多个接口。
+
+接口只包含方法声明，不包含实现。
+
+:::tip
+
+接口：定义行为
+
+:::
+
+#### 抽象类
+
+抽象类可以包含带实现和不带实现的方法。
+
+它们不能直接实例化。
+
+一个类可以实现多个接口，但只能继承一个抽象类。
+
+:::tip
+
+抽象类：共享基础实现
+
+:::
+
+```csharp
+// Interface definition
+public interface IGameCharacter
+{
+    string Name { get; set; }
+
+    void Attack();
+    void Defend();
+
+    void DisplayInfo()
+    {
+        Console.WriteLine($"Character Name: {Name}");
+    }
+}
+
+// Abstract class definition
+public abstract class BaseCharacter
+{
+    public string Name { get; set; }
+    public int Health { get; set; }
+
+    public BaseCharacter(string name)
+    {
+        Name = name;
+        Health = 100;
+    }
+
+    // Abstract method (must be implemented by subclasses)
+    public abstract void SpecialAbility();
+
+    // Concrete method
+    public virtual void TakeDamage(int amount)
+    {
+        Health -= amount;
+        Console.WriteLine($"{Name} took {amount} damage");
+    }
+}
+
+// Concrete class implementing the interface
+public class Warrior : BaseCharacter, IGameCharacter
+{
+    public string Weapon { get; set; }
+
+    public Warrior(string name, string weapon) : base(name)
+    {
+        Weapon = weapon;
+    }
+
+    // Interface method implementation
+    public void Attack()
+    {
+        Console.WriteLine($"{Name} attacks with {Weapon}!");
+    }
+
+    public void Defend()
+    {
+        Console.WriteLine($"{Name} raises a shield to defend!");
+    }
+
+    // Abstract method implementation
+    public override void SpecialAbility()
+    {
+        Console.WriteLine($"{Name} unleashes a berserker slash!");
+    }
+}
+
+public class Mage : BaseCharacter, IGameCharacter
+{
+    public int ManaPoints { get; set; }
+
+    public Mage(string name) : base(name)
+    {
+        ManaPoints = 100;
+    }
+
+    // Interface method implementation
+    public void Attack()
+    {
+        Console.WriteLine($"{Name} casts a magical attack!");
+        ManaPoints -= 10;
+    }
+
+    public void Defend()
+    {
+        Console.WriteLine($"{Name} uses a magical barrier!");
+    }
+
+    // Abstract method implementation
+    public override void SpecialAbility()
+    {
+        Console.WriteLine($"{Name} unleashes a wide-area spell!");
+    }
+}
+
+// Multiple interface implementation
+public interface IDamageable
+{
+    void ReceiveDamage(int damage);
+}
+
+public interface IHealable
+{
+    void Heal(int amount);
+}
+
+public class ComplexCharacter : IGameCharacter, IDamageable, IHealable
+{
+    public string Name { get; set; }
+    public int Health { get; set; }
+
+    public void Attack() { }
+    public void Defend() { }
+
+    public void ReceiveDamage(int damage)
+    {
+        Health -= damage;
+    }
+
+    public void Heal(int amount)
+    {
+        Health += amount;
+    }
+}
+
+public class Program
+{
+    public static void Main()
+    {
+        IGameCharacter warrior = new Warrior("Altaire", "Great Sword");
+        IGameCharacter mage = new Mage("Michael");
+
+        // Interface method calls
+        warrior.Attack();
+        mage.Attack();
+
+        // Abstract class method
+        BaseCharacter baseWarrior = new Warrior("Hero", "Long Sword");
+        baseWarrior.TakeDamage(20);
+        baseWarrior.SpecialAbility();
+
+        // Interface default implementation
+        warrior.DisplayInfo();
+    }
+}
+
+// Generic interface example
+public interface IRepository<T>
+{
+    void Add(T item);
+    T GetById(int id);
+    void Remove(T item);
+}
+
+public class CharacterRepository : IRepository<Warrior>
+{
+    public void Add(Warrior item) { }
+    public Warrior GetById(int id) { return null; }
+    public void Remove(Warrior item) { }
+}
+```
+
+### 5、类与类之间的关系 📝
+
+从关系强度由弱到强排序为：关联 < 聚合 < 组合
+
+#### 组合
+
+组合是一种强依赖的"整体-部分"关系，部分不能脱离整体而存在。
+
+```csharp
+public class Weapon
+{
+    public string Name { get; set; }
+    public int Damage { get; set; }
+
+    public void Attack()
+    {
+        Console.WriteLine($"{Name} attacks, dealing {Damage} damage");
+    }
+}
+
+public class Armor
+{
+    public string Name { get; set; }
+    public int Defense { get; set; }
+
+    public void Protect()
+    {
+        Console.WriteLine($"{Name} provides {Defense} defense");
+    }
+}
+
+public class GameCharacter
+{
+    // Composition: The character fully owns the weapon and armor
+    private Weapon _weapon;
+    private Armor _armor;
+
+    public GameCharacter(string weaponName, string armorName)
+    {
+        _weapon = new Weapon { Name = weaponName, Damage = 50 };
+        _armor = new Armor { Name = armorName, Defense = 30 };
+    }
+
+    public void Battle()
+    {
+        _weapon.Attack();
+        _armor.Protect();
+        Console.WriteLine("In battle...");
+    }
+}
+```
+
+#### 聚合
+
+聚合表示"整体-部分"的关系，但部分可以独立存在。
+
+```csharp
+public interface IWeapon
+{
+    string Name { get; }
+    int Damage { get; }
+}
+
+public class Sword : IWeapon
+{
+    public string Name { get; private set; }
+    public int Damage { get; private set; }
+
+    public Sword(string name, int damage)
+    {
+        Name = name;
+        Damage = damage;
+    }
+}
+
+public class Hero
+{
+    public string Name { get; private set; }
+    public int Health { get; private set; }
+
+    // Aggregation: Can change weapons
+    private IWeapon _weapon;
+
+    public Hero(string name)
+    {
+        Name = name;
+        Health = 100;
+    }
+
+    // Equip weapon (aggregation relationship)
+    public void EquipWeapon(IWeapon weapon)
+    {
+        _weapon = weapon;
+        Console.WriteLine($"{Name} equipped {weapon.Name}");
+    }
+
+    public void Attack(Hero target)
+    {
+        if (_weapon != null)
+        {
+            int damage = _weapon.Damage;
+            target.TakeDamage(damage);
+            Console.WriteLine($"{Name} attacks {target.Name} with {_weapon.Name}");
+        }
+        else
+        {
+            Console.WriteLine($"{Name} has no weapon and cannot attack");
+        }
+    }
+
+    public void TakeDamage(int damage)
+    {
+        Health -= damage;
+        Console.WriteLine($"{Name} takes {damage} damage, remaining health {Health}");
+    }
+}
+
+public class Program
+{
+    public static void Main()
+    {
+        Hero hero = new Hero("Hero");
+        Hero enemy = new Hero("Goblin");
+
+        IWeapon sword = new Sword("Hero's Sword", 20);
+        IWeapon axe = new Sword("Giant Axe", 25);
+
+        hero.EquipWeapon(sword);
+        enemy.EquipWeapon(axe);
+
+        hero.Attack(enemy);
+        enemy.Attack(hero);
+    }
+}
+```
+
+#### 关联
+
+关联是对象之间最普通的引用关系，对象之间相互独立。
+
+```csharp
+public class Player
+{
+    public string Name { get; set; }
+
+    // Association: A player can have multiple characters
+    public List<Character> Characters { get; set; }
+
+    // Association: A player can join multiple guilds
+    public List<Guild> Guilds { get; set; }
+
+    public Player(string name)
+    {
+        Name = name;
+        Characters = new List<Character>();
+        Guilds = new List<Guild>();
+    }
+
+    public void AddCharacter(Character character)
+    {
+        Characters.Add(character);
+    }
+
+    public void JoinGuild(Guild guild)
+    {
+        Guilds.Add(guild);
+        guild.AddMember(this);
+    }
+}
+
+public class Character
+{
+    public string Name { get; set; }
+    public int Level { get; set; }
+
+    // Association: A character belongs to a specific player
+    public Player Owner { get; set; }
+
+    // Association: A character can equip items
+    public List<Item> Equipment { get; set; }
+
+    public Character(string name, Player owner)
+    {
+        Name = name;
+        Owner = owner;
+        Equipment = new List<Item>();
+    }
+
+    public void EquipItem(Item item)
+    {
+        Equipment.Add(item);
+    }
+}
+
+public class Item
+{
+    public string Name { get; set; }
+    public int Attack { get; set; }
+    public int Defense { get; set; }
+
+    // Association: An item can be owned by multiple characters
+    public List<Character> Owners { get; set; }
+
+    public Item(string name, int attack, int defense)
+    {
+        Name = name;
+        Attack = attack;
+        Defense = defense;
+        Owners = new List<Character>();
+    }
+}
+
+public class Guild
+{
+    public string Name { get; set; }
+
+    // Association: A guild has multiple members
+    public List<Player> Members { get; set; }
+
+    public Guild(string name)
+    {
+        Name = name;
+        Members = new List<Player>();
+    }
+
+    public void AddMember(Player player)
+    {
+        Members.Add(player);
+    }
+}
+
+public class Program
+{
+    public static void Main()
+    {
+        Player player = new Player("Hero");
+        Character warrior = new Character("Warrior", player);
+        Character mage = new Character("Mage", player);
+
+        player.AddCharacter(warrior);
+        player.AddCharacter(mage);
+
+        Item sword = new Item("Flame Dragon Sword", 50, 10);
+        Item shield = new Item("Iron Shield", 5, 30);
+
+        warrior.EquipItem(sword);
+        warrior.EquipItem(shield);
+
+        Guild heroGuild = new Guild("Hero League");
+
+        player.JoinGuild(heroGuild);
+
+        // Display associations
+        Console.WriteLine($"Player {player.Name} has {player.Characters.Count} characters");
+        Console.WriteLine($"Character {warrior.Name} has {warrior.Equipment.Count} pieces of equipment");
+        Console.WriteLine($"Guild {heroGuild.Name} has {heroGuild.Members.Count} members");
+    }
+}
+```
+
+### 6、类的高级特性 📝
+
+#### 静态成员
+
+以下都需要使用 `static` 关键字声明。
+
+<b>静态字段</b>
+
+不需要创建类的实例即可使用，通过类名直接访问`ClassName.StaticFieldName`。
+
+- 存储在数据段中，在程序启动时就分配内存
+- 被类的所有实例共享，所有实例访问同一内存位置
+- 生命周期与应用程序相同，从程序启动到程序结束
+
+<b>静态方法</b>
+
+静态方法是属于类本身而不是类的实例的方法。
+
+- 不需要创建类的实例就能调用
+- 只能直接访问类的其他静态成员
+- 不能使用 `this` 关键字
+
+<b>静态构造函数</b>
+
+静态构造函数用于初始化类的静态成员或执行只应在类中发生一次的操作，而不是针对每个单独的对象。
+
+- 每个类只能有一个静态构造函数
+- 不能有参数
+- 不能有访问修饰符
+- 自动调用，不能手动调用
+- 在类第一次被使用前执行
+
+<b>静态类</b>
+
+静态类是一种特殊的类，只包含静态成员，不能被实例化。
+
+- 隐式密封（sealed），这意味着它们不能被继承
+- 不能包含实例构造函数
+- 不能被继承
+
+<b>静态属性</b>
+
+静态属性是属于类而不是实例的属性。
+
+- 通过类名直接访问的，不需要创建类的实例
+- 整个程序运行期间只存在一个共享的副本，所有对象共享这个属性
+- 可以是只读、只写或读写
+
+```csharp
+public class GameSettings
+{
+    // Static fields: Global game settings
+    public static int MaxLevel = 100;
+    public static int StartingGold = 1000;
+
+    // Static read-only field: Unmodifiable constant
+    public static readonly string GameVersion = "1.0.0";
+}
+
+public class Player
+{
+    // Instance fields
+    public string Name { get; }
+    public int Gold { get; }
+
+    // Static field: Record total number of players
+    private static int _totalPlayers;
+
+    // Static property: Get current total number of players
+    public static int TotalPlayers => _totalPlayers;
+
+    public Player(string name)
+    {
+        Name = name;
+        Gold = GameSettings.StartingGold;
+
+        // Increment total players count for each new player created
+        _totalPlayers++;
+    }
+
+    // Static method: Reset player count
+    public static void ResetPlayerCount()
+    {
+        _totalPlayers = 0;
+    }
+}
+
+public class MonsterManager
+{
+    // Static field: Global monster kill counter
+    private static int _totalMonstersKilled;
+
+    // Static method: Record monster kill
+    public static void RecordMonsterKill()
+    {
+        _totalMonstersKilled++;
+    }
+
+    // Static method: Get total kills
+    public static int GetTotalMonstersKilled()
+    {
+        return _totalMonstersKilled;
+    }
+}
+
+public class Program
+{
+    public static void Main()
+    {
+        // Using static fields and methods
+        Console.WriteLine($"Game Version: {GameSettings.GameVersion}");
+        Console.WriteLine($"Max Level: {GameSettings.MaxLevel}");
+
+        // Create players
+        Player player = new Player("Hero");
+        if (player == null) throw new ArgumentNullException(nameof(player));
+
+        // Using static property
+        Console.WriteLine($"Current Total Players: {Player.TotalPlayers}");
+
+        // Simulate battles
+        MonsterManager.RecordMonsterKill();
+        MonsterManager.RecordMonsterKill();
+        MonsterManager.RecordMonsterKill();
+
+        Console.WriteLine($"Total Monsters Killed: {MonsterManager.GetTotalMonstersKilled()}");
+
+        // Demonstrate the characteristics of static fields
+        Console.WriteLine($"{player.Name}'s Initial Gold: {player.Gold}");
+    }
+}
+```
+
+#### 特性
+
+特性用于将元数据添加到程序元素（例如类、方法和属性），这可以在运行时改变它们的行为。
+
+<b>预定义特性</b>
+
+- `Obsolete`—— 标记已过时的代码
+
+- `Serializable` —— 标记可序列化的类
+- `Conditional` —— 用于条件编译
+- `AttributeUsage` —— 描述特性的使用方式
+
+<b>自定义特性</b>
+
+- 必须继承自 `Attribute` 类
+
+- 类名通常以 `Attribute` 结尾
+- 可以包含构造函数和属性
+
+```csharp
+using System.Reflection;
+
+// Custom Attribute: Character Description
+[AttributeUsage(AttributeTargets.Class)]
+public class CharacterDescriptionAttribute(string description) : Attribute
+{
+    public string Description { get; } = description;
+}
+
+// Attribute Validation
+[AttributeUsage(AttributeTargets.Property)]
+public class ValidRangeAttribute(int min, int max) : Attribute
+{
+    public int Min { get; } = min;
+    public int Max { get; } = max;
+
+    public bool IsValid(int value)
+    {
+        return value >= Min && value <= Max;
+    }
+}
+
+// Character class using attributes
+[CharacterDescription("Brave Adventurer")]
+public class GameCharacter(string name, int level, int health)
+{
+    public string Name { get; set; } = name;
+
+    [ValidRange(1, 100)]
+    public int Level { get; set; } = level;
+
+    [ValidRange(10, 500)]
+    public int Health { get; set; } = health;
+
+    // Method to validate properties using attributes
+    public bool Validate()
+    {
+        var properties = GetType().GetProperties();
+
+        foreach (var prop in properties)
+        {
+            if (prop.GetCustomAttributes(typeof(ValidRangeAttribute), false)
+                    .FirstOrDefault() is ValidRangeAttribute validRangeAttr)
+            {
+                var value = (int)prop.GetValue(this);
+                if (!validRangeAttr.IsValid(value))
+                {
+                    Console.WriteLine($"Property {prop.Name} validation failed: value must be between {validRangeAttr.Min} and {validRangeAttr.Max}");
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    // Get the description of the class
+    public string GetDescription()
+    {
+        var attribute = GetType().GetCustomAttribute<CharacterDescriptionAttribute>();
+        return attribute?.Description ?? "No description";
+    }
+}
+
+public class Program
+{
+    public static void Main()
+    {
+        // Create character
+        GameCharacter hero = new GameCharacter("Hero", 50, 200);
+
+        // Validate character properties
+        if (hero.Validate())
+        {
+            Console.WriteLine("Character property validation passed");
+        }
+
+        // Get character description
+        Console.WriteLine($"Character description: {hero.GetDescription()}");
+
+        // Test invalid properties
+        GameCharacter invalidHero = new GameCharacter("Invalid Character", 150, 600);
+        if (!invalidHero.Validate())
+        {
+            Console.WriteLine("Character property validation failed");
+        }
+    }
+}
+```
+
+#### 反射
+
+反射允许在运行时检查、修改和创建类型、方法和属性。
+
+```csharp
+using System.Reflection;
+
+// Base class for characters
+public abstract class Character
+{
+    public string Name { get; set; }
+    public int Health { get; set; }
+
+    public abstract void Attack();
+}
+
+// Warrior class
+public class Warrior : Character
+{
+    public int Strength { get; set; }
+
+    public Warrior(string name, int health, int strength)
+    {
+        Name = name;
+        Health = health;
+        Strength = strength;
+    }
+
+    public override void Attack()
+    {
+        Console.WriteLine($"{Name} attacks with a sword!");
+    }
+
+    public void SpecialSkill()
+    {
+        Console.WriteLine($"{Name} uses Fury Slash!");
+    }
+}
+
+// Mage class
+public class Mage : Character
+{
+    public int Mana { get; set; }
+
+    public Mage(string name, int health, int mana)
+    {
+        Name = name;
+        Health = health;
+        Mana = mana;
+    }
+
+    public override void Attack()
+    {
+        Console.WriteLine($"{Name} casts a magic attack!");
+    }
+
+    public void CastSpell()
+    {
+        Console.WriteLine($"{Name} casts a high-level spell!");
+    }
+}
+
+// Reflection helper class
+public abstract class ReflectionHelper
+{
+    // Create an object
+    public static object? CreateInstance(string typeName)
+    {
+        Type? type = Type.GetType(typeName);
+        return Activator.CreateInstance(type, "Default Character", 100, 50);
+    }
+
+    // Get all public methods
+    public static void GetMethods(object? obj)
+    {
+        Type? type = obj?.GetType();
+        Console.WriteLine($"All public methods of type {type?.Name}:");
+
+        MethodInfo[]? methods = type?.GetMethods(
+            BindingFlags.Public |
+            BindingFlags.Instance |
+            BindingFlags.DeclaredOnly
+        );
+
+        if (methods != null)
+            foreach (var method in methods)
+            {
+                Console.WriteLine(method.Name);
+            }
+    }
+
+    // Invoke a method
+    public static void InvokeMethod(object? obj, string methodName)
+    {
+        Type? type = obj?.GetType();
+        MethodInfo? method = type?.GetMethod(methodName);
+
+        if (method != null)
+        {
+            method.Invoke(obj, null);
+        }
+        else
+        {
+            Console.WriteLine($"Method {methodName} not found");
+        }
+    }
+
+    // Display property values
+    public static void DisplayProperties(object? obj)
+    {
+        Type? type = obj?.GetType();
+        PropertyInfo[]? properties = type?.GetProperties();
+
+        Console.WriteLine($"Properties of type {type?.Name}:");
+        if (properties != null)
+            foreach (var prop in properties)
+            {
+                object? value = prop.GetValue(obj);
+                Console.WriteLine($"{prop.Name}: {value}");
+            }
+    }
+}
+
+public class Program
+{
+    public static void Main()
+    {
+        // Create an object using reflection
+        Warrior warrior = (Warrior)ReflectionHelper.CreateInstance("Warrior")!;
+
+        // Display object properties
+        ReflectionHelper.DisplayProperties(warrior);
+
+        // Get object methods
+        ReflectionHelper.GetMethods(warrior);
+
+        // Invoke specific methods
+        ReflectionHelper.InvokeMethod(warrior, "Attack");
+        ReflectionHelper.InvokeMethod(warrior, "SpecialSkill");
+
+        // Dynamically create and use an object
+        object? dynamicMage = ReflectionHelper.CreateInstance("Mage");
+        ReflectionHelper.InvokeMethod(dynamicMage, "Attack");
+    }
+}
+```

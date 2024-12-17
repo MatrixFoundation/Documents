@@ -1,10 +1,10 @@
 ---
-sidebar_label: C# Advancement
+sidebar_label: C# Advanced Improvement
 title: C# Advanced Improvement
 sidebar_position: 3
 ---
 
-## Methods 📝
+## I. Methods 📝
 
 In `C#`, methods are code blocks that perform specific tasks and can be called from other parts of the program. Methods facilitate code reuse, readability, and modularity.
 
@@ -226,6 +226,1407 @@ public class Logger
     public void LogError(string errorMessage)
     {
         Console.WriteLine($"Error: {errorMessage}");
+    }
+}
+```
+
+## II. Object-Oriented Programming 📦
+
+### 1. Principles 📝
+
+Object-oriented programming is based on four main principles: Encapsulation, Inheritance, Polymorphism, and Abstraction.
+
+- Encapsulation allows bundling data and methods into a single unit (class) and restricting access to certain components.
+- Inheritance allows one class (child or derived class) to inherit properties and methods from another class (parent or base class). This promotes code reuse and establishes hierarchical relationships between classes.
+- Polymorphism is the ability of a single function or method to work in various ways based on its input or the object calling it. In `C#`, polymorphism can be implemented through method overriding (using the `override` keyword) and method hiding (using the `new` keyword to hide methods from the base class).
+- Abstraction allows developers to hide complex implementations and show only essential features of objects. This means users interact only with necessary content while internal workings remain hidden. In `C#`, abstract classes and interfaces are tools that help implement abstraction.
+
+These principles help design robust and scalable applications that are easy to maintain and further develop.
+
+#### Encapsulation and Abstraction
+
+These concepts help manage access to object data and implement high-level abstractions in programming:
+
+- Encapsulation protects the internal state of objects and prevents unauthorized external access, allowing strict control over data and ensuring data integrity.
+- Abstraction allows separation of implementation from interface and supports creating systems with higher flexibility and extensibility, enabling developers to reduce programming complexity and improve efficiency.
+
+In `C#`, encapsulation is ensured through access modifiers such as `private`, `protected`, and `public`.
+
+These modifiers determine the visibility of class members, allowing implementation details to be hidden and exposing only necessary APIs.
+
+- `public`: Full access
+- `private`: Access only within the class
+- `protected`: Access within class and derived classes
+- `internal`: Access within the same assembly
+
+| Modifier           | Same Class | Derived Class<br />Same Assembly | Non-derived Class<br />Same Assembly | Derived Class<br />Different Assembly | Non-derived Class<br />Different Assembly |
+| ------------------ | ---------- | -------------------------------- | ------------------------------------ | ------------------------------------- | ----------------------------------------- |
+| public             | ✔️         | ✔️                               | ✔️                                   | ✔️                                    | ✔️                                        |
+| private            | ✔️         | ❌                               | ❌                                   | ❌                                    | ❌                                        |
+| protected          | ✔️         | ✔️                               | ❌                                   | ✔️                                    | ❌                                        |
+| internal           | ✔️         | ✔️                               | ✔️                                   | ❌                                    | ❌                                        |
+| protected internal | ✔️         | ✔️                               | ✔️                                   | ✔️                                    | ❌                                        |
+| private protected  | ✔️         | ✔️                               | ❌                                   | ❌                                    | ❌                                        |
+
+#### Inheritance and Polymorphism
+
+Inheritance and polymorphism are key principles of object-oriented programming that ensure code reusability and flexibility:
+
+- Inheritance allows creating a new class that inherits properties and methods from an existing class, improving code reusability and establishing hierarchical relationships between classes.
+- Polymorphism is implemented through the ability to override methods in child classes using the `virtual` and `override` keywords, and through interfaces that allow different classes to have a consistent set of methods.
+
+### 2. Classes and Objects 📝
+
+Classes and objects are fundamental concepts in `C#` object-oriented programming. A class is a user-defined data type that encapsulates data and methods that operate on that data. An object is a specific instance of a class, representing an implementation of the defined class.
+
+#### Class Basics
+
+:::tip
+The default access modifier is `internal`, and the default access modifier for members is `private`.
+:::
+
+```csharp
+public class Character
+{
+    // Properties
+    public string Name { get; set; }
+    public int Level { get; set; }
+    public int Health { get; set; }
+
+    // Constructor
+    public Character(string name)
+    {
+        Name = name;
+        Level = 1;
+        Health = 100;
+    }
+
+    // Method
+    public void LevelUp()
+    {
+        Level++;
+        Health += 10;
+        Console.WriteLine($"{Name} leveled up to level {Level}");
+    }
+
+    // Virtual method, can be overridden by subclasses
+    public virtual void Introduction()
+    {
+        Console.WriteLine($"I am {Name}, currently at level {Level}");
+    }
+}
+```
+
+#### Properties
+
+In `C#`, properties are special members used to encapsulate fields in a class and provide access to them. Properties allow external code to access class internal data like fields, but with added security and maintainability through property accessors.
+
+Properties typically consist of two accessors:
+
+- `get`: Used to retrieve the property value
+- `set`: Used to set the property value
+
+```csharp
+public class Program
+{
+    public static void Main()
+    {
+        // Create an instance of the Person class
+        Person person = new Person();
+        // Use the set accessor to set the Name property
+        person.Name = "Jack";
+        // Use the get accessor to retrieve the Name property and output it
+        Console.WriteLine("Person's name is: " + person.Name);
+    }
+}
+
+public class Person
+{
+    private string name;
+
+    public string Name
+    {
+        get { return name;  }
+        set { name = value; }
+    }
+}
+```
+
+<b>Auto-implemented Properties</b>: The compiler automatically generates a
+private field to store the value.
+
+```csharp
+public class Person
+{
+    public string Name { get; set; }
+}
+```
+
+<b>Read-only Properties</b>: Only have a `get` accessor, no `set` accessor. Can
+only be set in the constructor. Suitable for scenarios requiring calculation or
+read-only functionality.
+
+```csharp
+public class Circle
+{
+    private double radius;
+
+    public Circle(double radius)
+    {
+        this.radius = radius;
+    }
+
+    public double Radius
+    {
+        get { return radius; }
+    }
+
+    public double Area
+    {
+        get { return Math.PI * radius * radius; }
+    }
+}
+```
+
+<b>Write-only Properties</b>: Only have a `set` accessor, no `get` accessor.
+Suitable for scenarios where only setting values is needed without reading them.
+
+```csharp
+public class Account
+{
+    private decimal balance;
+
+    public decimal Balance
+    {
+        set { balance = value; }
+    }
+}
+```
+
+<b>Init-only Properties</b>: Introduced in `C#` 9.0, this feature allows
+properties to be set during object initialization but becomes read-only after
+object creation. This design pattern is particularly suitable for creating
+immutable objects.
+
+```csharp
+public class Program
+{
+    public static void Main()
+    {
+        var user = new User
+        {
+            Username = "Player",
+            Email = "player@example.com"
+        };
+        // user.Username = "Bob"; // This line will cause a compilation error because the Name property is read-only
+        Console.WriteLine($"User's Name is: {user.Username}");
+        Console.WriteLine($"User's Email is: {user.Email}");
+    }
+}
+
+public class User
+{
+    public string Username { get; init; }
+    public string Email { get; init; }
+}
+```
+
+#### Constructors
+
+Constructors are special methods called when creating objects to initialize their state.
+
+**Default Constructor**
+
+```csharp
+public class Person
+{
+    public string Name;
+
+    public Person()
+    {
+        Name = "Player";
+    }
+}
+```
+
+**Parameterized Constructor**
+
+```csharp
+public class Book
+{
+    public string Title;
+    public string Author;
+
+    public Book(string title, string author)
+    {
+        Title = title;
+        Author = author;
+    }
+}
+```
+
+#### Destructors
+
+Destructors are used to perform cleanup operations when an object's life ends. In game development, destructors help manage resources and memory to ensure game efficiency and stability.
+
+Destructors have the following characteristics:
+
+- Start with a tilde (~) followed by the class name
+- Cannot have access modifiers
+- Cannot have parameters
+- Cannot have return types
+- Each class can have only one destructor
+
+:::tip
+The timing of destructor calls is uncertain as it depends on when the garbage collector runs.
+:::
+
+```csharp
+public class Person
+{
+    public Person()
+    {
+        Console.WriteLine("Constructor called");
+    }
+
+    ~Person()
+    {
+        Console.WriteLine("Destructor called");
+    }
+}
+```
+
+#### Object Instantiation
+
+Creating objects or instances of a class.
+
+```csharp
+// Base class
+public class Player
+{
+    // Properties
+    public string Name { get; set; }
+    public int Level { get; set; }
+
+    // Parameterless constructor
+    public Player()
+    {
+        Name = "Unnamed Player";
+        Level = 1;
+    }
+
+    // Constructor with parameters
+    public Player(string name)
+    {
+        Name = name;
+        Level = 1;
+    }
+
+    // Constructor with multiple parameters
+    public Player(string name, int level)
+    {
+        Name = name;
+        Level = level;
+    }
+}
+
+// Complex object example
+public class GameCharacter
+{
+    // Properties
+    public string Name { get; set; }
+    public int Health { get; set; }
+    public List<string> Skills { get; set; }
+
+    // Constructor
+    public GameCharacter()
+    {
+        Skills = new List<string>();
+    }
+}
+
+public class Program
+{
+    public static void Main()
+    {
+        // 1. The most basic instantiation method
+        Player player1 = new Player();
+
+        // 2. Using constructors
+        Player player2 = new Player("Hero");
+        Player player3 = new Player("Mage", 10);
+
+        // 3. Object initializer
+        Player player4 = new Player
+        {
+            Name = "Archer",
+            Level = 5
+        };
+
+        // 4. var keyword
+        var player5 = new Player("Assassin", 8);
+
+        // 5. Explicit type instantiation
+        Player player6 = new("Knight", 12);
+
+        // 6. Collection initialization
+        var characters = new List<Player>
+        {
+            new Player("Warrior"),
+            new Player("Mage", 5),
+            new Player { Name = "Shooter", Level = 3 }
+        };
+
+        // 7. Complex object initialization
+        var advancedCharacter = new GameCharacter
+        {
+            Name = "Ultimate Hero",
+            Health = 100,
+            Skills = new List<string> { "Fireball", "Heal" }
+        };
+
+        // 8. Using factory method
+        Player specialPlayer = CreateSpecialPlayer();
+
+        // 9. Nullable type
+        Player? optionalPlayer = null;
+    }
+
+    // Factory method example
+    static Player CreateSpecialPlayer()
+    {
+        return new Player("Special Character", 20);
+    }
+}
+
+// Static constructor example
+public class GameConfig
+{
+    // Static field
+    public static int MaxLevel { get; private set; }
+
+    // Static constructor: will only be called once
+    static GameConfig()
+    {
+        MaxLevel = 100;
+    }
+}
+
+// Private constructor (Singleton pattern)
+public class GameManager
+{
+    // Private static instance
+    private static GameManager _instance;
+
+    // Private constructor
+    private GameManager() { }
+
+    // Public static method to get the instance
+    public static GameManager GetInstance()
+    {
+        if (_instance == null)
+        {
+            _instance = new GameManager();
+        }
+        return _instance;
+    }
+}
+```
+
+### 3. Inheritance and Derivation 📝
+
+#### Base Class and Derived Class
+
+Base class (parent class) defines basic properties and behaviors, while derived class (child class) inherits these characteristics and can add its own features. A class can only inherit from one base class.
+
+In `C#`, the colon (`:`) is used to indicate inheritance relationship.
+
+```csharp
+// Base class
+public class Animal
+{
+    public string Name { get; set; }
+}
+
+// Derived class
+public class Dog : Animal
+{
+    public string Breed { get; set; }
+}
+```
+
+#### `base` Keyword
+
+The `base` keyword allows you to call members from the base class when in a derived class. It is most commonly used in derived classes to call the constructor of the base class or to access other base class members that were overridden in the derived class.
+
+```csharp
+public class Animal
+{
+    public virtual void Eat()
+    {
+        Console.WriteLine("Animal is eating");
+    }
+}
+
+public class Dog : Animal
+{
+    public override void Eat()
+    {
+        // Call base class method
+        base.Eat();
+        Console.WriteLine("Dog is eating bones");
+    }
+}
+```
+
+#### `this` Keyword
+
+The `this` keyword points to the present instance of the class. It is often used to point to the fields or methods of the current object, especially when method parameter names overlap with class field names.
+
+1. Referencing Instance Members
+
+```csharp
+public class Player
+{
+    private string name;
+
+    public Player(string name)
+    {
+        // Use the this keyword to reference the member variable name
+        this.name = name;
+    }
+
+    public void DisplayInfo()
+    {
+        Console.WriteLine($"Player name: {this.name}");
+    }
+}
+```
+
+2. Calling Other Constructors
+
+```csharp
+public class Character
+{
+    private string name;
+    private int level;
+
+    // Constructor 1
+    public Character(string name) : this(name, 1)  // Call Constructor 2
+    {
+
+    }
+
+    // Constructor 2
+    public Character(string name, int level)
+    {
+        this.name = name;
+        this.level = level;
+    }
+
+    public void DisplayInfo()
+    {
+        Console.WriteLine($"Name: {this.name}, Level: {this.level}");
+    }
+}
+```
+
+#### Method Overriding
+
+- Base class methods must be marked with `virtual`, `abstract`, or `override` keywords
+- Derived class methods must use the `override` keyword
+- Overridden methods must have the same return type, name, and parameter list as the base class method
+
+In the base class, use the `virtual` keyword to declare methods that can be overridden:
+
+```csharp
+public class Animal
+{
+    public virtual void MakeSound()
+    {
+        Console.WriteLine("Some sound");
+    }
+}
+```
+
+In derived classes, use the `override` keyword to override the virtual method of the base class:
+
+```csharp
+public class Dog : Animal
+{
+    public override void MakeSound()
+    {
+        Console.WriteLine("Woof!");
+    }
+}
+```
+
+Abstract methods must be implemented by derived classes:
+
+```csharp
+public abstract class Shape
+{
+    public abstract double CalculateArea();
+
+    public virtual void Display()
+    {
+        Console.WriteLine("This is a shape");
+    }
+}
+
+public class Circle : Shape
+{
+    private double radius;
+
+    public override double CalculateArea()
+    {
+        return Math.PI * radius * radius;
+    }
+}
+```
+
+Use the `sealed` keyword to prevent further overriding:
+
+```csharp
+public class Dog : Animal
+{
+    public sealed override void MakeSound()
+    {
+        Console.WriteLine("Woof!");
+    }
+}
+```
+
+### 4. Interfaces and Abstract Classes 📝
+
+Interfaces and abstract classes are crucial tools for designing flexible and maintainable `C#` code.
+
+#### Interfaces
+
+`C#` doesn't support multiple inheritance for classes. However, a class can implement multiple interfaces.
+
+Interfaces contain only method declarations, not implementations.
+
+:::tip
+Interfaces: Define behavior
+:::
+
+#### Abstract Classes
+
+Abstract classes can contain methods with and without implementation.
+
+They cannot be instantiated directly.
+
+A class can implement multiple interfaces but can inherit only one abstract class.
+
+:::tip
+Abstract Classes: Share base implementation
+:::
+
+```csharp
+// Interface definition
+public interface IGameCharacter
+{
+    string Name { get; set; }
+
+    void Attack();
+    void Defend();
+
+    void DisplayInfo()
+    {
+        Console.WriteLine($"Character Name: {Name}");
+    }
+}
+
+// Abstract class definition
+public abstract class BaseCharacter
+{
+    public string Name { get; set; }
+    public int Health { get; set; }
+
+    public BaseCharacter(string name)
+    {
+        Name = name;
+        Health = 100;
+    }
+
+    // Abstract method (must be implemented by subclasses)
+    public abstract void SpecialAbility();
+
+    // Concrete method
+    public virtual void TakeDamage(int amount)
+    {
+        Health -= amount;
+        Console.WriteLine($"{Name} took {amount} damage");
+    }
+}
+
+// Concrete class implementing the interface
+public class Warrior : BaseCharacter, IGameCharacter
+{
+    public string Weapon { get; set; }
+
+    public Warrior(string name, string weapon) : base(name)
+    {
+        Weapon = weapon;
+    }
+
+    // Interface method implementation
+    public void Attack()
+    {
+        Console.WriteLine($"{Name} attacks with {Weapon}!");
+    }
+
+    public void Defend()
+    {
+        Console.WriteLine($"{Name} raises a shield to defend!");
+    }
+
+    // Abstract method implementation
+    public override void SpecialAbility()
+    {
+        Console.WriteLine($"{Name} unleashes a berserker slash!");
+    }
+}
+
+public class Mage : BaseCharacter, IGameCharacter
+{
+    public int ManaPoints { get; set; }
+
+    public Mage(string name) : base(name)
+    {
+        ManaPoints = 100;
+    }
+
+    // Interface method implementation
+    public void Attack()
+    {
+        Console.WriteLine($"{Name} casts a magical attack!");
+        ManaPoints -= 10;
+    }
+
+    public void Defend()
+    {
+        Console.WriteLine($"{Name} uses a magical barrier!");
+    }
+
+    // Abstract method implementation
+    public override void SpecialAbility()
+    {
+        Console.WriteLine($"{Name} unleashes a wide-area spell!");
+    }
+}
+
+// Multiple interface implementation
+public interface IDamageable
+{
+    void ReceiveDamage(int damage);
+}
+
+public interface IHealable
+{
+    void Heal(int amount);
+}
+
+public class ComplexCharacter : IGameCharacter, IDamageable, IHealable
+{
+    public string Name { get; set; }
+    public int Health { get; set; }
+
+    public void Attack() { }
+    public void Defend() { }
+
+    public void ReceiveDamage(int damage)
+    {
+        Health -= damage;
+    }
+
+    public void Heal(int amount)
+    {
+        Health += amount;
+    }
+}
+
+public class Program
+{
+    public static void Main()
+    {
+        IGameCharacter warrior = new Warrior("Altaire", "Great Sword");
+        IGameCharacter mage = new Mage("Michael");
+
+        // Interface method calls
+        warrior.Attack();
+        mage.Attack();
+
+        // Abstract class method
+        BaseCharacter baseWarrior = new Warrior("Hero", "Long Sword");
+        baseWarrior.TakeDamage(20);
+        baseWarrior.SpecialAbility();
+
+        // Interface default implementation
+        warrior.DisplayInfo();
+    }
+}
+
+// Generic interface example
+public interface IRepository<T>
+{
+    void Add(T item);
+    T GetById(int id);
+    void Remove(T item);
+}
+
+public class CharacterRepository : IRepository<Warrior>
+{
+    public void Add(Warrior item) { }
+    public Warrior GetById(int id) { return null; }
+    public void Remove(Warrior item) { }
+}
+```
+
+### 5. Relationships Between Classes 📝
+
+From weak to strong relationship order: Association < Aggregation < Composition
+
+#### Composition
+
+Composition is a strong "whole-part" dependency relationship where parts cannot exist without the whole.
+
+```csharp
+public class Weapon
+{
+    public string Name { get; set; }
+    public int Damage { get; set; }
+
+    public void Attack()
+    {
+        Console.WriteLine($"{Name} attacks, dealing {Damage} damage");
+    }
+}
+
+public class Armor
+{
+    public string Name { get; set; }
+    public int Defense { get; set; }
+
+    public void Protect()
+    {
+        Console.WriteLine($"{Name} provides {Defense} defense");
+    }
+}
+
+public class GameCharacter
+{
+    // Composition: The character fully owns the weapon and armor
+    private Weapon _weapon;
+    private Armor _armor;
+
+    public GameCharacter(string weaponName, string armorName)
+    {
+        _weapon = new Weapon { Name = weaponName, Damage = 50 };
+        _armor = new Armor { Name = armorName, Defense = 30 };
+    }
+
+    public void Battle()
+    {
+        _weapon.Attack();
+        _armor.Protect();
+        Console.WriteLine("In battle...");
+    }
+}
+```
+
+#### Aggregation
+
+Aggregation represents a "whole-part" relationship, but parts can exist independently.
+
+```csharp
+public interface IWeapon
+{
+    string Name { get; }
+    int Damage { get; }
+}
+
+public class Sword : IWeapon
+{
+    public string Name { get; private set; }
+    public int Damage { get; private set; }
+
+    public Sword(string name, int damage)
+    {
+        Name = name;
+        Damage = damage;
+    }
+}
+
+public class Hero
+{
+    public string Name { get; private set; }
+    public int Health { get; private set; }
+
+    // Aggregation: Can change weapons
+    private IWeapon _weapon;
+
+    public Hero(string name)
+    {
+        Name = name;
+        Health = 100;
+    }
+
+    // Equip weapon (aggregation relationship)
+    public void EquipWeapon(IWeapon weapon)
+    {
+        _weapon = weapon;
+        Console.WriteLine($"{Name} equipped {weapon.Name}");
+    }
+
+    public void Attack(Hero target)
+    {
+        if (_weapon != null)
+        {
+            int damage = _weapon.Damage;
+            target.TakeDamage(damage);
+            Console.WriteLine($"{Name} attacks {target.Name} with {_weapon.Name}");
+        }
+        else
+        {
+            Console.WriteLine($"{Name} has no weapon and cannot attack");
+        }
+    }
+
+    public void TakeDamage(int damage)
+    {
+        Health -= damage;
+        Console.WriteLine($"{Name} takes {damage} damage, remaining health {Health}");
+    }
+}
+
+public class Program
+{
+    public static void Main()
+    {
+        Hero hero = new Hero("Hero");
+        Hero enemy = new Hero("Goblin");
+
+        IWeapon sword = new Sword("Hero's Sword", 20);
+        IWeapon axe = new Sword("Giant Axe", 25);
+
+        hero.EquipWeapon(sword);
+        enemy.EquipWeapon(axe);
+
+        hero.Attack(enemy);
+        enemy.Attack(hero);
+    }
+}
+```
+
+#### Association
+
+Association is the most common reference relationship between objects, where objects are mutually independent.
+
+```csharp
+public class Player
+{
+    public string Name { get; set; }
+
+    // Association: A player can have multiple characters
+    public List<Character> Characters { get; set; }
+
+    // Association: A player can join multiple guilds
+    public List<Guild> Guilds { get; set; }
+
+    public Player(string name)
+    {
+        Name = name;
+        Characters = new List<Character>();
+        Guilds = new List<Guild>();
+    }
+
+    public void AddCharacter(Character character)
+    {
+        Characters.Add(character);
+    }
+
+    public void JoinGuild(Guild guild)
+    {
+        Guilds.Add(guild);
+        guild.AddMember(this);
+    }
+}
+
+public class Character
+{
+    public string Name { get; set; }
+    public int Level { get; set; }
+
+    // Association: A character belongs to a specific player
+    public Player Owner { get; set; }
+
+    // Association: A character can equip items
+    public List<Item> Equipment { get; set; }
+
+    public Character(string name, Player owner)
+    {
+        Name = name;
+        Owner = owner;
+        Equipment = new List<Item>();
+    }
+
+    public void EquipItem(Item item)
+    {
+        Equipment.Add(item);
+    }
+}
+
+public class Item
+{
+    public string Name { get; set; }
+    public int Attack { get; set; }
+    public int Defense { get; set; }
+
+    // Association: An item can be owned by multiple characters
+    public List<Character> Owners { get; set; }
+
+    public Item(string name, int attack, int defense)
+    {
+        Name = name;
+        Attack = attack;
+        Defense = defense;
+        Owners = new List<Character>();
+    }
+}
+
+public class Guild
+{
+    public string Name { get; set; }
+
+    // Association: A guild has multiple members
+    public List<Player> Members { get; set; }
+
+    public Guild(string name)
+    {
+        Name = name;
+        Members = new List<Player>();
+    }
+
+    public void AddMember(Player player)
+    {
+        Members.Add(player);
+    }
+}
+
+public class Program
+{
+    public static void Main()
+    {
+        Player player = new Player("Hero");
+        Character warrior = new Character("Warrior", player);
+        Character mage = new Character("Mage", player);
+
+        player.AddCharacter(warrior);
+        player.AddCharacter(mage);
+
+        Item sword = new Item("Flame Dragon Sword", 50, 10);
+        Item shield = new Item("Iron Shield", 5, 30);
+
+        warrior.EquipItem(sword);
+        warrior.EquipItem(shield);
+
+        Guild heroGuild = new Guild("Hero League");
+
+        player.JoinGuild(heroGuild);
+
+        // Display associations
+        Console.WriteLine($"Player {player.Name} has {player.Characters.Count} characters");
+        Console.WriteLine($"Character {warrior.Name} has {warrior.Equipment.Count} pieces of equipment");
+        Console.WriteLine($"Guild {heroGuild.Name} has {heroGuild.Members.Count} members");
+    }
+}
+```
+
+### 6. Advanced Class Features 📝
+
+#### Static Members
+
+The following all need to be declared using the `static` keyword.
+
+<b>Static Fields</b>
+
+Can be used without creating an instance of the class, accessed directly through the class name `ClassName.StaticFieldName`.
+
+- Stored in the data segment, memory is allocated when the program starts
+- Shared by all instances of the class, all instances access the same memory location
+- Lifetime same as the application, from program start to program end
+
+<b>Static Methods</b>
+
+Static methods belong to the class itself rather than instances of the class.
+
+- Can be called without creating an instance of the class
+- Can only directly access other static members of the class
+- Cannot use the `this` keyword
+
+<b>Static Constructors</b>
+
+Static constructors are used to initialize static members of a class or to perform actions that should occur only once for the class, not for each individual object.
+
+- Each class can have only one static constructor
+- Cannot have parameters
+- Cannot have access modifiers
+- Automatically called, cannot be manually called
+- Executes before the class is first used
+
+<b>Static Classes</b>
+
+A static class is a special type of class that contains only static members and cannot be instantiated.
+
+- Implicitly sealed, meaning they cannot be inherited
+- Cannot contain instance constructors
+- Cannot be inherited
+
+<b>Static Properties</b>
+
+Static properties belong to the class rather than instances.
+
+- Accessed directly through the class name, no instance creation needed
+- Only one shared copy exists throughout the program runtime, shared by all objects
+- Can be read-only, write-only, or read-write
+
+```csharp
+public class GameSettings
+{
+    // Static fields: Global game settings
+    public static int MaxLevel = 100;
+    public static int StartingGold = 1000;
+
+    // Static read-only field: Unmodifiable constant
+    public static readonly string GameVersion = "1.0.0";
+}
+
+public class Player
+{
+    // Instance fields
+    public string Name { get; }
+    public int Gold { get; }
+
+    // Static field: Record total number of players
+    private static int _totalPlayers;
+
+    // Static property: Get current total number of players
+    public static int TotalPlayers => _totalPlayers;
+
+    public Player(string name)
+    {
+        Name = name;
+        Gold = GameSettings.StartingGold;
+
+        // Increment total players count for each new player created
+        _totalPlayers++;
+    }
+
+    // Static method: Reset player count
+    public static void ResetPlayerCount()
+    {
+        _totalPlayers = 0;
+    }
+}
+
+public class MonsterManager
+{
+    // Static field: Global monster kill counter
+    private static int _totalMonstersKilled;
+
+    // Static method: Record monster kill
+    public static void RecordMonsterKill()
+    {
+        _totalMonstersKilled++;
+    }
+
+    // Static method: Get total kills
+    public static int GetTotalMonstersKilled()
+    {
+        return _totalMonstersKilled;
+    }
+}
+
+public class Program
+{
+    public static void Main()
+    {
+        // Using static fields and methods
+        Console.WriteLine($"Game Version: {GameSettings.GameVersion}");
+        Console.WriteLine($"Max Level: {GameSettings.MaxLevel}");
+
+        // Create players
+        Player player = new Player("Hero");
+        if (player == null) throw new ArgumentNullException(nameof(player));
+
+        // Using static property
+        Console.WriteLine($"Current Total Players: {Player.TotalPlayers}");
+
+        // Simulate battles
+        MonsterManager.RecordMonsterKill();
+        MonsterManager.RecordMonsterKill();
+        MonsterManager.RecordMonsterKill();
+
+        Console.WriteLine($"Total Monsters Killed: {MonsterManager.GetTotalMonstersKilled()}");
+
+        // Demonstrate the characteristics of static fields
+        Console.WriteLine($"{player.Name}'s Initial Gold: {player.Gold}");
+    }
+}
+```
+
+#### Attributes
+
+Attributes are used for adding metadata to program elements such as classes, methods, and properties, which can alter their behavior during runtime.
+
+<b>Predefined Attributes</b>
+
+- `Obsolete` — Mark code as deprecated
+- `Serializable` — Mark classes as serializable
+- `Conditional` — Used for conditional compilation
+- `AttributeUsage` — Describes how attributes can be used
+
+<b>Custom Attributes</b>
+
+- Must inherit from the `Attribute` class
+- Class names typically end with `Attribute`
+- Can contain constructors and properties
+
+```csharp
+using System.Reflection;
+
+// Custom Attribute: Character Description
+[AttributeUsage(AttributeTargets.Class)]
+public class CharacterDescriptionAttribute(string description) : Attribute
+{
+    public string Description { get; } = description;
+}
+
+// Attribute Validation
+[AttributeUsage(AttributeTargets.Property)]
+public class ValidRangeAttribute(int min, int max) : Attribute
+{
+    public int Min { get; } = min;
+    public int Max { get; } = max;
+
+    public bool IsValid(int value)
+    {
+        return value >= Min && value <= Max;
+    }
+}
+
+// Character class using attributes
+[CharacterDescription("Brave Adventurer")]
+public class GameCharacter(string name, int level, int health)
+{
+    public string Name { get; set; } = name;
+
+    [ValidRange(1, 100)]
+    public int Level { get; set; } = level;
+
+    [ValidRange(10, 500)]
+    public int Health { get; set; } = health;
+
+    // Method to validate properties using attributes
+    public bool Validate()
+    {
+        var properties = GetType().GetProperties();
+
+        foreach (var prop in properties)
+        {
+            if (prop.GetCustomAttributes(typeof(ValidRangeAttribute), false)
+                    .FirstOrDefault() is ValidRangeAttribute validRangeAttr)
+            {
+                var value = (int)prop.GetValue(this);
+                if (!validRangeAttr.IsValid(value))
+                {
+                    Console.WriteLine($"Property {prop.Name} validation failed: value must be between {validRangeAttr.Min} and {validRangeAttr.Max}");
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    // Get the description of the class
+    public string GetDescription()
+    {
+        var attribute = GetType().GetCustomAttribute<CharacterDescriptionAttribute>();
+        return attribute?.Description ?? "No description";
+    }
+}
+
+public class Program
+{
+    public static void Main()
+    {
+        // Create character
+        GameCharacter hero = new GameCharacter("Hero", 50, 200);
+
+        // Validate character properties
+        if (hero.Validate())
+        {
+            Console.WriteLine("Character property validation passed");
+        }
+
+        // Get character description
+        Console.WriteLine($"Character description: {hero.GetDescription()}");
+
+        // Test invalid properties
+        GameCharacter invalidHero = new GameCharacter("Invalid Character", 150, 600);
+        if (!invalidHero.Validate())
+        {
+            Console.WriteLine("Character property validation failed");
+        }
+    }
+}
+```
+
+#### Reflection
+
+Reflection allows inspection, modification, and creation of types, methods, and properties at runtime.
+
+```csharp
+using System.Reflection;
+
+// Base class for characters
+public abstract class Character
+{
+    public string Name { get; set; }
+    public int Health { get; set; }
+
+    public abstract void Attack();
+}
+
+// Warrior class
+public class Warrior : Character
+{
+    public int Strength { get; set; }
+
+    public Warrior(string name, int health, int strength)
+    {
+        Name = name;
+        Health = health;
+        Strength = strength;
+    }
+
+    public override void Attack()
+    {
+        Console.WriteLine($"{Name} attacks with a sword!");
+    }
+
+    public void SpecialSkill()
+    {
+        Console.WriteLine($"{Name} uses Fury Slash!");
+    }
+}
+
+// Mage class
+public class Mage : Character
+{
+    public int Mana { get; set; }
+
+    public Mage(string name, int health, int mana)
+    {
+        Name = name;
+        Health = health;
+        Mana = mana;
+    }
+
+    public override void Attack()
+    {
+        Console.WriteLine($"{Name} casts a magic attack!");
+    }
+
+    public void CastSpell()
+    {
+        Console.WriteLine($"{Name} casts a high-level spell!");
+    }
+}
+
+// Reflection helper class
+public abstract class ReflectionHelper
+{
+    // Create an object
+    public static object? CreateInstance(string typeName)
+    {
+        Type? type = Type.GetType(typeName);
+        return Activator.CreateInstance(type, "Default Character", 100, 50);
+    }
+
+    // Get all public methods
+    public static void GetMethods(object? obj)
+    {
+        Type? type = obj?.GetType();
+        Console.WriteLine($"All public methods of type {type?.Name}:");
+
+        MethodInfo[]? methods = type?.GetMethods(
+            BindingFlags.Public |
+            BindingFlags.Instance |
+            BindingFlags.DeclaredOnly
+        );
+
+        if (methods != null)
+            foreach (var method in methods)
+            {
+                Console.WriteLine(method.Name);
+            }
+    }
+
+    // Invoke a method
+    public static void InvokeMethod(object? obj, string methodName)
+    {
+        Type? type = obj?.GetType();
+        MethodInfo? method = type?.GetMethod(methodName);
+
+        if (method != null)
+        {
+            method.Invoke(obj, null);
+        }
+        else
+        {
+            Console.WriteLine($"Method {methodName} not found");
+        }
+    }
+
+    // Display property values
+    public static void DisplayProperties(object? obj)
+    {
+        Type? type = obj?.GetType();
+        PropertyInfo[]? properties = type?.GetProperties();
+
+        Console.WriteLine($"Properties of type {type?.Name}:");
+        if (properties != null)
+            foreach (var prop in properties)
+            {
+                object? value = prop.GetValue(obj);
+                Console.WriteLine($"{prop.Name}: {value}");
+            }
+    }
+}
+
+public class Program
+{
+    public static void Main()
+    {
+        // Create an object using reflection
+        Warrior warrior = (Warrior)ReflectionHelper.CreateInstance("Warrior")!;
+
+        // Display object properties
+        ReflectionHelper.DisplayProperties(warrior);
+
+        // Get object methods
+        ReflectionHelper.GetMethods(warrior);
+
+        // Invoke specific methods
+        ReflectionHelper.InvokeMethod(warrior, "Attack");
+        ReflectionHelper.InvokeMethod(warrior, "SpecialSkill");
+
+        // Dynamically create and use an object
+        object? dynamicMage = ReflectionHelper.CreateInstance("Mage");
+        ReflectionHelper.InvokeMethod(dynamicMage, "Attack");
     }
 }
 ```
