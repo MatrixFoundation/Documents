@@ -1630,3 +1630,912 @@ public class Program
     }
 }
 ```
+
+## III. Exception Handling 🚨
+
+**Exception handling allows for detecting and handling errors that occur during program execution, preventing crashes and unforeseen outcomes.**
+
+### 1. Basic Exception Handling 📝
+
+In `C#`, the primary error handling mechanism is based on the use of `try`, `catch`, `finally`, and `throw` constructs.
+
+The `try-catch` block is used to handle exceptions. Code that might throw an exception is placed inside the `try` block, and the corresponding exception-handling code is placed inside the `catch` block.
+
+The `finally` block ensures that the code inside it gets executed regardless of whether an exception was thrown in the preceding `try` or `catch` blocks. This is particularly useful for cleanup operations, such as closing files or database connections.
+
+In most cases, the `finally` block will execute. However, there are rare circumstances, such as program termination or catastrophic exceptions (for example, `StackOverflowException` or a process termination), where the `finally` block might not get executed because these critical errors can disrupt the normal flow of program execution, and the app will stop, leaving no opportunity for the `finally` block to run.
+
+**Scenarios Where** **​`finally`​** **Might Not Execute:**
+
+1. If the application crashes or is forcibly terminated
+2. If there's an infinite loop in the `try` or `catch` block
+3. If `Environment.FailFast()` or `Process.Kill()` is called
+4. In extreme system-level failures or hardware issues
+
+```csharp
+try
+{
+    // Code that may throw an exception
+    int result = 10 / int.Parse("0");
+}
+catch (DivideByZeroException ex)
+{
+    // Handling specific exception
+    Console.WriteLine($"Error: {ex.Message}");
+}
+catch (Exception ex)
+{
+    // Handling any other exception
+    Console.WriteLine($"An unexpected error occurred: {ex.Message}");
+}
+finally
+{
+    // Code that will be executed regardless of whether an exception occurred
+    Console.WriteLine("This code always executes, even if an exception occurred.");
+}
+```
+
+You can manually throw exceptions using the `throw` keyword. This is useful when you want to indicate that a certain condition or error has occurred.
+
+```csharp
+public class Calculator
+{
+    public int Divide(int dividend, int divisor)
+    {
+        if (divisor == 0)
+        {
+            throw new DivideByZeroException("Cannot divide by zero.");
+        }
+        return dividend / divisor;
+    }
+}
+```
+
+### 2. Common Exception Types 🔍
+
+`C#` features a wide variety of exception types to cater to different exceptional scenarios.
+
+- `ArgumentNullException`: This is thrown when an argument passed to a method is null when a non-null value is expected
+- `ArgumentOutOfRangeException`: This occurs when an argument's value is outside the permissible range
+- `DivideByZeroException`: This is thrown when there's an attempt to divide by zero
+- `InvalidOperationException`: This arises when the state of an object doesn't permit a particular operation
+- `FileNotFoundException`: This occurs when a file that's being attempted to be accessed doesn't exist
+- `StackOverflowException`: This is thrown when there's a stack overflow due to excessive recursion or other reasons
+- `NullReferenceException`: This occurs when you try to access a member on an object reference that is null
+
+### 3. Custom Exceptions 📝
+
+In `C#`, exceptions are implemented as objects that inherit from the base Exception class. This allows for passing additional information about the exception and creating custom exception types. To create your own exception class, simply inherit it from the Exception class or one of its subclasses.
+
+You can create your own custom exception classes by deriving from the Exception class. This allows you to define specific exception types for your application.
+
+```csharp
+public class CustomException : Exception
+{
+    public CustomException(string message) : base(message)
+    {
+
+    }
+}
+```
+
+```csharp
+// Custom exception class
+public class BusinessException : Exception
+{
+    public string ErrorCode { get; }
+
+    public BusinessException(string message) : base(message)
+    {
+    }
+
+    public BusinessException(string message, string errorCode)
+        : base(message)
+    {
+        ErrorCode = errorCode;
+    }
+
+    public BusinessException(string message, Exception innerException)
+        : base(message, innerException)
+    {
+    }
+}
+
+// Using the custom exception
+public class BusinessLogic
+{
+    public void ProcessOrder(Order order)
+    {
+        if (order == null)
+        {
+            throw new BusinessException("Order cannot be null", "ORDER001");
+        }
+
+        if (order.Amount <= 0)
+        {
+            throw new BusinessException("Order amount must be greater than 0", "ORDER002");
+        }
+    }
+}
+```
+
+### 4. Exception Filters 🔀
+
+Exception filters allow you to catch exceptions based on a specific condition.
+
+```csharp
+try
+{
+    // Code that may throw an exception
+    int result = 10 / int.Parse("0");
+}
+catch (DivideByZeroException ex) when (ex.Message == "Attempted to divide by zero.")
+{
+    // Handling specific exception with a filter
+    Console.WriteLine($"Error: {ex.Message}");
+}
+```
+
+## IV. Collections and Generics 📈
+
+### 1. Common Collections 🔗
+
+Arrays and collections in `C#` are used for storing data and allow data to be organized in a manner that facilitates easy access and manipulation:
+
+- Arrays are static collections capable of storing a fixed number of elements of a single type.
+- Collections are dynamic and can store a variable number of elements; they come in different types, such as lists, dictionaries, stacks, queues, and so on.
+
+.NET provides several primary collection types:<br />
+
+- `List<T>`: A dynamic array of elements. It maintains order and allows duplicate elements.
+- `Dictionary<TKey, TValue>`: A collection of key-value pairs. It does not have a defined order, and keys must be unique.<br />
+- `HashSet<T>`: A set of unique elements. It does not maintain any specific order.<br />
+- `Queue<T>`: A collection supporting First-In-First-Out (FIFO) operations.
+- `Stack<T>`: A collection supporting Last-In-First-Out (LIFO) operations.
+
+#### Array
+
+Arrays in `C#` are fixed-size collections of elements of the same data type.
+
+```csharp
+// Declaration and Initialization
+int[] numbers = new int[5] { 1, 2, 3, 4, 5 };
+
+// Accessing Elements
+int firstElement = numbers[0]; // Accessing the first element (index 0)
+
+// Iterating Through Arrays
+foreach (int number in numbers)
+{
+    Console.WriteLine(number);
+}
+
+// Multidimensional Arrays
+int[,] matrix = new int[3, 3]
+{
+    {1, 2, 3},
+    {4, 5, 6},
+    {7, 8, 9}
+};
+```
+
+#### List
+
+Lists offer dynamic sizing and additional features.
+
+```csharp
+// Declaration and Initialization
+List<string> names = new List<string>() { "Alice", "Bob", "Charlie" };
+
+// Adding and Removing Elements
+names.Add("David"); // Add an element
+names.Remove("Bob"); // Remove an element by value
+names.RemoveAt(0); // Remove an element by index
+
+// Accessing Elements
+string firstElement = names[0]; // Accessing the first element (index 0)
+
+// Iterating Through Lists
+foreach (string name in names)
+{
+    Console.WriteLine(name);
+}
+```
+
+:::info
+
+Arrays are typically faster for indexed access and more memory-efficient, making them ideal when the number of items is known and constant. `List<T>` provides more manipulation methods and is better suited for dynamic collections where size is uncertain.
+
+:::
+
+#### Dictionary
+
+Dictionaries in `C#` are collections that store key-value pairs, providing fast access to values based on their associated keys.
+
+```csharp
+// Declaration and Initialization
+Dictionary<string, int> ages = new Dictionary<string, int>()
+{
+    {"Alice", 25},
+    {"Bob", 30},
+    {"Charlie", 22}
+};
+
+// Adding and Accessing Elements
+ages["David"] = 28; // Add a new key-value pair
+int bobAge = ages["Bob"]; // Access the value using the key
+
+// Iterating Through Dictionaries
+foreach (var pair in ages)
+{
+    Console.WriteLine($"{pair.Key}: {pair.Value}");
+}
+
+// Checking for Key Existence
+bool hasAlice = ages.ContainsKey("Alice"); // true
+bool hasEve = ages.ContainsKey("Eve"); // false
+```
+
+#### HashSet
+
+`HashSets` in `C#` are collections that store unique elements without any specific order.
+
+```csharp
+// Declaration and Initialization
+HashSet<int> uniqueNumbers = new HashSet<int>() { 1, 2, 3, 4, 5 };
+
+// Adding and Removing Elements
+uniqueNumbers.Add(6); // Add a new element
+uniqueNumbers.Remove(3); // Remove an element
+
+// Checking for Element Existence
+bool hasThree = uniqueNumbers.Contains(3); // false
+bool hasFive = uniqueNumbers.Contains(5); // true
+
+// Set Operations
+HashSet<int> otherNumbers = new HashSet<int>() { 4, 5, 6, 7, 8 };
+
+// Union
+HashSet<int> unionSet = new HashSet<int>(uniqueNumbers);
+unionSet.UnionWith(otherNumbers); // {1, 2, 3, 4, 5, 6, 7, 8}
+
+// Intersection
+HashSet<int> intersectionSet = new HashSet<int>(uniqueNumbers);
+intersectionSet.IntersectWith(otherNumbers); // {4, 5}
+
+// Difference
+HashSet<int> differenceSet = new HashSet<int>(uniqueNumbers);
+differenceSet.ExceptWith(otherNumbers); // {1, 2, 3}
+```
+
+:::tip
+
+It's ideal when you need to prevent duplicates or perform frequent lookup operations.
+
+:::
+
+#### Queue 和 Stack
+
+```csharp
+// Queue (First In First Out - FIFO)
+Queue<string> queue = new Queue<string>();
+
+// Enqueue
+queue.Enqueue("First");
+queue.Enqueue("Second");
+
+// Dequeue
+string item = queue.Dequeue();
+
+// Peek at the front element without removing it
+string peek = queue.Peek();
+
+// Stack (Last In First Out - LIFO)
+Stack<string> stack = new Stack<string>();
+
+// Push onto the stack
+stack.Push("First");
+stack.Push("Second");
+
+// Pop from the stack
+string item = stack.Pop();
+
+// Peek at the top element without removing it
+string peek = stack.Peek();
+```
+
+### 2. Generic Programming 🔀
+
+At the heart of efficient and robust programming lies the ability to write code that stands the test of time, adapts to diverse scenarios, and minimizes redundancy.
+
+Rather than committing to a specific data type, generics allow for a more abstract and versatile coding style, ensuring that you can cater to a wide array of requirements without the burden of excessive code repetition.
+
+Generics in `C#` enable the creation of classes, interfaces, and methods that can operate with different data types without losing type safety and performance. They play a key role in creating versatile and flexible collections, services, and other components that can work with any data type.
+
+Compared to using the object type, generics offer the following advantages:<br />
+
+- Type safety: Generics ensure that you are working with the correct data type, eliminating the risk of runtime type errors.
+- Performance: With generics, there’s no need for boxing or unboxing when dealing with value types, leading to more efficient operations.
+- Code reusability: Generics allow you to write a piece of code that works with different data types, reducing code duplication.
+- Elimination of type casting: With generics, explicit type casting is reduced, making the code cleaner and more readable.
+
+In .NET, generic types are compiled into a single template in Intermediate Language (IL).
+
+When a specific type instance is required at runtime, the Just-In-Time (JIT) compiler generates the specialized code.
+
+For value types (for example, int, double), separate code is generated for each type to ensure optimized performance.
+
+However, for reference types, the same code is shared, making the process more memory-efficient.
+
+Generics can be combined with various features in `C#`, such as the following:
+
+- Delegates: You can define generic delegates, which can point to methods of various types.
+- Events: Events can be based on generic delegates.
+- Attributes: While you can’t create a generic attribute class, you can apply attributes to generic constructs.
+
+#### Generic Classes
+
+A generic type extension method allows developers to add methods to existing types (both built-in and user-defined) without modifying them or creating new derived types.
+
+```csharp
+// Basic Generic Class
+public class GenericContainer<T>
+{
+    private T _item;
+
+    public GenericContainer(T item)
+    {
+        _item = item;
+    }
+
+    public T GetItem()
+    {
+        return _item;
+    }
+
+    public void SetItem(T item)
+    {
+        _item = item;
+    }
+}
+
+// Multiple Type Parameters
+public class KeyValuePair<TKey, TValue>
+{
+    public TKey Key { get; set; }
+    public TValue Value { get; set; }
+
+    public KeyValuePair(TKey key, TValue value)
+    {
+        Key = key;
+        Value = value;
+    }
+}
+
+// Usage Example
+public class GenericExample
+{
+    public void UseGenericTypes()
+    {
+        var intContainer = new GenericContainer<int>(42);
+        var stringContainer = new GenericContainer<string>("Hello");
+        var pair = new KeyValuePair<int, string>(1, "One");
+    }
+}
+```
+
+#### Generic Method
+
+Generic methods are a special type of method in `C#` that allow the parameter types to be determined at the time of use.
+
+```csharp
+public class GenericMethods
+{
+    // Basic Generic Method
+    public T GenericMethod<T>(T item)
+    {
+        Console.WriteLine($"Type: {typeof(T)}, Value: {item}");
+        return item;
+    }
+
+    // Generic Method with Multiple Type Parameters
+    public TResult Convert<TInput, TResult>(TInput input)
+        where TResult : new()
+    {
+        TResult result = new TResult();
+        // Conversion logic
+        return result;
+    }
+
+    // Generic Method in a Non-Generic Class
+    public static void Swap<T>(ref T first, ref T second)
+    {
+        T temp = first;
+        first = second;
+        second = temp;
+    }
+}
+```
+
+#### Constraints on Generics
+
+Constraints can be applied to generics to restrict the types that can be used as arguments.
+
+```csharp
+// Class Constraint
+public class ClassConstraint<T> where T : class
+{
+    public T Instance { get; set; }
+}
+
+// Value Type Constraint
+public class ValueTypeConstraint<T> where T : struct
+{
+    public T Value { get; set; }
+}
+
+// Constructor Constraint
+public class NewConstraint<T> where T : new()
+{
+    public T CreateNew()
+    {
+        return new T();
+    }
+}
+
+// Interface Constraint
+public class InterfaceConstraint<T> where T : IComparable<T>
+{
+    public bool IsGreaterThan(T first, T second)
+    {
+        return first.CompareTo(second) > 0;
+    }
+}
+
+// Multiple Constraints
+public class MultipleConstraints<T>
+    where T : class, IDisposable, new()
+{
+    public void ProcessItem(T item)
+    {
+        // Processing logic
+        item.Dispose();
+    }
+}
+```
+
+```csharp
+// Base Class
+public class Animal
+{
+    public virtual void MakeSound() { }
+}
+
+// Generic Class with Base Class Constraint
+public class AnimalContainer<T> where T : Animal
+{
+    private T _animal;
+
+    public AnimalContainer(T animal)
+    {
+        _animal = animal;
+    }
+
+    public void MakeAnimalSound()
+    {
+        _animal.MakeSound();
+    }
+}
+
+// Usage Example
+public class Dog : Animal
+{
+    public override void MakeSound()
+    {
+        Console.WriteLine("Woof!");
+    }
+}
+
+public class Cat : Animal
+{
+    public override void MakeSound()
+    {
+        Console.WriteLine("Meow!");
+    }
+}
+```
+
+#### Generic Interface
+
+```csharp
+// Generic Interface Definition
+public interface IRepository<T>
+{
+    T GetById(int id);
+    void Add(T item);
+    void Update(T item);
+    void Delete(int id);
+    IEnumerable<T> GetAll();
+}
+
+// Implementing the Generic Interface
+public class Repository<T> : IRepository<T> where T : class
+{
+    private readonly List<T> _items = new List<T>();
+
+    public T GetById(int id)
+    {
+        // Implement retrieval logic
+        return _items.FirstOrDefault();
+    }
+
+    public void Add(T item)
+    {
+        _items.Add(item);
+    }
+
+    public void Update(T item)
+    {
+        // Implement update logic
+    }
+
+    public void Delete(int id)
+    {
+        // Implement deletion logic
+    }
+
+    public IEnumerable<T> GetAll()
+    {
+        return _items;
+    }
+}
+```
+
+Generics in `C#` support covariance and contravariance, enabling more flexible relationships between types.
+
+```csharp
+// Covariant Interface (out)
+public interface IProducer<out T>
+{
+    T Produce();
+}
+
+// Contravariant Interface (in)
+public interface IConsumer<in T>
+{
+    void Consume(T item);
+}
+
+// Implementation Example
+public class Producer<T> : IProducer<T> where T : new()
+{
+    public T Produce()
+    {
+        return new T();
+    }
+}
+
+public class Consumer<T> : IConsumer<T>
+{
+    public void Consume(T item)
+    {
+        Console.WriteLine($"Consuming {item}");
+    }
+}
+
+// Using Covariance and Contravariance
+public class VarianceExample
+{
+    public void DemonstrateVariance()
+    {
+        IProducer<string> stringProducer = new Producer<string>();
+        IProducer<object> objectProducer = stringProducer; // Covariance
+
+        IConsumer<object> objectConsumer = new Consumer<object>();
+        IConsumer<string> stringConsumer = objectConsumer; // Contravariance
+    }
+}
+```
+
+Generics in `C#` enhance code reusability and maintainability by providing a mechanism for creating flexible and type-safe components. Whether working with generic classes, methods, or interfaces, understanding generics is crucial for building efficient and adaptable software solutions in `C#`.
+
+## V. Language Integrated Query (LINQ) 📚
+
+LINQ enables the use of query expressions to interact with data, irrespective of its source. It facilitates easy filtering, sorting, grouping, and transformation of data, providing a seamless and integrated way to query objects, databases, and XML documents.
+
+Understanding LINQ is essential as it provides a uniform and model-independent querying capability, streamlining data manipulation and retrieval processes and offering enhanced readability and maintainability.
+
+In `C#`, LINQ is a set of extensions that enable queries to be performed on various data sources directly from the programming language. LINQ can be used to work with collections, XML, databases, and more.
+
+### 1. Basic 📝
+
+#### LINQ Query Syntax
+
+```csharp
+var query = from item in collection
+            where item.Price > 100
+            orderby item.Name
+            select item;
+```
+
+#### Method Syntax
+
+```csharp
+var query = collection
+    .Where(x => x.Price > 100)
+    .OrderBy(x => x.Name)
+    .Select(x => x);
+```
+
+### 2. Common LINQ operators 📊
+
+- `Where`: This method is used for filtering collections based on a given predicate. It returns a new collection that includes only those elements that satisfy a specified condition.
+- `Select`: This method is used for projecting or transforming the elements of a collection. It returns a new collection with elements that have been transformed based on a specified function or projection.
+
+### 3. Aggregation operation 🔗
+
+```csharp
+int count = numbers.Count();
+int sum = numbers.Sum();
+double average = numbers.Average();
+int max = numbers.Max();
+int min = numbers.Min();
+```
+
+### 4. Grouping and Joining 📈
+
+```csharp
+var groups = products.GroupBy(p => p.Category);
+
+var joined = customers.Join(orders,
+    c => c.Id,
+    o => o.CustomerId,
+    (c, o) => new { Customer = c, Order = o });
+```
+
+### 5. Deferred execution and Actual execution
+
+Deferred execution in LINQ means that actual data processing or computation does not occur until the results are enumerated. When you construct a LINQ query, it just creates a query definition.
+
+```csharp
+var query = numbers.Where(n => n > 3); // Query not executed yet
+foreach (var num in query)
+{
+    Console.WriteLine(num); // Query executed here
+}
+```
+
+The actual execution is delayed until you iterate over the query result, such as by using a foreach loop or converting the results with methods such as ToList() or ToArray(). This can enhance performance by avoiding unnecessary computations.
+
+```csharp
+var result = numbers.Where(n => n > 3).ToList(); // Query executed immediately
+```
+
+> Calling the following methods executes the query immediately:
+>
+> - **​`ToList()`​**
+> - **​`ToArray()`​**
+> - **​`Count()`​**
+
+However, it’s important to manage the moment when the data is actually materialized – that is, fetched and loaded into memory. Materializing the data too early can sometimes consume more resources, especially when the data source is substantial, such as a database. You might want to append more conditions or filters to the query before deciding to materialize the results to optimize resource usage and performance.<br />
+
+### 6. `All` and `Any` 🔁
+
+Used to check elements in a collection.
+
+- `All`: Checks if every element in the collection satisfies a particular condition. Use `All` when you need to ensure that all elements of a collection meet a specific criterion.<br />
+- `Any`: Checks if at least one element in the collection satisfies a particular condition. Use `Any` when you need to determine if there are any elements that fulfill a specific criterion.<br />
+
+When the collection is empty, the following happens:<br />
+
+- `All`: Always returns true because there are no elements that would violate the condition. This might seem counter-intuitive, but in the absence of any elements to check, it defaults to true.<br />
+- `Any`: Always returns false since there are no elements present to satisfy the condition.<br />
+
+For instance, if you want to verify that all numbers in a list are positive, you’d use `All`. If you’re going to check if there’s a negative number in the list, you’d use `Any`.<br />
+
+```csharp
+int[] numbers = { 1, 3, 5, 8 };
+bool hasEvenNumber = numbers.Any(n => n % 2 == 0);
+Console.WriteLine($"Is there an even number? {hasEvenNumber}");
+```
+
+### 7. Custom LINQ extension methods 📝
+
+`IEnumerable` and `IQueryable` are two primary interfaces representing collections in .NET. This is what they do:<br />
+
+`IEnumerable`: Operates at the object level in memory. When you execute LINQ queries against an `IEnumerable` interface, operations are performed in memory. It’s suitable for working with in-memory collections such as arrays or lists.
+
+`IQueryable`: Designed for interacting with external data sources (for example, databases). Queries made with `IQueryable` get translated into queries specific to the data source (such as SQL for relational databases). This interface allows for deferred execution and out-of-memory (OOM) data querying, making it efficient for large datasets, especially in databases.<br />
+
+The main distinction between these two interfaces lies in the execution location: `IEnumerable` processes data in memory. Meanwhile, `IQueryable` allows the construction of an expression tree that can be translated into a query suitable for an external data source, such as SQL for databases. Then, it sends the parsed query for processing to the data source and fetches the results as `IEnumerable`.<br />
+
+```csharp
+public class BasicConcepts
+{
+    // IEnumerable: In-memory collection operations
+    // IQueryable: Database query operations
+
+    public void CompareInterfaces()
+    {
+        // IEnumerable - executed in memory
+        IEnumerable<int> enumerable = Enumerable.Range(1, 100);
+        var enumResult = enumerable
+            .Where(x => x > 50)    // Filter in memory
+            .Select(x => x * 2);   // Transform in memory
+
+        // IQueryable - executed at the data source
+        IQueryable<int> queryable = Enumerable.Range(1, 100).AsQueryable();
+        var queryResult = queryable
+            .Where(x => x > 50)    // Translated to SQL WHERE clause
+            .Select(x => x * 2);   // Translated to SQL SELECT clause
+    }
+}
+```
+
+### 8. Optimizing 💻
+
+Optimizing LINQ queries, especially with substantial datasets, can be achieved through several approaches:<br />
+
+- Utilize deferred execution whenever possible, ensuring that queries are only executed when the result is genuinely required. This avoids unnecessary computations.
+- Choose the most efficient collection type tailored for your specific use case, as the underlying data structure can impact performance.<br />
+- Limit the size of the resulting dataset when feasible using methods such as `Take` to avoid processing more data than necessary.
+- Avoid or judiciously use nested queries. They can lead to performance issues due to multiple rounds of data retrieval or computations.
+- Use methods such as `ToArray` or `ToList` to materialize results into memory if you anticipate multiple operations on the data. This can prevent repeated execution of the same LINQ query.<br />
+
+## VI. Lambda 👀
+
+Lambda expressions and anonymous functions are fundamental concepts in `C#` that allow functions to be declared and defined in place, often used as arguments for other functions.
+
+They are notable for their ability to provide concise, expressive syntax for representing functionality, especially when used with higher-order functions and LINQ.
+
+### 1. Lambda Expressions 🔍
+
+`(parameters) => expression`
+
+```csharp
+public class LambdaBasics
+{
+    public void BasicSyntax()
+    {
+        // 1. No-parameter Lambda
+        Action sayHello = () => Console.WriteLine("Hello");
+
+        // 2. Single-parameter Lambda
+        Func<int, int> square = x => x * x;
+
+        // 3. Multiple-parameter Lambda
+        Func<int, int, int> add = (x, y) => x + y;
+
+        // 4. Lambda with a statement block
+        Func<int, int, int> multiply = (x, y) =>
+        {
+            Console.WriteLine($"Multiplying {x} and {y}");
+            return x * y;
+        };
+
+        // 5. Type-declared Lambda
+        Func<double, double, double> divide = (double x, double y) => x / y;
+
+        // Usage examples
+        sayHello();                    // Output: Hello
+        Console.WriteLine(square(5));  // Output: 25
+        Console.WriteLine(add(3, 4));  // Output: 7
+    }
+}
+```
+
+### 2. Lambda Closure 🔗
+
+A closure in the context of lambda expressions and anonymous methods refers to the ability of these constructs to capture and retain access to variables from their enclosing scope.<br />
+
+The captured variables are stored in a way that they remain accessible and mutable even after the method in which they were declared has finished executing.
+
+This can lead to unexpected behaviors if not understood correctly, especially in multithreaded environments, where closures can introduce shared state across threads.
+
+```csharp
+public class LambdaClosure
+{
+    public void ClosureExamples()
+    {
+        // Basic closure
+        int multiplier = 10;
+        Func<int, int> multiply = x => x * multiplier;
+
+        // Closure trap
+        var actions = new List<Action>();
+        for (int i = 0; i < 5; i++)
+        {
+            // Incorrect way - all actions will use the final value of i
+            actions.Add(() => Console.WriteLine(i));
+        }
+
+        // Correct way
+        for (int i = 0; i < 5; i++)
+        {
+            int temp = i;
+            actions.Add(() => Console.WriteLine(temp));
+        }
+
+        // Counter closure
+        Func<int> counter = CreateCounter();
+        Console.WriteLine(counter()); // 1
+        Console.WriteLine(counter()); // 2
+    }
+
+    private Func<int> CreateCounter()
+    {
+        int count = 0;
+        return () => ++count;
+    }
+}
+```
+
+### 3. Lambda Expression Tree 🌳
+
+Lambda expression trees are a way to represent code as a tree data structure and are often used to dynamically build queries.
+
+```csharp
+public class ExpressionTrees
+{
+    public void ExpressionTreeExamples()
+    {
+        // Create an expression tree
+        Expression<Func<int, bool>> isEven = x => x % 2 == 0;
+
+        // Manually construct an expression tree
+        ParameterExpression param = Expression.Parameter(typeof(int), "x");
+        BinaryExpression operation = Expression.Equal(
+            Expression.Modulo(param, Expression.Constant(2)),
+            Expression.Constant(0)
+        );
+        var manualIsEven = Expression.Lambda<Func<int, bool>>(
+            operation,
+            param
+        );
+
+        // Compile and execute
+        var compiled = isEven.Compile();
+        bool result = compiled(4); // true
+    }
+}
+```
+
+### 4. Using Lambdas with LINQ
+
+Lambda expressions are widely used in LINQ to make query syntax more concise and clear.
+
+```csharp
+public class LinqWithLambda
+{
+    private List<int> numbers = Enumerable.Range(1, 10).ToList();
+    private List<string> words = new List<string>
+    {
+        "apple", "banana", "cherry", "date"
+    };
+
+    public void LinqExamples()
+    {
+        // Where
+        var evenNumbers = numbers.Where(n => n % 2 == 0);
+
+        // Select
+        var doubled = numbers.Select(n => n * 2);
+
+        // OrderBy
+        var ordered = words.OrderBy(w => w.Length);
+
+        var filteredAndOrdered = numbers
+            .Where(n => n > 5)
+            .OrderByDescending(n => n)
+            .Select(n => n * n);
+
+        var grouped = words
+            .GroupBy(w => w[0])
+            .Select(g => new
+            {
+                FirstLetter = g.Key,
+                Words = g.ToList()
+            });
+    }
+}
+```

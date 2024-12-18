@@ -1637,3 +1637,924 @@ public class Program
     }
 }
 ```
+
+## 三、异常处理 🚨
+
+异常处理是允许检测和处理程序执行期间发生的错误，防止崩溃和不可预见的结果。
+
+### 1、基础异常处理 📝
+
+在 `C#` 中，主要的错误处理机制基于 `try`、`catch`、`finally` 和 `throw` 结构的使用。
+
+`try-catch` 块用于处理异常。可能引发异常的代码放在 `try` 块内，相应的异常处理代码放在 `catch` 块内。
+
+`try-catch` 结构中 `finally` 块的作用是确保无论前面的 `try` 或 `catch` 块中是否抛出异常，其内部的代码都会被执行。这对于清理操作特别有用，例如关闭文件或数据库连接。
+
+在大多数情况下，`finally` 块将被执行。但是，在极少数情况下，例如程序终止或灾难性异常（例如 `StackOverflowException` 或进程终止），`finally` 块可能无法执行，因为这些严重错误可能会中断程序执行的正常流程，并且应用程序将停止，从而导致 `finally` 块没有机会运行。
+
+**​`finally`​** **可能无法执行的场景：**
+
+1. 如果应用程序崩溃或被强制终止
+2. 如果 `try` 或 `catch` 块中存在无限循环
+3. 如果调用了 `Environment.FailFast()` 或 `Process.Kill()`
+4. 在极端的系统级故障或硬件问题中
+
+```csharp
+try
+{
+    // Code that may throw an exception
+    int result = 10 / int.Parse("0");
+}
+catch (DivideByZeroException ex)
+{
+    // Handling specific exception
+    Console.WriteLine($"Error: {ex.Message}");
+}
+catch (Exception ex)
+{
+    // Handling any other exception
+    Console.WriteLine($"An unexpected error occurred: {ex.Message}");
+}
+finally
+{
+    // Code that will be executed regardless of whether an exception occurred
+    Console.WriteLine("This code always executes, even if an exception occurred.");
+}
+```
+
+您可以使用 `throw` 关键字手动引发异常。当您想要指示发生了某种情况或错误时，这非常有用。
+
+```csharp
+public class Calculator
+{
+    public int Divide(int dividend, int divisor)
+    {
+        if (divisor == 0)
+        {
+            throw new DivideByZeroException("Cannot divide by zero.");
+        }
+        return dividend / divisor;
+    }
+}
+```
+
+### 2、常见异常类型 🔍
+
+`C#` 具有多种异常类型，可以满足不同的异常场景。
+
+- `ArgumentNullException`：当传递给方法的参数为 null 时抛出此异常，当需要非空值时
+- `ArgumentOutOfRangeException`：当参数的值超出允许范围时会发生这种情况
+- `DivideByZeroException`：当尝试除以零时抛出此异常
+- `InvalidOperationException`：当对象的状态不允许特定操作时会出现这种情况
+- `FileNotFoundException`：当尝试访问的文件不存在时会发生这种情况
+- `StackOverflowException`：当由于过多递归或其他原因导致堆栈溢出时抛出此异常
+- `NullReferenceException`：当您尝试访问空引用对象的成员时会发生这种情况
+
+### 3、自定义异常 📝
+
+在 `C#` 中，异常被实现为从 Exception 基类继承的对象。这允许传递有关异常的附加信息并创建自定义异常类型。要创建您自己的异常类，只需从 Exception 类或其子类之一继承它即可。
+
+您可以通过从 Exception 类派生来创建自己的自定义异常类。这允许您为您的应用程序定义特定的异常类型。
+
+```csharp
+public class CustomException : Exception
+{
+    public CustomException(string message) : base(message)
+    {
+
+    }
+}
+```
+
+```csharp
+// Custom exception class
+public class BusinessException : Exception
+{
+    public string ErrorCode { get; }
+
+    public BusinessException(string message) : base(message)
+    {
+    }
+
+    public BusinessException(string message, string errorCode)
+        : base(message)
+    {
+        ErrorCode = errorCode;
+    }
+
+    public BusinessException(string message, Exception innerException)
+        : base(message, innerException)
+    {
+    }
+}
+
+// Using the custom exception
+public class BusinessLogic
+{
+    public void ProcessOrder(Order order)
+    {
+        if (order == null)
+        {
+            throw new BusinessException("Order cannot be null", "ORDER001");
+        }
+
+        if (order.Amount <= 0)
+        {
+            throw new BusinessException("Order amount must be greater than 0", "ORDER002");
+        }
+    }
+}
+```
+
+### 4、异常过滤器 🔀
+
+异常过滤器允许您根据特定条件捕获异常。
+
+```csharp
+try
+{
+    // Code that may throw an exception
+    int result = 10 / int.Parse("0");
+}
+catch (DivideByZeroException ex) when (ex.Message == "Attempted to divide by zero.")
+{
+    // Handling specific exception with a filter
+    Console.WriteLine($"Error: {ex.Message}");
+}
+```
+
+## 四、集合与泛型 📈
+
+### 1、常用集合 🔗
+
+`C#` 中的数组和集合用于存储数据，并允许以易于访问和操作的方式组织数据：
+
+- 数组是静态集合，能够存储固定数量的单一类型元素。
+- 集合是动态的，可以存储可变数量的元素；它们有不同的表现类型，例如列表、字典、堆栈、队列等。
+
+.NET 提供了几种主要的集合类型：
+
+- `List<T>`：元素的动态数组。它维持顺序并允许重复元素。
+
+- `Dictionary<TKey, TValue>`：键值对的集合。它没有一个定义的顺序，并且键必须是唯一的。
+
+- `HashSet<T>`：一组唯一元素。它不维护任何特定的顺序。
+- `Queue<T>`：支持先进先出(FIFO) 操作的集合。
+
+- `Stack<T>`：支持后进先出 (LIFO) 操作的集合。
+
+#### Array
+
+`C#`中的数组是相同数据类型元素的固定大小集合。
+
+```csharp
+// Declaration and Initialization
+int[] numbers = new int[5] { 1, 2, 3, 4, 5 };
+
+// Accessing Elements
+int firstElement = numbers[0]; // Accessing the first element (index 0)
+
+// Iterating Through Arrays
+foreach (int number in numbers)
+{
+    Console.WriteLine(number);
+}
+
+// Multidimensional Arrays
+int[,] matrix = new int[3, 3]
+{
+    {1, 2, 3},
+    {4, 5, 6},
+    {7, 8, 9}
+};
+```
+
+#### List
+
+列表提供动态大小调整和其他功能。
+
+```csharp
+// Declaration and Initialization
+List<string> names = new List<string>() { "Alice", "Bob", "Charlie" };
+
+// Adding and Removing Elements
+names.Add("David"); // Add an element
+names.Remove("Bob"); // Remove an element by value
+names.RemoveAt(0); // Remove an element by index
+
+// Accessing Elements
+string firstElement = names[0]; // Accessing the first element (index 0)
+
+// Iterating Through Lists
+foreach (string name in names)
+{
+    Console.WriteLine(name);
+}
+```
+
+:::info
+
+数组通常在索引访问和内存效率方面更快，当项目数量预先已知且保持不变时最为理想。`List<T>` 提供更多操作方法，更适合大小不确定的动态集合。
+
+:::
+
+#### Dictionary
+
+`C#` 中的字典是存储键值对的集合，可以根据关联的键快速访问值。
+
+```csharp
+// Declaration and Initialization
+Dictionary<string, int> ages = new Dictionary<string, int>()
+{
+    {"Alice", 25},
+    {"Bob", 30},
+    {"Charlie", 22}
+};
+
+// Adding and Accessing Elements
+ages["David"] = 28; // Add a new key-value pair
+int bobAge = ages["Bob"]; // Access the value using the key
+
+// Iterating Through Dictionaries
+foreach (var pair in ages)
+{
+    Console.WriteLine($"{pair.Key}: {pair.Value}");
+}
+
+// Checking for Key Existence
+bool hasAlice = ages.ContainsKey("Alice"); // true
+bool hasEve = ages.ContainsKey("Eve"); // false
+```
+
+#### HashSet
+
+`C#` 中的 `HashSet` 是存储唯一元素的集合，没有任何特定的顺序。
+
+```csharp
+// Declaration and Initialization
+HashSet<int> uniqueNumbers = new HashSet<int>() { 1, 2, 3, 4, 5 };
+
+// Adding and Removing Elements
+uniqueNumbers.Add(6); // Add a new element
+uniqueNumbers.Remove(3); // Remove an element
+
+// Checking for Element Existence
+bool hasThree = uniqueNumbers.Contains(3); // false
+bool hasFive = uniqueNumbers.Contains(5); // true
+
+// Set Operations
+HashSet<int> otherNumbers = new HashSet<int>() { 4, 5, 6, 7, 8 };
+
+// Union
+HashSet<int> unionSet = new HashSet<int>(uniqueNumbers);
+unionSet.UnionWith(otherNumbers); // {1, 2, 3, 4, 5, 6, 7, 8}
+
+// Intersection
+HashSet<int> intersectionSet = new HashSet<int>(uniqueNumbers);
+intersectionSet.IntersectWith(otherNumbers); // {4, 5}
+
+// Difference
+HashSet<int> differenceSet = new HashSet<int>(uniqueNumbers);
+differenceSet.ExceptWith(otherNumbers); // {1, 2, 3}
+```
+
+:::tip
+
+当需要防止重复或执行频繁的查找操作时，它最为理想。
+
+:::
+
+#### Queue 和 Stack
+
+```csharp
+// Queue (First In First Out - FIFO)
+Queue<string> queue = new Queue<string>();
+
+// Enqueue
+queue.Enqueue("First");
+queue.Enqueue("Second");
+
+// Dequeue
+string item = queue.Dequeue();
+
+// Peek at the front element without removing it
+string peek = queue.Peek();
+
+// Stack (Last In First Out - LIFO)
+Stack<string> stack = new Stack<string>();
+
+// Push onto the stack
+stack.Push("First");
+stack.Push("Second");
+
+// Pop from the stack
+string item = stack.Pop();
+
+// Peek at the top element without removing it
+string peek = stack.Peek();
+```
+
+### 2、泛型编程 🔀
+
+高效、健壮的编程的核心在于编写经得起时间考验、适应不同场景并最大限度减少冗余的代码的能力。
+
+泛型允许更抽象和通用的编码风格，而不是致力于特定的数据类型，确保您可以满足广泛的需求，而无需承担过多的代码重复的负担。
+
+`C#` 中的泛型允许创建可操作不同数据类型的类、接口和方法，而不会损失类型安全性和性能。它们在创建可处理任何数据类型的多功能且灵活的集合、服务和其他组件方面发挥着关键作用。
+
+与使用对象类型相比，泛型具有以下优点：
+
+- 类型安全：泛型确保您使用正确的数据类型，从而消除了运行时类型错误的风险。
+
+- 性能：使用泛型，在处理值类型时无需装箱或拆箱，从而提高运营效率。
+- 代码可重用性：泛型允许您编写一段可处理不同数据类型的代码，减少代码重复。
+- 消除类型转换：使用泛型，可以减少显式类型转换，从而使代码更干净、更具可读性。
+
+在 .NET 中，泛型类型被编译为中间语言 (IL) 的单个模板。
+
+当运行时需要特定类型实例时，即时 (JIT) 编译器会生成专用代码。
+
+对于值类型（例如 int、double），将为每种类型生成单独的代码以确保优化性能。
+
+然而，对于引用类型，相同的代码是共享的，从而使过程更加节省内存。
+
+泛型可以与 `C#` 中的各种功能结合使用，例如：
+
+- 委托：您可以定义通用委托，它可以指向各种类型的方法。
+- 事件：事件可以基于通用委托。
+
+- 属性：虽然您无法创建通用属性类，但您可以将属性应用于通用结构。
+
+#### 泛型类
+
+泛型类型扩展方法允许开发人员向现有类型（内置类型和用户定义类型）添加方法，而无需修改它们或创建新的派生类型。
+
+```csharp
+// Basic Generic Class
+public class GenericContainer<T>
+{
+    private T _item;
+
+    public GenericContainer(T item)
+    {
+        _item = item;
+    }
+
+    public T GetItem()
+    {
+        return _item;
+    }
+
+    public void SetItem(T item)
+    {
+        _item = item;
+    }
+}
+
+// Multiple Type Parameters
+public class KeyValuePair<TKey, TValue>
+{
+    public TKey Key { get; set; }
+    public TValue Value { get; set; }
+
+    public KeyValuePair(TKey key, TValue value)
+    {
+        Key = key;
+        Value = value;
+    }
+}
+
+// Usage Example
+public class GenericExample
+{
+    public void UseGenericTypes()
+    {
+        var intContainer = new GenericContainer<int>(42);
+        var stringContainer = new GenericContainer<string>("Hello");
+        var pair = new KeyValuePair<int, string>(1, "One");
+    }
+}
+```
+
+#### 泛型方法
+
+泛型方法是 `C#` 中一种特殊的方法类型，允许方法的参数类型在使用时才确定。
+
+```csharp
+public class GenericMethods
+{
+    // Basic Generic Method
+    public T GenericMethod<T>(T item)
+    {
+        Console.WriteLine($"Type: {typeof(T)}, Value: {item}");
+        return item;
+    }
+
+    // Generic Method with Multiple Type Parameters
+    public TResult Convert<TInput, TResult>(TInput input)
+        where TResult : new()
+    {
+        TResult result = new TResult();
+        // Conversion logic
+        return result;
+    }
+
+    // Generic Method in a Non-Generic Class
+    public static void Swap<T>(ref T first, ref T second)
+    {
+        T temp = first;
+        first = second;
+        second = temp;
+    }
+}
+```
+
+#### 泛型约束
+
+约束可以应用于泛型，以限制可以用作参数的类型。
+
+```csharp
+// Class Constraint
+public class ClassConstraint<T> where T : class
+{
+    public T Instance { get; set; }
+}
+
+// Value Type Constraint
+public class ValueTypeConstraint<T> where T : struct
+{
+    public T Value { get; set; }
+}
+
+// Constructor Constraint
+public class NewConstraint<T> where T : new()
+{
+    public T CreateNew()
+    {
+        return new T();
+    }
+}
+
+// Interface Constraint
+public class InterfaceConstraint<T> where T : IComparable<T>
+{
+    public bool IsGreaterThan(T first, T second)
+    {
+        return first.CompareTo(second) > 0;
+    }
+}
+
+// Multiple Constraints
+public class MultipleConstraints<T>
+    where T : class, IDisposable, new()
+{
+    public void ProcessItem(T item)
+    {
+        // Processing logic
+        item.Dispose();
+    }
+}
+```
+
+```csharp
+// Base Class
+public class Animal
+{
+    public virtual void MakeSound() { }
+}
+
+// Generic Class with Base Class Constraint
+public class AnimalContainer<T> where T : Animal
+{
+    private T _animal;
+
+    public AnimalContainer(T animal)
+    {
+        _animal = animal;
+    }
+
+    public void MakeAnimalSound()
+    {
+        _animal.MakeSound();
+    }
+}
+
+// Usage Example
+public class Dog : Animal
+{
+    public override void MakeSound()
+    {
+        Console.WriteLine("Woof!");
+    }
+}
+
+public class Cat : Animal
+{
+    public override void MakeSound()
+    {
+        Console.WriteLine("Meow!");
+    }
+}
+```
+
+#### 泛型接口
+
+```csharp
+// Generic Interface Definition
+public interface IRepository<T>
+{
+    T GetById(int id);
+    void Add(T item);
+    void Update(T item);
+    void Delete(int id);
+    IEnumerable<T> GetAll();
+}
+
+// Implementing the Generic Interface
+public class Repository<T> : IRepository<T> where T : class
+{
+    private readonly List<T> _items = new List<T>();
+
+    public T GetById(int id)
+    {
+        // Implement retrieval logic
+        return _items.FirstOrDefault();
+    }
+
+    public void Add(T item)
+    {
+        _items.Add(item);
+    }
+
+    public void Update(T item)
+    {
+        // Implement update logic
+    }
+
+    public void Delete(int id)
+    {
+        // Implement deletion logic
+    }
+
+    public IEnumerable<T> GetAll()
+    {
+        return _items;
+    }
+}
+```
+
+`C#` 中的泛型支持协变和逆变，从而在类型之间实现更灵活的关系。
+
+```csharp
+// Covariant Interface (out)
+public interface IProducer<out T>
+{
+    T Produce();
+}
+
+// Contravariant Interface (in)
+public interface IConsumer<in T>
+{
+    void Consume(T item);
+}
+
+// Implementation Example
+public class Producer<T> : IProducer<T> where T : new()
+{
+    public T Produce()
+    {
+        return new T();
+    }
+}
+
+public class Consumer<T> : IConsumer<T>
+{
+    public void Consume(T item)
+    {
+        Console.WriteLine($"Consuming {item}");
+    }
+}
+
+// Using Covariance and Contravariance
+public class VarianceExample
+{
+    public void DemonstrateVariance()
+    {
+        IProducer<string> stringProducer = new Producer<string>();
+        IProducer<object> objectProducer = stringProducer; // Covariance
+
+        IConsumer<object> objectConsumer = new Consumer<object>();
+        IConsumer<string> stringConsumer = objectConsumer; // Contravariance
+    }
+}
+```
+
+`C#` 中的泛型通过提供创建灵活且类型安全的组件的机制来增强代码的可重用性和可维护性。无论是使用泛型类、方法还是接口，理解泛型对于在 `C#` 中构建高效且适应性强的软件解决方案至关重要。
+
+## 五、语言集成查询 (LINQ) 📚
+
+LINQ 允许使用查询表达式与数据交互，而不管其来源如何。它有助于轻松地过滤、排序、分组和转换数据，提供一种无缝且集成的方式来查询对象、数据库和 XML 文档。
+
+理解 LINQ 至关重要，因为它提供了统一且独立于模型的查询功能，简化了数据操作和检索过程，并且提供增强的可读性和可维护性。
+
+在 `C#` 中，LINQ 是一组扩展，允许直接从编程语言对各种数据源执行查询。LINQ 可用于处理集合、XML、数据库等。
+
+### 1、基础 📝
+
+#### 查询语法
+
+```csharp
+var query = from item in collection
+            where item.Price > 100
+            orderby item.Name
+            select item;
+```
+
+#### 方法语法
+
+```csharp
+var query = collection
+    .Where(x => x.Price > 100)
+    .OrderBy(x => x.Name)
+    .Select(x => x);
+```
+
+### 2、常用 LINQ 操作符 📊
+
+- `Where`：此方法用于根据给定谓词过滤集合。它返回一个新集合，其中仅包含满足指定条件的元素。
+
+- `Select`：此方法用于投影或转换集合的元素。它返回一个新集合，其中包含已根据指定函数或投影进行转换的元素。
+
+### 3、聚合操作 🔗
+
+```csharp
+int count = numbers.Count();
+int sum = numbers.Sum();
+double average = numbers.Average();
+int max = numbers.Max();
+int min = numbers.Min();
+```
+
+### 4、分组和连接 📈
+
+```csharp
+var groups = products.GroupBy(p => p.Category);
+
+var joined = customers.Join(orders,
+    c => c.Id,
+    o => o.CustomerId,
+    (c, o) => new { Customer = c, Order = o });
+```
+
+### 5、延迟执行与立即执行 ⏰
+
+LINQ 中的延迟执行意味着在枚举结果之前不会发生实际的数据处理或计算。当您构建 LINQ 查询时，它只是创建一个查询定义。
+
+```csharp
+var query = numbers.Where(n => n > 3); // Query not executed yet
+foreach (var num in query)
+{
+    Console.WriteLine(num); // Query executed here
+}
+```
+
+实际执行会延迟，直到您迭代查询结果，例如使用 foreach 循环或使用 ToList() 或 ToArray() 等方法转换结果。这可以通过避免不必要的计算来提高性能。
+
+```csharp
+var result = numbers.Where(n => n > 3).ToList(); // Query executed immediately
+```
+
+> 调用以下方法会立即执行查询：
+>
+> - **​`ToList()`​**
+> - **​`ToArray()`​**
+> - **​`Count()`​**
+
+然而，管理数据实际实现的时刻（即获取数据并将其加载到内存中）非常重要。过早具体化数据有时会消耗更多资源，尤其是当数据源很大（例如数据库）时。在决定具体化结果以优化资源使用和性能之前，您可能需要向查询附加更多条件或过滤器。
+
+### 6、`All`与 `Any` 🔁
+
+用于检查集合中的元素。
+
+- `All`：检查集合中的每个元素是否满足特定条件。使用 `All` 时，您需要确保集合的所有元素都满足特定标准。
+
+- `Any`：检查集合中是否至少有一个元素满足特定条件。使用 `Any` 当您需要确定是否有任何元素满足特定标准时。
+
+当集合为空时，会发生以下情况：
+
+- `All`：始终返回 true，因为不存在违反条件的元素。这可能看起来违反直觉，但在没有任何要检查的元素的情况下，它默认为 true。
+
+- `Any`：始终返回 false，因为不存在满足条件的元素。
+
+例如，如果您想验证列表中的所有数字均为正数，则可以使用 `All`。如果您要检查列表中是否有负数，则可以使用 `Any`。
+
+```csharp
+int[] numbers = { 1, 3, 5, 8 };
+bool hasEvenNumber = numbers.Any(n => n % 2 == 0);
+Console.WriteLine($"Is there an even number? {hasEvenNumber}");
+```
+
+### 7、自定义 LINQ 扩展方法 📝
+
+`IEnumerable` 和 `IQueryable` 是表示 .NET 中集合的两个主要接口。这就是它们的作用：
+
+`IEnumerable`：在内存中的对象级别操作。当您针对 `IEnumerable` 接口执行 LINQ 查询时，操作是在内存中执行的。它适合处理内存中的集合，例如数组或列表。
+
+`IQueryable`：设计用于与外部数据源（例如数据库）交互。使用 `IQueryable` 进行的查询将转换为特定于数据源的查询（例如关系数据库的 SQL）。该接口允许延迟执行和内存不足 (OOM) 数据查询，使其对于大型数据集（尤其是数据库）非常高效。
+
+这两个接口的主要区别在于执行位置：`IEnumerable` 处理内存中的数据。同时，`IQueryable` 允许构建表达式树，该表达式树可以转换为适合外部数据源的查询，例如数据库的 SQL。然后，它将解析后的查询发送到数据源进行处理，并以 `IEnumerable` 形式获取结果。
+
+```csharp
+public class BasicConcepts
+{
+    // IEnumerable: In-memory collection operations
+    // IQueryable: Database query operations
+
+    public void CompareInterfaces()
+    {
+        // IEnumerable - executed in memory
+        IEnumerable<int> enumerable = Enumerable.Range(1, 100);
+        var enumResult = enumerable
+            .Where(x => x > 50)    // Filter in memory
+            .Select(x => x * 2);   // Transform in memory
+
+        // IQueryable - executed at the data source
+        IQueryable<int> queryable = Enumerable.Range(1, 100).AsQueryable();
+        var queryResult = queryable
+            .Where(x => x > 50)    // Translated to SQL WHERE clause
+            .Select(x => x * 2);   // Translated to SQL SELECT clause
+    }
+}
+```
+
+### 8、优化 💻
+
+优化 LINQ 查询，尤其是针对大量数据集的查询，可以通过多种方法来实现：
+
+- 尽可能利用延迟执行，确保查询仅在结果是真正需要的情况下执行。这避免了不必要的计算。
+
+- 选择为您的特定用例量身定制的最有效的集合类型，因为底层数据结构会影响性能。
+
+- 在可行的情况下，使用 `Take` 等方法限制结果数据集的大小，以避免处理超出必要的数据。
+
+- 避免或明智地使用嵌套查询。由于多轮数据检索或计算，它们可能会导致性能问题。
+
+- 如果您预计对数据进行多次操作，请使用 `ToArray` 或 `ToList` 等方法将结果具体化到内存中。这可以防止重复执行相同的 LINQ 查询。
+
+## 六、Lambda 👀
+
+Lambda 表达式和匿名函数是 `C#` 中的基本概念，它们允许就地声明和定义函数，通常用作其他函数的参数。
+
+它们因能够提供简洁、富有表现力的语法来表示功能而闻名，尤其是与高阶函数和 LINQ 一起使用时。
+
+### 1、Lambda 表达式 🔍
+
+`(parameters) => expression`
+
+```csharp
+public class LambdaBasics
+{
+    public void BasicSyntax()
+    {
+        // 1. No-parameter Lambda
+        Action sayHello = () => Console.WriteLine("Hello");
+
+        // 2. Single-parameter Lambda
+        Func<int, int> square = x => x * x;
+
+        // 3. Multiple-parameter Lambda
+        Func<int, int, int> add = (x, y) => x + y;
+
+        // 4. Lambda with a statement block
+        Func<int, int, int> multiply = (x, y) =>
+        {
+            Console.WriteLine($"Multiplying {x} and {y}");
+            return x * y;
+        };
+
+        // 5. Type-declared Lambda
+        Func<double, double, double> divide = (double x, double y) => x / y;
+
+        // Usage examples
+        sayHello();                    // Output: Hello
+        Console.WriteLine(square(5));  // Output: 25
+        Console.WriteLine(add(3, 4));  // Output: 7
+    }
+}
+```
+
+### 2、Lambda 闭包 🔗
+
+lambda 表达式和匿名方法上下文中的闭包是指这些构造从其封闭范围捕获并保留对其变量的访问的能力。
+
+捕获的变量以即使在声明它们的方法完成执行后仍可访问和可变的方式存储。
+
+如果没有正确理解，这可能会导致意外的行为，尤其是在多线程环境中，其中闭包可能会引入跨线程的共享状态。
+
+```csharp
+public class LambdaClosure
+{
+    public void ClosureExamples()
+    {
+        // Basic closure
+        int multiplier = 10;
+        Func<int, int> multiply = x => x * multiplier;
+
+        // Closure trap
+        var actions = new List<Action>();
+        for (int i = 0; i < 5; i++)
+        {
+            // Incorrect way - all actions will use the final value of i
+            actions.Add(() => Console.WriteLine(i));
+        }
+
+        // Correct way
+        for (int i = 0; i < 5; i++)
+        {
+            int temp = i;
+            actions.Add(() => Console.WriteLine(temp));
+        }
+
+        // Counter closure
+        Func<int> counter = CreateCounter();
+        Console.WriteLine(counter()); // 1
+        Console.WriteLine(counter()); // 2
+    }
+
+    private Func<int> CreateCounter()
+    {
+        int count = 0;
+        return () => ++count;
+    }
+}
+```
+
+### 3、Lambda 表达式树 🌳
+
+Lambda 表达式树是一种以树形数据结构来表示代码的方式，常用于动态构建查询。
+
+```csharp
+public class ExpressionTrees
+{
+    public void ExpressionTreeExamples()
+    {
+        // Create an expression tree
+        Expression<Func<int, bool>> isEven = x => x % 2 == 0;
+
+        // Manually construct an expression tree
+        ParameterExpression param = Expression.Parameter(typeof(int), "x");
+        BinaryExpression operation = Expression.Equal(
+            Expression.Modulo(param, Expression.Constant(2)),
+            Expression.Constant(0)
+        );
+        var manualIsEven = Expression.Lambda<Func<int, bool>>(
+            operation,
+            param
+        );
+
+        // Compile and execute
+        var compiled = isEven.Compile();
+        bool result = compiled(4); // true
+    }
+}
+```
+
+### 4、将 Lambda 与 LINQ 结合使用 📈
+
+Lambda 表达式在 LINQ 中的应用非常广泛，它使查询语法更简洁和清晰。
+
+```csharp
+public class LinqWithLambda
+{
+    private List<int> numbers = Enumerable.Range(1, 10).ToList();
+    private List<string> words = new List<string>
+    {
+        "apple", "banana", "cherry", "date"
+    };
+
+    public void LinqExamples()
+    {
+        // Where
+        var evenNumbers = numbers.Where(n => n % 2 == 0);
+
+        // Select
+        var doubled = numbers.Select(n => n * 2);
+
+        // OrderBy
+        var ordered = words.OrderBy(w => w.Length);
+
+        var filteredAndOrdered = numbers
+            .Where(n => n > 5)
+            .OrderByDescending(n => n)
+            .Select(n => n * n);
+
+        var grouped = words
+            .GroupBy(w => w[0])
+            .Select(g => new
+            {
+                FirstLetter = g.Key,
+                Words = g.ToList()
+            });
+    }
+}
+```
