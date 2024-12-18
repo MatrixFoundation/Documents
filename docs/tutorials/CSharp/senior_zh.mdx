@@ -104,3 +104,538 @@ using var resource = new ResourceManager();
 resource.DoWork();
 // Dispose() is automatically called at the end of the scope
 ```
+
+## 二、文件 IO 操作与序列化 💻
+
+文件输入/输出（I/O）和序列化是 `C#` 编程的重要方面，涉及从文件中读取和写入，以及将对象转换为适合存储或传输的格式。
+
+### 1、文件 I/O 📁
+
+```csharp
+// Reading text from a file
+string filePath = "example.txt";
+string content = File.ReadAllText(filePath);
+
+// Writing text to a file
+string filePath = "example.txt";
+string content = "Hello, File I/O!";
+File.WriteAllText(filePath, content);
+
+// Reading lines from a file
+string filePath = "example.txt";
+string[] lines = File.ReadAllLines(filePath);
+
+// Writing lines to a file
+string filePath = "example.txt";
+string[] lines = { "Line 1", "Line 2", "Line 3" };
+File.WriteAllLines(filePath, lines);
+```
+
+```csharp
+using System.IO;
+
+// Define the file path
+string filePath = "example.txt";
+
+// Checking if a file exists
+bool fileExists = File.Exists(filePath);
+if (fileExists)
+{
+    // Deleting a file
+    File.Delete(filePath);
+    Console.WriteLine("File deleted successfully.");
+}
+else
+{
+    Console.WriteLine("File does not exist.");
+}
+```
+
+### 2、序列化 🔗
+
+序列化是将对象或数据结构转换为易于存储或传输的格式的过程。
+
+#### 二进制序列化
+
+```csharp
+using System;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+
+[Serializable]
+public class Person
+{
+    public string Name { get; set; }
+    public int Age { get; set; }
+}
+
+Person person = new Person { Name = "John", Age = 30 };
+
+BinaryFormatter binaryFormatter = new BinaryFormatter();
+
+using (FileStream stream = new FileStream("person.bin", FileMode.Create))
+{
+    binaryFormatter.Serialize(stream, person);
+}
+```
+
+#### 二进制反序列化
+
+```csharp
+using System;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+
+[Serializable]
+public class Person
+{
+    public string Name { get; set; }
+    public int Age { get; set; }
+}
+
+// Binary deserialization
+BinaryFormatter binaryFormatter = new BinaryFormatter();
+
+using (FileStream stream = new FileStream("person.bin", FileMode.Open))
+{
+    Person deserializedPerson = (Person)binaryFormatter.Deserialize(stream);
+    Console.WriteLine($"Name: {deserializedPerson.Name}, Age: {deserializedPerson.Age}");
+}
+```
+
+#### JSON 序列化和反序列化
+
+```csharp
+using System.Text.Json;
+using System.Text.Json.Serialization;
+
+public class Character
+{
+    // JSON property renaming
+    [JsonPropertyName("character_name")]
+    public string Name { get; set; }
+
+    public int Level { get; set; }
+
+    // Ignore serialization
+    [JsonIgnore]
+    public string SecretCode { get; set; }
+
+    // Conditional serialization
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string Title { get; set; }
+
+    // Collection property
+    public List<Item> Inventory { get; set; }
+}
+
+public class Item
+{
+    public string Name { get; set; }
+    public int Quantity { get; set; }
+
+    // Custom serialization converter
+    [JsonConverter(typeof(CustomPriceConverter))]
+    public decimal Price { get; set; }
+}
+
+public class CustomPriceConverter : JsonConverter<decimal>
+{
+    public override decimal Read(
+        ref Utf8JsonReader reader,
+        Type typeToConvert,
+        JsonSerializerOptions options)
+    {
+        // Custom deserialization logic
+        return reader.GetDecimal() * 1.1m;
+    }
+
+    public override void Write(
+        Utf8JsonWriter writer,
+        decimal value,
+        JsonSerializerOptions options)
+    {
+        // Custom serialization logic
+        writer.WriteNumberValue(Math.Round(value, 2));
+    }
+}
+
+// JSON serialization manager
+public class JsonSerializationManager
+{
+    // Basic serialization
+    public static string Serialize(object obj)
+    {
+        // Configure serialization options
+        var options = new JsonSerializerOptions
+        {
+            WriteIndented = true,  // Pretty print
+            PropertyNameCaseInsensitive = true
+        };
+
+        return JsonSerializer.Serialize(obj, options);
+    }
+
+    // Basic deserialization
+    public static T? Deserialize<T>(string json)
+    {
+        return JsonSerializer.Deserialize<T>(json);
+    }
+
+    // File serialization
+    public static void SerializeToFile(object obj, string filePath)
+    {
+        string json = Serialize(obj);
+        File.WriteAllText(filePath, json);
+    }
+
+    // Deserialize from file
+    public static T? DeserializeFromFile<T>(string filePath)
+    {
+        string json = File.ReadAllText(filePath);
+        return Deserialize<T>(json);
+    }
+}
+
+public class Program
+{
+    public static void Main()
+    {
+        // Create character
+        var character = new Character
+        {
+            Name = "Hero Allen",
+            Level = 10,
+            SecretCode = "HERO123",
+            Title = "Savior",
+            Inventory =
+            [
+                new() { Name = "Magic Sword", Quantity = 1, Price = 100.50m },
+                new() { Name = "Healing Potion", Quantity = 5, Price = 20.75m }
+            ]
+        };
+
+        // Basic serialization
+        string jsonString = JsonSerializationManager.Serialize(character);
+        Console.WriteLine("Serialization result:");
+        Console.WriteLine(jsonString);
+
+        // Deserialization
+        var deserializedCharacter = JsonSerializationManager.Deserialize<Character>(jsonString);
+        Console.WriteLine("\nDeserialization result:");
+        Console.WriteLine($"Name: {deserializedCharacter?.Name}");
+        if (deserializedCharacter != null) Console.WriteLine($"Level: {deserializedCharacter.Level}");
+
+        // File serialization
+        string filePath = "character.json";
+        JsonSerializationManager.SerializeToFile(character, filePath);
+        Console.WriteLine($"\nSaved to file: {filePath}");
+
+        // Deserialize from file
+        var fileCharacter = JsonSerializationManager.DeserializeFromFile<Character>(filePath);
+        Console.WriteLine("\nFile deserialization result:");
+        Console.WriteLine($"Name: {fileCharacter?.Name}");
+        if (fileCharacter != null) Console.WriteLine($"Item count: {fileCharacter.Inventory.Count}");
+    }
+}
+```
+
+## 三、委托与事件 👥
+
+委托和事件是 `C#` 中的基本概念，有助于实现事件驱动编程。它们提供了一种以解耦和可扩展的方式处理和响应事件的方法。
+
+虽然委托本质上是类型安全的函数指针，可以指向一个或多个方法，但事件是一种机制，允许类在发生感兴趣的事情时通知其他类或对象。
+
+### 1、委托 📝
+
+`C#` 中的委托是可以指向方法的对象。它们允许以类型安全的方式实现函数指针概念。委托通常用于实现事件和回调。
+
+委托是安全封装方法的类型，并允许定义可保存对这些方法的引用的变量，从而启用回调机制和事件处理。
+
+#### 委托声明
+
+```csharp
+public delegate void MyDelegate(string message);
+```
+
+#### 使用委托
+
+```csharp
+public class MessageProcessor
+{
+    public void ProcessMessage(string message)
+    {
+        Console.WriteLine($"Processing message: {message}");
+    }
+}
+
+// Delegate declaration
+public delegate void MyDelegate(string message);
+
+public class Program
+{
+    public static void Main()
+    {
+        MessageProcessor processor = new MessageProcessor();
+        MyDelegate delegateInstance = processor.ProcessMessage;
+
+        // Invoking the delegate
+        delegateInstance("Hello, Delegate!");
+    }
+}
+```
+
+#### 多播委托
+
+允许一个委托实例持有多个方法的引用，当调用该委托时，所有被引用的方法都会按照添加顺序依次执行。
+
+这可能会增加管理和调试的复杂性，如果处理不当，可能会导致意想不到的副作用。
+
+```csharp
+public class Calculator
+{
+    public void Add(int a, int b)
+    {
+        Console.WriteLine($"Sum: {a + b}");
+    }
+
+    public void Multiply(int a, int b)
+    {
+        Console.WriteLine($"Product: {a * b}");
+    }
+}
+
+// Delegate declaration
+public delegate void MyDelegate(int a, int b);
+
+public class Program
+{
+    public static void Main()
+    {
+        Calculator calculator = new Calculator();
+
+        MyDelegate addDelegate = calculator.Add;
+        MyDelegate multiplyDelegate = calculator.Multiply;
+
+        // Creating a multicast delegate
+        MyDelegate multicastDelegate = addDelegate + multiplyDelegate;
+
+        // Invoking both methods
+        multicastDelegate(3, 4);
+    }
+}
+```
+
+#### 内置泛型委托类型
+
+在 `C#` 中，`Func<T>` 用于返回值的委托，`Action<T>` 用于不返回值的委托，`Predicate<T>` 用于返回布尔值的委托。
+
+```csharp
+Func<int, int, int> add = (a, b) => a + b;
+int result = add(5, 3);  // result = 8
+
+// Calculate damage
+Func<int, float, int> calculateDamage = (baseDamage, criticalMultiplier) =>
+    (int)(baseDamage * criticalMultiplier);
+```
+
+```csharp
+Action<string> logMessage = message => Console.WriteLine(message);
+logMessage("Player attacked!");
+
+// Character action
+Action<Character> playerAttack = character => {
+    character.TakeDamage(10);
+    character.PlayAttackAnimation();
+};
+```
+
+```csharp
+Predicate<int> isEven = number => number % 2 == 0;
+bool result = isEven(4);  // true
+
+// Enemy filtering
+Predicate<Enemy> isLowHealth = enemy => enemy.Health < 20;
+List<Enemy> weakEnemies = enemyList.FindAll(isLowHealth);
+```
+
+### 2、事件 📣
+
+事件使用委托来通知状态更改，允许一个对象通知其他对象有关某些事件的信息。
+
+#### 事件声明
+
+```csharp
+public class EventPublisher
+{
+    public event MyDelegate MyEvent;
+}
+```
+
+#### 订阅事件
+
+```csharp
+public class EventSubscriber
+{
+    public void Subscribe(EventPublisher publisher)
+    {
+        publisher.MyEvent += HandleEvent;
+    }
+
+    public void HandleEvent(string message)
+    {
+        Console.WriteLine($"Event handled: {message}");
+    }
+}
+```
+
+#### 发布事件
+
+```csharp
+EventPublisher publisher = new EventPublisher();
+EventSubscriber subscriber = new EventSubscriber();
+subscriber.Subscribe(publisher);
+publisher.MyEvent?.Invoke("Event message"); // Raising the event
+```
+
+#### 事件处理程序和 `EventArgs`
+
+```csharp
+public class CustomEventArgs : EventArgs
+{
+    public string EventMessage { get; }
+
+    public CustomEventArgs(string message)
+    {
+        EventMessage = message;
+    }
+}
+
+public class EventPublisher
+{
+    public event EventHandler<CustomEventArgs> MyEvent;
+
+    public void RaiseEvent(string message)
+    {
+        OnMyEvent(new CustomEventArgs(message));
+    }
+
+    protected virtual void OnMyEvent(CustomEventArgs e)
+    {
+        MyEvent?.Invoke(this, e);
+    }
+}
+```
+
+### 3、综合例子 📚
+
+```csharp
+// Define delegate types
+public delegate void AttackDelegate(string target);
+public delegate int CalculateDamageDelegate(int baseAttack, int criticalChance);
+
+public class GameCharacter(string name, int health, int attack)
+{
+    // Event delegates
+    public event AttackDelegate? OnAttack;
+    public event Action<string>? OnDeath;
+
+    public string Name { get; } = name;
+    private int Health { get; set; } = health;
+    private int Attack { get; } = attack;
+
+    // Perform attack using delegate
+    public void PerformAttack(string target, CalculateDamageDelegate damageCalculator)
+    {
+        // Calculate damage
+        int damage = damageCalculator(Attack, 20);
+
+        // Trigger attack event
+        OnAttack?.Invoke(target);
+
+        Console.WriteLine($"{Name} attacks {target}, dealing {damage} damage");
+    }
+
+    public void TakeDamage(int damage)
+    {
+        Health -= damage;
+
+        if (Health <= 0)
+        {
+            // Trigger death event
+            OnDeath?.Invoke($"{Name} has fallen");
+        }
+    }
+}
+
+public abstract class SkillManager
+{
+    // Multicast delegate
+    public delegate void SkillEventHandler(string skillName);
+    public static event SkillEventHandler? OnSkillUsed;
+
+    public static void UseSkill(string skillName, Action? skillAction)
+    {
+        // Trigger skill event
+        OnSkillUsed?.Invoke(skillName);
+
+        // Execute skill action
+        skillAction?.Invoke();
+    }
+}
+
+public class CombatLogger
+{
+    public void LogAttack(string target)
+    {
+        Console.WriteLine($"[Log] Attack target: {target}");
+    }
+
+    public void LogDeath(string deathMessage)
+    {
+        Console.WriteLine($"[Log] {deathMessage}");
+    }
+}
+
+public class Program
+{
+    public static void Main()
+    {
+        GameCharacter hero = new GameCharacter("Hero", 100, 20);
+        GameCharacter monster = new GameCharacter("Goblin", 50, 10);
+        CombatLogger logger = new CombatLogger();
+
+        // Register events
+        hero.OnAttack += logger.LogAttack;
+        hero.OnDeath += logger.LogDeath;
+        monster.OnDeath += logger.LogDeath;
+
+        // Register skill event
+        SkillManager.OnSkillUsed += skillName =>
+            Console.WriteLine($"[Skill] Used skill: {skillName}");
+
+        // Define damage calculation delegate
+        CalculateDamageDelegate standardDamage = (baseAttack, criticalChance) =>
+        {
+            Random random = new Random();
+            bool isCritical = random.Next(100) < criticalChance;
+            return isCritical ? baseAttack * 2 : baseAttack;
+        };
+
+        SkillManager.UseSkill("Fireball", () =>
+        {
+            Console.WriteLine("Casting a powerful fireball!");
+        });
+
+        hero.PerformAttack(monster.Name, standardDamage);
+        monster.TakeDamage(25);
+
+        // Func and Action delegate examples
+        Func<int, int, int> multiply = (a, b) => a * b;
+        Action<string> print = Console.WriteLine;
+
+        Console.WriteLine($"Multiplication result: {multiply(5, 3)}");
+        print("Delegate usage example");
+    }
+}
+```
