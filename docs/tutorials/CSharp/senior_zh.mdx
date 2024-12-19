@@ -639,3 +639,256 @@ public class Program
     }
 }
 ```
+
+## 五、基本原则 🔝
+
+- **可读性**：代码应该易于阅读和理解，不仅对于创建者而且对于其他开发人员。这有利于更顺畅的协作和知识转移。
+- **模块化**：代码应分为可独立测试和使用的逻辑块或模块。这种方法有助于隔离问题并增强代码的可重用性。
+- **不要重复 (DRY)** ：通过利用提高代码可重用性的方法、函数和类来避免代码重复，这有助于更轻松地维护代码并减少出现错误的可能性。
+- **清晰的接口**：函数和类应该具有清晰且易于理解的接口，以促进不同代码组件之间更好的交互和集成。
+- **简单性**：避免复杂而复杂的结构，这会使代码维护更具挑战性。力求简单和清晰，使代码更易于理解和修改。
+
+## 六、设计模式 👥
+
+设计模式是针对软件设计中遇到的常见问题的可重用解决方案。它们提供了一种结构化的方法来解决某些类型的问题，并促进代码更加模块化、可维护和可扩展。
+
+在 `C#` 中，我经常使用单例、工厂、观察者、策略和装饰者等模式。
+
+### 1、单例模式 📝
+
+单例模式确保一个类在整个系统中只有一个实例，并提供对该实例的全局访问点。这对于管理应限制为单个实例的资源非常有用，确保一致性并防止资源使用中的潜在冲突。
+
+`C#` 中的单例模式可以使用类的静态实例与私有构造函数相结合来实现。要注意的主要问题之一是多线程环境，这可能会导致创建多个实例。这可以通过采用锁定机制或延迟初始化来规避。
+
+```csharp
+public class Singleton
+{
+    private static Singleton instance;
+    private Singleton() { }
+
+    public static Singleton Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = new Singleton();
+            }
+
+            return instance;
+        }
+    }
+}
+```
+
+### 2、工厂模式 🏭
+
+定义用于创建对象的接口，但允许子类更改将要创建的对象的类型。
+
+工厂模式有助于将对象创建逻辑与主客户端代码隔离开来，从而提高系统灵活性和可扩展性。这也有助于在不修改现有代码的情况下添加新的对象类型，从而增强系统的可维护性和可扩展性。
+
+```csharp
+public interface IProduct
+{
+    void Produce();
+}
+
+public class ConcreteProductA : IProduct
+{
+    public void Produce()
+    {
+        Console.WriteLine("Producing Product A");
+    }
+}
+
+public class ConcreteProductB : IProduct
+{
+    public void Produce()
+    {
+        Console.WriteLine("Producing Product B");
+    }
+}
+
+public interface IFactory
+{
+    IProduct CreateProduct();
+}
+
+public class ConcreteFactoryA : IFactory
+{
+    public IProduct CreateProduct()
+    {
+        return new ConcreteProductA();
+    }
+}
+
+public class ConcreteFactoryB : IFactory
+{
+    public IProduct CreateProduct()
+    {
+        return new ConcreteProductB();
+    }
+}
+```
+
+### 3、观察者模式 👀
+
+定义对象之间的一对多依赖关系，以便当一个对象状态改变时，所有依赖于它的对象都会被通知并自动更新。
+
+```csharp
+public interface IObserver
+{
+    void Update(string message);
+}
+
+public class ConcreteObserver : IObserver
+{
+    private readonly string name;
+
+    public ConcreteObserver(string name)
+    {
+        this.name = name;
+    }
+
+    public void Update(string message)
+    {
+        Console.WriteLine($"{name} received message: {message}");
+    }
+}
+
+public interface ISubject
+{
+    void Attach(IObserver observer);
+    void Detach(IObserver observer);
+    void Notify(string message);
+}
+
+public class ConcreteSubject : ISubject
+{
+    private readonly List<IObserver> observers = new List<IObserver>();
+
+    public void Attach(IObserver observer)
+    {
+        observers.Add(observer);
+    }
+
+    public void Detach(IObserver observer)
+    {
+        observers.Remove(observer);
+    }
+
+    public void Notify(string message)
+    {
+        foreach (var observer in observers)
+        {
+            observer.Update(message);
+        }
+    }
+}
+```
+
+### 4、策略模式 🔩
+
+定义一系列算法，封装每个算法，并使它们可以互换。
+
+```csharp
+public interface IStrategy
+{
+    void Execute();
+}
+
+public class ConcreteStrategyA : IStrategy
+{
+    public void Execute()
+    {
+        Console.WriteLine("Executing Strategy A");
+    }
+}
+
+public class ConcreteStrategyB : IStrategy
+{
+    public void Execute()
+    {
+        Console.WriteLine("Executing Strategy B");
+    }
+}
+
+public class Context
+{
+    private IStrategy _strategy;
+
+    public Context(IStrategy strategy)
+    {
+        _strategy = strategy;
+    }
+
+    public void SetStrategy(IStrategy strategy)
+    {
+        _strategy = strategy;
+    }
+
+    public void ExecuteStrategy()
+    {
+        _strategy.Execute();
+    }
+}
+```
+
+### 5、装饰器模式 🎨
+
+动态地将额外的责任附加到对象上。装饰器提供了一种灵活的替代方案，用于通过子类化扩展功能。
+
+```csharp
+public interface IComponent
+{
+    void Operation();
+}
+
+public class ConcreteComponent : IComponent
+{
+    public void Operation()
+    {
+        Console.WriteLine("Concrete Component Operation");
+    }
+}
+
+public abstract class Decorator : IComponent
+{
+    protected IComponent component;
+
+    public Decorator(IComponent component)
+    {
+        this.component = component;
+    }
+
+    public virtual void Operation()
+    {
+        if (component != null)
+        {
+            component.Operation();
+        }
+    }
+}
+
+public class ConcreteDecoratorA : Decorator
+{
+    public ConcreteDecoratorA(IComponent component) : base(component) { }
+
+    public override void Operation()
+    {
+        base.Operation();
+        Console.WriteLine("Concrete Decorator A Operation");
+    }
+}
+
+public class ConcreteDecoratorB : Decorator
+{
+    public ConcreteDecoratorB(IComponent component) : base(component) { }
+
+    public override void Operation()
+    {
+        base.Operation();
+        Console.WriteLine("Concrete Decorator B Operation");
+    }
+}
+```

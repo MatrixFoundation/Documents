@@ -641,3 +641,256 @@ public class Program
     }
 }
 ```
+
+## V. Fundamental Principles 🔝
+
+- **Readability**: The code should be easy to read and comprehend, not only for the creator but also for other developers. This facilitates smoother collaboration and knowledge transfer.
+- **Modularity**: The code should be divided into logical blocks or modules that can be tested and utilized independently. This approach aids in isolating issues and enhancing code reusability.
+- **Don’t Repeat Yourself (DRY)** : Avoid code duplication by utilizing methods, functions, and classes that promote code reusability, which helps in maintaining code more easily and reduces the potential for errors.
+- **Clear interfaces**: Functions and classes should have clear and understandable interfaces to promote better interaction and integration between different code components.
+- **Simplicity**: Avoid complex and convoluted constructions that can make code maintenance more challenging. Strive for simplicity and clarity to make code more approachable and easier to modify.
+
+## VI. Design Patterns 👥
+
+Design patterns are reusable solutions to common problems encountered in software design. They provide a structured approach to solving certain types of problems and promote code that is more modular, maintainable, and scalable.
+
+In `C#`, I often use patterns such as Singleton, Factory, Observer, Strategy, and Decorator.
+
+### 1. Singleton Pattern 📝
+
+The Singleton pattern ensures that a class has only one instance throughout the system and provides a global access point to this instance. This can be useful for managing resources that should be limited to a single instance, ensuring consistency and preventing potential conflicts in resource usage.
+
+The Singleton pattern in `C#` can be implemented using a static instance of the class coupled with a private constructor. One of the primary concerns to be aware of is the multithreading environment, which might lead to the creation of multiple instances. This can be circumvented by employing locking mechanisms or lazy initialization.
+
+```csharp
+public class Singleton
+{
+    private static Singleton instance;
+    private Singleton() { }
+
+    public static Singleton Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = new Singleton();
+            }
+
+            return instance;
+        }
+    }
+}
+```
+
+### 2. Factory Pattern 🏭
+
+The Factory pattern helps isolate object creation logic from the main client code, fostering system flexibility and scalability. This also facilitates the addition of new object types without modifying the existing code, thereby enhancing the maintainability and extensibility of the system.
+
+Define an interface for creating an object but let subclasses alter the type of objects that will be created.
+
+```csharp
+public interface IProduct
+{
+    void Produce();
+}
+
+public class ConcreteProductA : IProduct
+{
+    public void Produce()
+    {
+        Console.WriteLine("Producing Product A");
+    }
+}
+
+public class ConcreteProductB : IProduct
+{
+    public void Produce()
+    {
+        Console.WriteLine("Producing Product B");
+    }
+}
+
+public interface IFactory
+{
+    IProduct CreateProduct();
+}
+
+public class ConcreteFactoryA : IFactory
+{
+    public IProduct CreateProduct()
+    {
+        return new ConcreteProductA();
+    }
+}
+
+public class ConcreteFactoryB : IFactory
+{
+    public IProduct CreateProduct()
+    {
+        return new ConcreteProductB();
+    }
+}
+```
+
+### 3. Observer Pattern 👀
+
+Define a one-to-many dependency between objects so that when one object changes state, all its dependents are notified and updated automatically.
+
+```csharp
+public interface IObserver
+{
+    void Update(string message);
+}
+
+public class ConcreteObserver : IObserver
+{
+    private readonly string name;
+
+    public ConcreteObserver(string name)
+    {
+        this.name = name;
+    }
+
+    public void Update(string message)
+    {
+        Console.WriteLine($"{name} received message: {message}");
+    }
+}
+
+public interface ISubject
+{
+    void Attach(IObserver observer);
+    void Detach(IObserver observer);
+    void Notify(string message);
+}
+
+public class ConcreteSubject : ISubject
+{
+    private readonly List<IObserver> observers = new List<IObserver>();
+
+    public void Attach(IObserver observer)
+    {
+        observers.Add(observer);
+    }
+
+    public void Detach(IObserver observer)
+    {
+        observers.Remove(observer);
+    }
+
+    public void Notify(string message)
+    {
+        foreach (var observer in observers)
+        {
+            observer.Update(message);
+        }
+    }
+}
+```
+
+### 4. Strategy Pattern 🔩
+
+Define a family of algorithms, encapsulate each one, and make them interchangeable.
+
+```csharp
+public interface IStrategy
+{
+    void Execute();
+}
+
+public class ConcreteStrategyA : IStrategy
+{
+    public void Execute()
+    {
+        Console.WriteLine("Executing Strategy A");
+    }
+}
+
+public class ConcreteStrategyB : IStrategy
+{
+    public void Execute()
+    {
+        Console.WriteLine("Executing Strategy B");
+    }
+}
+
+public class Context
+{
+    private IStrategy _strategy;
+
+    public Context(IStrategy strategy)
+    {
+        _strategy = strategy;
+    }
+
+    public void SetStrategy(IStrategy strategy)
+    {
+        _strategy = strategy;
+    }
+
+    public void ExecuteStrategy()
+    {
+        _strategy.Execute();
+    }
+}
+```
+
+### 5. Decorator Pattern 🎨
+
+Attach additional responsibilities to an object dynamically. Decorators provide a flexible alternative to subclassing for extending functionality.
+
+```csharp
+public interface IComponent
+{
+    void Operation();
+}
+
+public class ConcreteComponent : IComponent
+{
+    public void Operation()
+    {
+        Console.WriteLine("Concrete Component Operation");
+    }
+}
+
+public abstract class Decorator : IComponent
+{
+    protected IComponent component;
+
+    public Decorator(IComponent component)
+    {
+        this.component = component;
+    }
+
+    public virtual void Operation()
+    {
+        if (component != null)
+        {
+            component.Operation();
+        }
+    }
+}
+
+public class ConcreteDecoratorA : Decorator
+{
+    public ConcreteDecoratorA(IComponent component) : base(component) { }
+
+    public override void Operation()
+    {
+        base.Operation();
+        Console.WriteLine("Concrete Decorator A Operation");
+    }
+}
+
+public class ConcreteDecoratorB : Decorator
+{
+    public ConcreteDecoratorB(IComponent component) : base(component) { }
+
+    public override void Operation()
+    {
+        base.Operation();
+        Console.WriteLine("Concrete Decorator B Operation");
+    }
+}
+```
