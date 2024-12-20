@@ -1,51 +1,31 @@
 ---
-sidebar_label: I. Godot Appearance Optimization
-title: I. Godot Appearance Optimization
+sidebar_label: Appearance Optimization
+title: Appearance Optimization
 sidebar_position: 1
 ---
 
-## 一、 Optimizing the Godot Interface 优化 Godot 界面
+## I. Optimizing Interface 🎨
 
-The Godot engine interface has seen significant improvements in appearance and usability from its initial release to the current 4.3 version. While there has been substantial progress from the early versions, there is still room for improvement.
+The Godot engine interface has seen significant improvements in appearance and usability from its initial release to the current version. While there has been substantial progress from the early versions, there is still room for improvement.
 
-Godot 引擎界面从最初的发布到目前的 4.3 版本已经有了显著改进，变得更加美观和易用。虽然从早期版本到现在有了巨大进步，但仍有改进空间。
-
-To achieve the ultimate development experience, I will customize the appearance of the Godot engine, allowing me to optimize the interface and workflow according to personal preferences. However, the aesthetic appeal and functionality of the engine interface must be balanced, as different users may have varying preferences, and **what works best for oneself is the most suitable**!
-
-为了最极致的开发体验，我会对 Godot 引擎进行外观美化，可以根据个人喜好优化界面和工作流程。然而，引擎界面的美观度和功能性需要平衡，不同用户可能有不同的偏好，**适合自己的就是最好的**！
+To achieve the ultimate development experience, I will customize the appearance of the Godot engine, allowing me to optimize the interface and workflow according to personal preferences. However, the aesthetic appeal and functionality of the engine interface must be balanced, as different users may have varying preferences, and <b>what works best for oneself is the most suitable</b>!
 
 The main changes are as follows:
 
-主要是以下两点的改变：
-
 1. The bluish-gray color scheme is not aesthetically pleasing, and the neutral tones used by other engines are more popular.
-
 2. The latest version of the interface layout is more reasonable, with better contrast and clarity.
 
-3. 蓝灰色配色方案不够美观，不如其他引擎的中性色调更受欢迎；
-4. 更改最新版本的界面布局更加合理，对比度和清晰度都有所提升。
-
-> ## Reference 参考资料
+> ## Reference
 >
 > [📺 Godot... But Prettier](https://www.youtube.com/watch?v=WmZq3UgOGKY)
 
-## 二、Theme Configuration 主题配置
+## II. Theme Configuration 💻
 
 I am using a custom theme [🔗 GitHub - passivestar/godot-minimal-theme: Godot Minimal Editor Theme](https://github.com/passivestar/godot-minimal-theme), which provides a clean and visually appealing Godot editor interface theme, significantly enhancing the overall appearance of Godot.
 
-这边我使用自定义主题[🔗 GitHub - passivestar/godot-minimal-theme: Godot Minimal Editor Theme](https://github.com/passivestar/godot-minimal-theme)，提供了一个简洁美观的 Godot 编辑器界面主题，可以大幅提升 Godot 的界面美观度。
-
 1. Visit the [Releases](https://github.com/passivestar/godot-minimal-theme/releases) page and download the `.tres` file that matches your Godot version. If you are using a high-resolution display, please download the high ppi version of the file.
-
-1. 访问 [Releases](https://github.com/passivestar/godot-minimal-theme/releases) 页面，下载适合你 Godot 版本的 `.tres` 文件。如果你使用的是高分辨率显示器，请下载 high ppi 版本的文件。
-
-1. In Godot, go to `Editor Settings -> Interface -> Theme`, and at the bottom, under `Custom Theme`, select the theme file you just downloaded. A message will appear: "The editor must be restarted for the changes to take effect." Click the "Save & Restart" button to restart the editor.
-
-1. 在 Godot 中，打开 `Editor Settings -> Interface -> Theme`，在最下面 `Custom Theme` 中选择你刚下载的主题文件。此时会弹出一条消息："The editor must be restarted for the changes to take effect."（编辑器必须重启才能使更改生效），并有一个 点击"Save & Restart" 按钮重启。
-
-1. The author also provides recommended settings in `Editor Settings -> Interface -> Theme`:
-
-1. 这里作者也提供了推荐设置在 `Editor Settings -> Interface -> Theme` 中：
+2. In Godot, go to `Editor Settings -> Interface -> Theme`, and at the bottom, under `Custom Theme`, select the theme file you just downloaded. A message will appear: "The editor must be restarted for the changes to take effect." Click the "Save & Restart" button to restart the editor.
+3. The author also provides recommended settings in `Editor Settings -> Interface -> Theme`:
 
 - Base Color: `#252525`
 - Accent Color: `#569eff`
@@ -56,58 +36,39 @@ I am using a custom theme [🔗 GitHub - passivestar/godot-minimal-theme: Godot 
 
 4. Modify the font in `Editor Settings -> Interface -> Editor` under `Main Font`.
 
-5. 修改字体，在 `Editor Settings -> Interface -> Editor` 中 `Main Font` 修改。
-
-## 三、Layout Configuration 布局配置
+## III. Layout Configuration 📐
 
 Next, I will adjust the layout, taking inspiration from the Unreal Engine 5 interface layout.
 
-接下来需要进行布局调整，参考了 Unreal Engine 5 的界面布局。
-
 Click the panel's top-right corner:
-
-点击面板右上角：
 
 <img src="/godot/appearance/2.png" alt="appearance-2" />
 
 Place it in a suitable position:
 
-将其放在合适的位置：
-
 <img src="/godot/appearance/3.png" alt="appearance-3" />
 
 Dock the "File System" panel to the bottom:
-
-将“文件系统”面板固定在底部：
 
 <img src="/godot/appearance/4.png" alt="appearance-4" />
 
 Configure the "File System" panel shortcut:
 
-配置“文件系统”面板快捷键：
-
 `Editor Settings > Shortcuts > Toggle FileSystem Bottom Panel : CTRL+SPACE`
 
 <img src="/godot/appearance/5.png" alt="appearance-5" />
+<br />
 
 Save the layout so that the same layout can be used in subsequent projects without having to reset it each time:
-
-保存布局，以便后续项目中使用相同的布局，而不需要每次重新设置：
 
 `Editor -> Editor Layout -> Save Layout`
 
 Name the layouts (e.g. `Usual`) to help you quickly identify and switch to the desired layout.
 
-给 Layout 命名（例如，`Usual`） ，以帮助你快速识别和切换到所需的布局。
-
-<img src="/godot/appearance/6.png" alt="appearance-6" />
-
+<img src="/godot/appearance/6.jpg" alt="appearance-6" />
+<br />
 Switch to the specified layout for new projects:
-
-新项目切换到指定布局：
 
 `Editor -> Editor Layout -> (Select the layout you named)`
 
-`Editor -> Editor Layout -> （选择你命名的布局）`
-
-<img src="/godot/appearance/7.png" alt="appearance-7" />
+<img src="/godot/appearance/7.jpg" alt="appearance-7" />
