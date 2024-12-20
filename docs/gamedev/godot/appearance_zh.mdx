@@ -1,0 +1,73 @@
+---
+sidebar_label: 外观优化
+title: 外观优化
+sidebar_position: 2
+---
+
+## 一、 优化界面 🎨
+
+Godot 引擎界面从最初的发布到目前的版本已经有了显著改进，变得更加美观和易用。虽然从早期版本到现在有了巨大进步，但仍有改进空间。
+
+为了最极致的开发体验，我会对 Godot 引擎进行外观美化，可以根据个人喜好优化界面和工作流程。然而，引擎界面的美观度和功能性需要平衡，不同用户可能有不同的偏好，<b>适合自己的就是最好的</b>！
+
+主要是以下两点的改变：
+
+1. 蓝灰色配色方案不够美观，不如其他引擎的中性色调更受欢迎；
+2. 更改最新版本的界面布局更加合理，对比度和清晰度都有所提升。
+
+> ## 参考资料
+>
+> [📺 Godot... But Prettier](https://www.youtube.com/watch?v=WmZq3UgOGKY)
+
+## 二、主题配置 💻
+
+这边我使用自定义主题[🔗 GitHub - passivestar/godot-minimal-theme: Godot Minimal Editor Theme](https://github.com/passivestar/godot-minimal-theme)，提供了一个简洁美观的 Godot 编辑器界面主题，可以大幅提升 Godot 的界面美观度。
+
+1. 访问 [Releases](https://github.com/passivestar/godot-minimal-theme/releases) 页面，下载适合你 Godot 版本的 `.tres` 文件。如果你使用的是高分辨率显示器，请下载 high ppi 版本的文件。
+2. 在 Godot 中，打开 `Editor Settings -> Interface -> Theme`，在最下面 `Custom Theme` 中选择你刚下载的主题文件。此时会弹出一条消息："The editor must be restarted for the changes to take effect."（编辑器必须重启才能使更改生效），并有一个 点击"Save & Restart" 按钮重启。
+3. 这里作者也提供了推荐设置在 `Editor Settings -> Interface -> Theme` 中：
+
+- Base Color: `#252525`
+- Accent Color: `#569eff`
+- Contrast: `0.2`
+- Icon Saturation: `2`
+
+<img src="/godot/appearance/1.png" alt="appearance-1" />
+
+4. 修改字体，在 `Editor Settings -> Interface -> Editor` 中 `Main Font` 修改。
+
+## 三、布局配置 📐
+
+接下来需要进行布局调整，参考了 Unreal Engine 5 的界面布局。
+
+点击面板右上角：
+
+<img src="/godot/appearance/2.png" alt="appearance-2" />
+
+将其放在合适的位置：
+
+<img src="/godot/appearance/3.png" alt="appearance-3" />
+
+将“文件系统”面板固定在底部：
+
+<img src="/godot/appearance/4.png" alt="appearance-4" />
+
+配置“文件系统”面板快捷键：
+
+`Editor Settings > Shortcuts > Toggle FileSystem Bottom Panel : CTRL+SPACE`
+
+<img src="/godot/appearance/5.png" alt="appearance-5" />
+<br />
+保存布局，以便后续项目中使用相同的布局，而不需要每次重新设置：
+
+`Editor -> Editor Layout -> Save Layout`
+
+给 Layout 命名（例如，`Usual`） ，以帮助你快速识别和切换到所需的布局。
+
+<img src="/godot/appearance/6.jpg" alt="appearance-6" />
+<br />
+新项目切换到指定布局：
+
+`Editor -> Editor Layout -> （选择你命名的布局）`
+
+<img src="/godot/appearance/7.jpg" alt="appearance-7" />
