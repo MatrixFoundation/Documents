@@ -100,17 +100,10 @@ const config: Config = {
         },
         {
           type: "docSidebar",
-          sidebarId: "gamedevSidebar",
-          className: "nav-gamedev",
+          sidebarId: "cgSidebar",
+          className: "nav-cg",
           position: "left",
-          label: "GameDev",
-        },
-        {
-          type: "docSidebar",
-          sidebarId: "cryptoSidebar",
-          className: "nav-crypto",
-          position: "left",
-          label: "Crypto",
+          label: "CG",
         },
         {
           type: "docSidebar",
