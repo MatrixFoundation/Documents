@@ -96,6 +96,21 @@ ssh -T git@github.com
 ```
 
 <img src="/tools/git_ssh.png" alt="Git SSH" />
+<br/>
+
+:::warning
+
+To resolve the issue "ssh: connect to host github.com port 22: Connection refused" 🤔
+
+You can add the following content to the ~/.ssh/config file. This way, SSH will use port 443 when connecting to GitHub.
+
+```
+Host github.com
+    Hostname ssh.github.com
+    Port 443
+```
+
+:::
 
 #### Configuration Levels
 
