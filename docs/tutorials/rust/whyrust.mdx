@@ -1,10 +1,10 @@
 ---
-sidebar_label: I. Why Rust?
-title: I. Why Rust?
+sidebar_label: Why Rust?
+title: Why Rust?
 sidebar_position: 1
 ---
 
-## 1. Overview 初印象
+## 1. Overview 初印象 🧐
 
 A language empowering everyone to build reliable and efficient software.
 
@@ -24,10 +24,9 @@ Rust is a modern programming language that has been gaining a reputation for its
 
 Rust 是一种现代编程语言，以其对安全性和性能的关注而声名远扬，值得我们所有开发者学习！
 
-## 2. Features 特点
+## 2. Features 特点 ✨
 
-### Safety 安全
-
+### Safety 安全 🛡
 Rust offers memory safety without the need for a garbage collector through its innovative ownership model.
 
 Rust 通过其创新的所有权模型确保内存安全，而无需垃圾收集器。
@@ -44,7 +43,7 @@ Additionally, Rust's borrow checker enforces strict rules around mutable and imm
 
 此外，Rust 的借用检查器强制执行对可变和不可变引用的严格规则，防止数据竞争和其他常见的并发错误。
 
-### High Performance 高性能
+### High Performance 高性能 🚀
 
 Rust offers the speed of a compiled language and the efficiency of manual memory management without a garbage collector, making it an ideal candidate for performance-critical domains. Rust’s unique “zero-cost abstractions” allow us to write code that is both high-performance and safe without experiencing additional runtime overhead.
 
@@ -62,13 +61,12 @@ In contrast, Rust takes a distinct approach by forgoing the use of a garbage col
 
 :::
 
-### Fearless Concurrency 并发
-
+### Fearless Concurrency 并发 🤝
 Rust aims to make concurrent programming accessible and safe. It offers abstractions like threads and asynchronous programming while enforcing thread safety through the type system.
 
 Rust 旨在使并发编程变得可访问和安全。它提供了诸如线程和异步编程之类的抽象，同时通过类型系统强制执行线程安全。
 
-### Ecosystem 生态系统
+### Ecosystem 生态系统 🌍
 
 Rust's ecosystem offers a treasure trove of libraries, tools, and frameworks.
 
@@ -86,19 +84,19 @@ Rust, while still growing, has an active community that continuously develops an
 
 Rust 仍在不断发展壮大，其活跃的社区不断开发和维护适用于各种用例的库。你可以在 `crates.io` 上找到各种各样的库。
 
-### Open Source Community 开源社区
+### Open Source Community 开源社区 🧑‍🤝‍🧑
 
 Rust has a very friendly and vibrant open-source developer community. This community is known for its enthusiasm, inclusivity, and willingness to help.
 
 Rust 拥有一个非常友好和充满活力的开源开发者社区。这个社区以其热情、包容和乐于助人而闻名。
 
-## 3. Hello World
+## 3. Hello World 🧑‍
 
-### Creating a New Project 新建项目
+### Creating a New Project 新建项目 ➕
 
 `cargo new hello-rust`
 
-### Project File Structure 项目文件结构
+### Project File Structure 项目文件结构 📁
 
 ```
 hello-rust/
@@ -120,7 +118,7 @@ hello-rust/
 
 - `src/main.rs` 是我们要写应用程序代码的地方。
 
-### Writing the Program 编写程序
+### Writing the Program 编写程序 ✍
 
 ```rust
 fn main() {
@@ -142,17 +140,17 @@ This is a macro call used to output text to the standard output.
 
 `println!`  是 Rust 标准库提供的宏之一，它在控制台打印一行文本，并自动在末尾添加换行符。对于  `println`  来说，我们没有使用其它语言惯用的  `%s`、`%d`  来做输出占位符，而是使用  `{}`，因为 Rust 在底层帮我们做了大量工作，会自动识别输出数据的类型。
 
-### Running Code 运行代码
+### Running Code 运行代码 ▶️
 
 `cargo run`
 
-## 4. Number Guessing Game 猜数游戏
+## 4. Number Guessing Game 猜数游戏 🔢
 
 In this game, the computer randomly generates a number, and the player needs to guess what that number is. After each guess, the program will inform the player whether their guess is too high, too low, or correct. Through this process, the player can gradually narrow down the range until they find the correct number.
 
 在这个游戏中，计算机会随机生成一个数字，然后玩家需要猜测这个数字。每次猜测后，程序会告诉玩家猜的数字是太大、太小还是正确。通过这个过程，玩家可以逐步缩小范围，直到找到正确的数字。
 
-### Input/Output
+### Input/Output 📥/📤
 
 Enter a number and it will be displayed.
 
@@ -219,7 +217,7 @@ Uses the `println!` macro again to print the user's input. `{}` is a placeho
 
 再次使用  `println!`  宏，打印用户输入的内容。`{}`  是一个占位符，会被  `guess`  的值替换。
 
-### Randomly Generated 随机生成
+### Randomly Generated 随机生成 🎲
 
 Generate a random number between 1 and 100.
 
@@ -264,7 +262,7 @@ The `rand::Rng` package is a `trait` in Rust. You can think of a trait as an int
 
 `let secret_number =`：这一部分声明了一个名为 `secret_number` 的新变量，并将随机数生成器生成的值赋给它。
 
-### Compare 比较
+### Compare 比较 ⚖
 
 Compare the generated random number with the input number.
 
@@ -314,7 +312,7 @@ Ordering 有三个变体 `Less`、`Greater`、`Equal`。
 
 `guess.cmp(&secret_number)` 是用 guess 和 secret_number 进行比较，这个方法会返回一个 Ordering。
 
-### Final 终版
+### Final 终版 🏁
 
 Add loops until the rule is reached and then ends.
 
