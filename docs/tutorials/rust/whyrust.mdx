@@ -4,99 +4,67 @@ title: Why Rust?
 sidebar_position: 1
 ---
 
-## 1. Overview 初印象 🧐
+## I. Overview 🧐
 
 A language empowering everyone to build reliable and efficient software.
 
-一门赋予每个人构建可靠且高效软件能力的语言。
-
 Rust is one of the most widely used languages in blockchain systems and many popular blockchains including <u>Solana, Polkadot, Aptos, and Sui</u> are built with Rust. Rust frameworks such as <u>Foundry</u> are also highly preferred by developers of established chains including Ethereum.
 
-Rust 是区块链系统中最广泛使用的语言之一，许多流行的区块链包括 <u>Solana、Polkadot、Aptos 和 Sui</u> 都是用 Rust 构建的。诸如 <u>Foundry</u> 等 Rust 框架也受到包括以太坊在内的区块链开发人员的高度青睐。
-
 The use of Rust is growing rapidly among blockchain projects, with more and more developers and teams recognizing the advantages of its performance and safety. In the coming years, we will see an exponential increase in this trend.
-
-Rust 的使用在区块链项目中正在迅速增长，越来越多的开发者和团队开始认识到其性能和安全性带来的优势。在未来几年，我们将看到这一趋势的指数级增长。
 
 > [GitHub - rust-in-blockchain/awesome-blockchain-rust](https://github.com/rust-in-blockchain/awesome-blockchain-rust)
 
 Rust is a modern programming language that has been gaining a reputation for its focus on safety and performance, making it worth learning for all developers!
 
-Rust 是一种现代编程语言，以其对安全性和性能的关注而声名远扬，值得我们所有开发者学习！
+## II. Features ✨
 
-## 2. Features 特点 ✨
+### 1. Safety 🛡
 
-### Safety 安全 🛡
 Rust offers memory safety without the need for a garbage collector through its innovative ownership model.
-
-Rust 通过其创新的所有权模型确保内存安全，而无需垃圾收集器。
 
 Memory safety means that the language prevents bugs that lead to crashes or security vulnerabilities due to mishandled memory.
 
-内存安全意味着该语言可以防止由于内存处理不当而导致崩溃或安全漏洞的错误。
-
 Rust's ownership model ensures that variables are deallocated when they go out of scope, preventing memory leaks and dangling references.
-
-Rust 的所有权模型确保变量在超出作用域时自动释放，防止内存泄漏和悬挂引用。
 
 Additionally, Rust's borrow checker enforces strict rules around mutable and immutable references, preventing data races and other common concurrency bugs.
 
-此外，Rust 的借用检查器强制执行对可变和不可变引用的严格规则，防止数据竞争和其他常见的并发错误。
-
-### High Performance 高性能 🚀
+### 2. High Performance 🚀
 
 Rust offers the speed of a compiled language and the efficiency of manual memory management without a garbage collector, making it an ideal candidate for performance-critical domains. Rust’s unique “zero-cost abstractions” allow us to write code that is both high-performance and safe without experiencing additional runtime overhead.
-
-Rust 提供了编译型语言的速度和无需垃圾收集器的手动内存管理效率，使其成为性能关键领域的理想选择。Rust 独特的“零成本抽象”使我们能够编写高性能且安全的代码，而无需经历额外的运行时开销。
 
 :::info
 
 Garbage collection involves the automated process of reclaiming memory that the runtime is no longer using. In simpler terms, it serves as a means to eliminate unused objects. The purpose of garbage collection is to prevent a program from exceeding its allocated memory capacity or reaching a state where it can no longer operate properly. Additionally, it relieves developers from the manual burden of managing a program’s memory, thereby reducing the potential for memory-related errors.
 
-垃圾收集涉及回收运行时不再使用的内存的自动化过程。简单来说，它是消除未使用对象的一种手段。垃圾收集的目的是防止程序超出其分配的内存容量或达到无法再正常运行的状态。此外，它还减轻了开发人员手动管理程序内存的负担，从而减少了出现内存相关错误的可能性。
-
 In contrast, Rust takes a distinct approach by forgoing the use of a garbage collector. Instead, it accomplishes these objectives through a sophisticated yet intricate type system. This methodology renders Rust exceptionally efficient; however, it also introduces a higher level of complexity to the learning and utilization of Rust.
-
-相比之下，Rust 采用了一种独特的方法，放弃使用垃圾收集器。相反，它通过复杂而复杂的类型系统来实现这些目标。这种方法使 Rust 异常高效；然而，它也给 Rust 的学习和使用带来了更高程度的复杂性。
 
 :::
 
-### Fearless Concurrency 并发 🤝
+### 3. Fearless Concurrency 🤝
+
 Rust aims to make concurrent programming accessible and safe. It offers abstractions like threads and asynchronous programming while enforcing thread safety through the type system.
 
-Rust 旨在使并发编程变得可访问和安全。它提供了诸如线程和异步编程之类的抽象，同时通过类型系统强制执行线程安全。
-
-### Ecosystem 生态系统 🌍
+### 4. Ecosystem 🌍
 
 Rust's ecosystem offers a treasure trove of libraries, tools, and frameworks.
 
-Rust 的生态系统提供了丰富的库、工具和框架。
-
 The Cargo package manager simplifies dependency management, compilation, and building of Rust projects, fostering a vibrant ecosystem that continuously expands the language's applicability.
-
-Cargo 包管理器简化了依赖项管理、编译和构建 Rust 项目的过程，培育了一个充满活力的生态系统，不断扩展语言的适用性。
 
 Furthermore, the integration with various languages through FFI (Foreign Function Interface) effectively bridges the gap between Rust's system-level efficiency and the user-friendly nature of high-level scripting languages.
 
-此外，通过 FFI（外部函数接口）与各种语言的集成，有效地弥合了 Rust 系统级效率与高级脚本语言的易用性之间的鸿沟。
-
 Rust, while still growing, has an active community that continuously develops and maintains libraries (crates) for a wide range of use cases. You can find all sorts of libraries on [`crates.io`](http://crates.io).
 
-Rust 仍在不断发展壮大，其活跃的社区不断开发和维护适用于各种用例的库。你可以在 `crates.io` 上找到各种各样的库。
-
-### Open Source Community 开源社区 🧑‍🤝‍🧑
+### 5. Open Source Community 🧑‍🤝‍🧑
 
 Rust has a very friendly and vibrant open-source developer community. This community is known for its enthusiasm, inclusivity, and willingness to help.
 
-Rust 拥有一个非常友好和充满活力的开源开发者社区。这个社区以其热情、包容和乐于助人而闻名。
+## III. Hello World 🧑‍
 
-## 3. Hello World 🧑‍
-
-### Creating a New Project 新建项目 ➕
+### 1. Creating a New Project ➕
 
 `cargo new hello-rust`
 
-### Project File Structure 项目文件结构 📁
+### 2. Project File Structure 📁
 
 ```
 hello-rust/
@@ -108,17 +76,11 @@ hello-rust/
 
 - `Cargo.toml` is the core configuration file for Rust projects, used to define project metadata, dependencies, and build settings.
 
-- `Cargo.toml` 是 Rust 项目的核心配置文件，用于定义项目元数据、依赖关系和构建设置。
-
 - `.gitignore` file is used to specify which files and directories should be ignored by Git when tracking changes in a repository.
-
-- `.gitignore` 文件用于指定在 Git 版本控制中应被忽略的文件和目录。
 
 - `src/main.rs` is where we’ll write our application code.
 
-- `src/main.rs` 是我们要写应用程序代码的地方。
-
-### Writing the Program 编写程序 ✍
+### 3. Writing the Program ✍
 
 ```rust
 fn main() {
@@ -128,33 +90,23 @@ fn main() {
 
 In Rust, every executable program must include a function named `main` as the entry point.
 
-在 Rust 中，每个可执行程序都必须包含一个名为  `main`  的函数作为入口点。
-
 `println!("Hello World");`
 
 This is a macro call used to output text to the standard output.
 
-这是一个宏调用，用于将文本输出到标准输出。
-
 `println!` is one of the macros provided by Rust's standard library, which prints a line of text to the console and automatically adds a newline at the end. Unlike other languages where placeholders like `%s` or `%d` are used, `println` in Rust uses `{}`. This is because Rust does a lot of work under the hood to automatically recognize the type of the output data.
 
-`println!`  是 Rust 标准库提供的宏之一，它在控制台打印一行文本，并自动在末尾添加换行符。对于  `println`  来说，我们没有使用其它语言惯用的  `%s`、`%d`  来做输出占位符，而是使用  `{}`，因为 Rust 在底层帮我们做了大量工作，会自动识别输出数据的类型。
-
-### Running Code 运行代码 ▶️
+### 4. Running Code ▶️
 
 `cargo run`
 
-## 4. Number Guessing Game 猜数游戏 🔢
+## IV. Number Guessing Game 🔢
 
 In this game, the computer randomly generates a number, and the player needs to guess what that number is. After each guess, the program will inform the player whether their guess is too high, too low, or correct. Through this process, the player can gradually narrow down the range until they find the correct number.
 
-在这个游戏中，计算机会随机生成一个数字，然后玩家需要猜测这个数字。每次猜测后，程序会告诉玩家猜的数字是太大、太小还是正确。通过这个过程，玩家可以逐步缩小范围，直到找到正确的数字。
-
-### Input/Output 📥/📤
+### 1. Input/Output 📥/📤
 
 Enter a number and it will be displayed.
-
-输入一个数并输出。
 
 ```rust
 use std::io;
@@ -173,55 +125,37 @@ fn main() {
 
 This line imports the input/output module from Rust's standard library, allowing us to use input/output related functionalities.
 
-这行代码导入了 Rust 标准库中的 input/output 模块，使我们能够使用输入输出相关的功能。
-
 `fn main()`
 
 Defines the main function of the program, where the execution begins.
-
-定义了程序的主函数，程序的执行从这里开始。
 
 `println!("Please input your guess：");`
 
 Uses the `println!` macro to print a prompt message to the console, asking the user to input their guess.
 
-使用  `println!`  宏在控制台打印一条提示信息，要求用户输入猜测。
-
 `let mut guess = String::new();`
 
 Creates a mutable `String` type variable `guess` to store user input. The `mut` keyword indicates that this variable is mutable.
-
-创建一个可变的  `String`  类型变量  `guess`，用于存储用户输入。`mut`  关键字表示这个变量是可变的。
 
 `io::stdin()`
 
 Calls the `stdin` function from the `io` module, returning a handle to the standard input.
 
-调用  `io`  模块的  `stdin`  函数，返回一个标准输入的句柄。
-
 `.read_line(&mut guess)`
 
 Calls the `read_line` method on the standard input handle to read a line of text from user input. `&mut guess` is a mutable reference, indicating that the user input will be stored in the `guess` variable.
-
-在标准输入句柄上调用  `read_line`  方法，读取用户输入的一行文本。`&mut guess`  是一个可变引用，表示将用户输入存储到  `guess`  变量中。
 
 `.expect("Failed to read line");`
 
 The `read_line` method returns a `Result` type, and `expect` is used to handle potential errors. If reading fails, the program will terminate and display the specified error message.
 
-`read_line`  方法返回一个  `Result`  类型，`expect`  用于处理可能的错误。如果读取失败，程序会终止并显示指定的错误信息。
-
 `println!("You guessed: {}", guess);`
 
 Uses the `println!` macro again to print the user's input. `{}` is a placeholder that will be replaced by the value of `guess`.
 
-再次使用  `println!`  宏，打印用户输入的内容。`{}`  是一个占位符，会被  `guess`  的值替换。
-
-### Randomly Generated 随机生成 🎲
+### 2. Randomly Generated 🎲
 
 Generate a random number between 1 and 100.
-
-生成一个 1~100 之间的随机数。
 
 ```toml
 [dependencies]
@@ -248,25 +182,15 @@ fn main() {
 
 The `rand::Rng` package is a `trait` in Rust. You can think of a trait as an interface that defines certain methods that types must implement. When you bring a `trait` into your code using `use`, it’s similar to a class implementing an interface in other programming languages.
 
-`rand::Rng` 包是 Rust 中的一个 `trait`。你可以把 `trait` 想成一个接口，它定义了某些方法，类型必须实现这些方法。当你使用 `use` 引入一个 `trait` 时，这类似于其他编程语言中一个类实现一个接口。
-
 `rand::thread_rng()`: This function creates a random number generator that is local to the current thread. It is a convenient way to generate random numbers in a thread-safe manner.
-
-`rand::thread_rng()`：这个函数创建一个与当前线程相关的随机数生成器。这是一种方便的方式，可以在线程安全的情况下生成随机数。
 
 `.gen_range(1..101)`: This method generates a random number within the specified range. The range `1..101` means that the generated number will be between 1 and 100, inclusive of 1 and exclusive of 101.
 
-`.gen_range(1..101)`：这个方法在指定的范围内生成一个随机数。范围 `1..101` 意味着生成的数字将在 1 到 100 之间，包括 1，但不包括 101。
-
 `let secret_number =`: This part declares a new variable named `secret_number` and assigns it the value generated by the random number generator.
 
-`let secret_number =`：这一部分声明了一个名为 `secret_number` 的新变量，并将随机数生成器生成的值赋给它。
-
-### Compare 比较 ⚖
+### 3. Compare ⚖
 
 Compare the generated random number with the input number.
-
-比较生成的随机数和输入数字。
 
 ```rust
 use rand::Rng;
@@ -294,29 +218,17 @@ fn main() {
 
 `guess.trim()` removes spaces, tabs, and carriage returns (pressing `enter` while typing results in `\n` input)
 
-`guess.trim()` 会删除空格、tab、以及回车（输入时候按`回车`就会有 `\n` 输入）
-
 `parse()` will parse the input string, there are `i32` `u32` `i64`, we choose to parse it as `u32`.
-
-`parse()` 会把输入的字符串解析，有 `i32` `u32` `i64`，我们这里选择解析成 `u32`。
 
 `.expect("Please type a number!")`: This method is called on the result of the `parse()` method. If the parsing is successful, it returns the parsed number. If it fails (for example, if the input is not a valid number), it will panic and display the message "Please type a number!".
 
-`.expect("Please type a number!")`：这个方法在 `parse()` 方法的结果上调用。如果解析成功，它返回解析后的数字。如果失败（例如，输入不是有效的数字），它将引发 panic，并显示消息 "Please type a number!"。
-
 Ordering has three variants `Less`, `Greater`, `Equal`.
-
-Ordering 有三个变体 `Less`、`Greater`、`Equal`。
 
 `guess.cmp(&secret_number)` is to compare guess with secret_number, this method returns an Ordering.
 
-`guess.cmp(&secret_number)` 是用 guess 和 secret_number 进行比较，这个方法会返回一个 Ordering。
-
-### Final 终版 🏁
+### 4. Final 🏁
 
 Add loops until the rule is reached and then ends.
-
-添加循环直至达到规则后结束。
 
 ```rust
 fn main() {
